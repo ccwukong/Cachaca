@@ -1,0 +1,121 @@
+{
+  "currencies": [
+    {
+      "id": 1,
+      "code": "USD",
+      "symbol": "$",
+      "name": "US Dollar"
+    },
+    {
+      "id": 2,
+      "code": "EUR",
+      "symbol": "€",
+      "name": "Euro"
+    },
+    {
+      "id": 3,
+      "code": "GBP",
+      "symbol": "£",
+      "name": "Pound Sterling"
+    },
+    {
+      "id": 4,
+      "code": "JPY",
+      "symbol": "¥",
+      "name": "Japanese Yen"
+    },
+    {
+      "id": 5,
+      "code": "AUD",
+      "symbol": "$",
+      "name": "Australian Dollar"
+    },
+    {
+      "id": 6,
+      "code": "CAD",
+      "symbol": "$",
+      "name": "Canadian Dollar"
+    },
+    {
+      "id": 7,
+      "code": "SGD",
+      "symbol": "$",
+      "name": "Singapore Dollar"
+    },
+    {
+      "id": 8,
+      "code": "MYR",
+      "symbol": "RM",
+      "name": "Malaysian Ringgit"
+    },
+    {
+      "id": 9,
+      "code": "INR",
+      "symbol": "₹",
+      "name": "Indian Rupee"
+    },
+    {
+      "id": 10,
+      "code": "CNY",
+      "symbol": "¥",
+      "name": "Chinese Yuan"
+    },
+    {
+      "id": 11,
+      "code": "HKD",
+      "symbol": "$",
+      "name": "Hong Kong Dollar"
+    },
+    {
+      "id": 12,
+      "code": "NZD",
+      "symbol": "$",
+      "name": "New Zealand Dollar"
+    },
+    {
+      "id": 13,
+      "code": "NTD",
+      "symbol": "$",
+      "name": "New Taiwan Dollar"
+    },
+    {
+      "id": 14,
+      "code": "PHP",
+      "symbol": "₱",
+      "name": "Philippine Peso"
+    },
+    {
+      "id": 15,
+      "code": "THB",
+      "symbol": "฿",
+      "name": "Thai Baht"
+    },
+    {
+      "id": 16,
+      "code": "IDR",
+      "symbol": "Rp",
+      "name": "Indonesian Rupiah"
+    }
+  ],
+  "shopCategories": [
+    "Fashion",
+    "Electronics",
+    "Home",
+    "Beauty",
+    "Grocery",
+    "Sports",
+    "Baby",
+    "Books",
+    "Toys",
+    "Health",
+    "Digital Goods",
+    "Entertainment"
+  ],
+  "superAdmin": {
+    "email": "test@test.com",
+    "phone": "1234567890",
+    "password": "123456",
+    "firstName": "Super",
+    "lastName": "Admin"
+  }
+}

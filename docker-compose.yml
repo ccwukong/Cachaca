@@ -1,0 +1,34 @@
+version: '3.8'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  app_db_dev:
+    image: mysql
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - app-tier
+    expose:
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456789
+      - MYSQL_DATABASE=tenzing
+    volumes:
+      - app-db:/var/lib/mysql
+  app_api_dev:
+    depends_on:
+      - app_db_dev
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - app-tier
+    volumes:
+      - './:/app'
+volumes:
+  app-db:
