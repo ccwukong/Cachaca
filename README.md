@@ -1,6 +1,6 @@
-# Welcome to Remix!
+# Cachaca
 
-- 📖 [Remix docs](https://remix.run/docs)
+An AI-powered open source e-commerce solution.
 
 ## Development
 
