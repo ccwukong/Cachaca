@@ -11,10 +11,12 @@ const Header = ({
   storeLogo,
   storeName,
   menuItems,
+  logoOnly = false,
 }: {
   storeLogo: string
   storeName: string
-  menuItems: MenuItem[]
+  menuItems?: MenuItem[]
+  logoOnly?: boolean
 }) => {
   const [state, setState] = useState(false)
   return (
@@ -43,21 +45,25 @@ const Header = ({
             </button>
           </div>
         </div>
-        <div className="flex-1 justify-self-center pb-3 mt-8 md:pb-0 md:mt-0 md:block">
-          <ul className="justify-center items-center space-y-8 md:flex md:space-x-6 md:space-y-0">
-            {menuItems.map((item, idx) => (
-              <li key={idx} className="hover:text-indigo-600">
-                <Link to={item.path}>{item.title}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="md:flex justify-between w-16">
-          <UserRound className="cursor-pointer" />
-          <Link to="/cart">
-            <ShoppingCart className="mt-5 md:mt-0" />
-          </Link>
-        </div>
+        {menuItems && (
+          <div className="flex-1 justify-self-center pb-3 mt-8 md:pb-0 md:mt-0 md:block">
+            <ul className="justify-center items-center space-y-8 md:flex md:space-x-6 md:space-y-0">
+              {menuItems.map((item, idx) => (
+                <li key={idx} className="hover:text-indigo-600">
+                  <Link to={item.path}>{item.title}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {logoOnly || (
+          <div className="md:flex justify-between w-16">
+            <UserRound className="cursor-pointer" />
+            <Link to="/cart">
+              <ShoppingCart className="mt-5 md:mt-0" />
+            </Link>
+          </div>
+        )}
       </div>
     </nav>
   )

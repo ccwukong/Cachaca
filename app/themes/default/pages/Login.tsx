@@ -16,13 +16,15 @@ import {
   TabsList,
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
-import Layout from '~/themes/default/Layout'
+import Header from '~/themes/default/components/ui/Header'
+import StoreLayout from '~/themes/default/StoreLayout'
 
 const Login = () => {
   return (
-    <Layout
+    <StoreLayout
+      header={<Header storeLogo="" storeName="Cachaca" logoOnly={true} />}
       content={
-        <div className="max-w-screen-xl mx-auto h-full pt-36 flex justify-center">
+        <div className="max-w-screen-xl mx-auto h-full pt-24 flex justify-center">
           <Tabs defaultValue="account" className="w-[400px]">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="account">Account</TabsTrigger>

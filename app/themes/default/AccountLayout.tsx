@@ -1,4 +1,4 @@
-const Layout = ({
+const AccountLayout = ({
   header,
   content,
   footer,
@@ -16,4 +16,4 @@ const Layout = ({
   )
 }
 
-export default Layout
+export default AccountLayout
