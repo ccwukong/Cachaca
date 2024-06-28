@@ -102,9 +102,9 @@ const Account = () => {
   return (
     <ShopLayout
       content={
-        <div className="hidden flex-col md:flex">
-          <div className="border-b">
-            <div className="flex h-16 items-center px-4">
+        <div className="flex flex-col">
+          <div className="border-b fixed w-full flex justify-center">
+            <div className="max-w-screen-xl w-full flex h-16 items-center px-4">
               <nav className="flex items-center mx-6 space-x-4 lg:space-x-6">
                 <Link
                   to="/examples/dashboard"
@@ -187,7 +187,7 @@ const Account = () => {
               </div>
             </div>
           </div>
-          <div className="flex-1 space-y-4 p-8 pt-6">
+          <div className="max-w-screen-xl w-full flex-1 space-y-4 p-8 pt-6 mx-auto h-auto mt-16">
             <div className="flex items-center justify-between space-y-2">
               <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
               <div className="flex items-center space-x-2">
