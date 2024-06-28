@@ -1,5 +1,5 @@
 import type { MetaFunction } from '@remix-run/node'
-import ProductDetail from '~/themes/default/pages/ProductDetail'
+import ProductDetail from '~/themes/default/pages/shop/ProductDetail'
 
 export const meta: MetaFunction = () => {
   return [

@@ -1,4 +1,4 @@
-const StoreLayout = ({
+const ShopLayout = ({
   header,
   content,
   footer,
@@ -16,4 +16,4 @@ const StoreLayout = ({
   )
 }
 
-export default StoreLayout
+export default ShopLayout

@@ -4,7 +4,7 @@ import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 import { CalendarFold } from 'lucide-react'
 import { addDays, format } from 'date-fns'
 import { DateRange } from 'react-day-picker'
-import StoreLayout from '~/themes/default/StoreLayout'
+import ShopLayout from '~/themes/default/ShopLayout'
 import {
   Tabs,
   TabsContent,
@@ -100,7 +100,7 @@ const Account = () => {
     to: addDays(new Date(2023, 0, 20), 20),
   })
   return (
-    <StoreLayout
+    <ShopLayout
       content={
         <div className="hidden flex-col md:flex">
           <div className="border-b">
@@ -176,7 +176,6 @@ const Account = () => {
                         Settings
                         <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
                       </DropdownMenuItem>
-                      <DropdownMenuItem>New Team</DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>

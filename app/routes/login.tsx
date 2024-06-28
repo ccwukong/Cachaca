@@ -1,5 +1,5 @@
 import type { MetaFunction } from '@remix-run/node'
-import Login from '~/themes/default/pages/Login'
+import Login from '~/themes/default/pages/account/Login'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Login' }, { name: 'description', content: 'Login' }]

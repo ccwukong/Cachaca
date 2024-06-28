@@ -1,10 +1,10 @@
 import type { MetaFunction } from '@remix-run/node'
-import Register from '~/themes/default/pages/account/Register'
+import Login from '~/admin/pages/Login'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Login' }, { name: 'description', content: 'Login' }]
 }
 
 export default function Index() {
-  return <Register />
+  return <Login />
 }

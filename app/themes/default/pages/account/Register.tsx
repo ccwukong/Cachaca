@@ -11,11 +11,11 @@ import { Label } from '~/themes/default/components/ui/label'
 import { Input } from '~/themes/default/components/ui/input'
 import { Button } from '~/themes/default/components/ui/button'
 import Header from '~/themes/default/components/ui/Header'
-import StoreLayout from '~/themes/default/StoreLayout'
+import ShopLayout from '~/themes/default/ShopLayout'
 
 const Register = () => {
   return (
-    <StoreLayout
+    <ShopLayout
       header={<Header storeLogo="" storeName="Cachaca" logoOnly={true} />}
       content={
         <div className="max-w-screen-xl mx-auto h-full pt-24 flex justify-center">

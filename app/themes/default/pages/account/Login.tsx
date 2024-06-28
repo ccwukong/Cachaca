@@ -17,11 +17,11 @@ import {
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
 import Header from '~/themes/default/components/ui/Header'
-import StoreLayout from '~/themes/default/StoreLayout'
+import ShopLayout from '~/themes/default/ShopLayout'
 
 const Login = () => {
   return (
-    <StoreLayout
+    <ShopLayout
       header={<Header storeLogo="" storeName="Cachaca" logoOnly={true} />}
       content={
         <div className="max-w-screen-xl mx-auto h-full pt-24 flex justify-center">

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import StoreLayout from '~/themes/default/StoreLayout'
+import ShopLayout from '~/themes/default/ShopLayout'
 import Header from '~/themes/default/components/ui/Header'
 import Footer from '~/themes/default/components/ui/Footer'
 import {
@@ -14,7 +14,7 @@ import { Button } from '~/themes/default/components/ui/button'
 const ProductDetail = () => {
   const { t } = useTranslation()
   return (
-    <StoreLayout
+    <ShopLayout
       header={
         <Header
           storeLogo=""

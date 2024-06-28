@@ -7,11 +7,11 @@ import {
 import Header from '~/themes/default/components/ui/Header'
 import Footer from '~/themes/default/components/ui/Footer'
 import ProductCard from '~/themes/default/components/ui/ProductCard'
-import StoreLayout from '~/themes/default/StoreLayout'
+import ShopLayout from '~/themes/default/ShopLayout'
 
 const Home = () => {
   return (
-    <StoreLayout
+    <ShopLayout
       header={
         <Header
           storeLogo=""

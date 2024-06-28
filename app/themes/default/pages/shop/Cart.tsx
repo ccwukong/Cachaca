@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import StoreLayout from '~/themes/default/StoreLayout'
+import ShopLayout from '~/themes/default/ShopLayout'
 import Header from '~/themes/default/components/ui/Header'
 import Footer from '~/themes/default/components/ui/Footer'
 import CartItem from '~/themes/default/components/ui/CartItem'
@@ -17,7 +17,7 @@ export interface CartItem {
 const Cart = ({ items }: { items: CartItem[] }) => {
   const { t } = useTranslation()
   return (
-    <StoreLayout
+    <ShopLayout
       header={
         <Header
           storeLogo=""
