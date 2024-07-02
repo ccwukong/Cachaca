@@ -6,5 +6,5 @@ export const meta: MetaFunction = () => {
 }
 
 export default function Index() {
-  return <Account />
+  return <Account storeLogo="" storeName="Cachaca" />
 }

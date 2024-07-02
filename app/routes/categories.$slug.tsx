@@ -1,5 +1,5 @@
 import type { MetaFunction } from '@remix-run/node'
-import ProductDetail from '~/themes/default/pages/shop/ProductDetail'
+import CategoryProductList from '~/themes/default/pages/shop/CategoryProductList'
 
 export const meta: MetaFunction = () => {
   return [
@@ -9,5 +9,5 @@ export const meta: MetaFunction = () => {
 }
 
 export default function Index() {
-  return <ProductDetail />
+  return <CategoryProductList />
 }

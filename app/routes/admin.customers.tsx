@@ -1,5 +1,5 @@
 import type { MetaFunction } from '@remix-run/node'
-import Dashboard from '~/admin/pages/Dashboard'
+import CustomerList from '~/themes/default/pages/admin/CustomerList'
 
 export const meta: MetaFunction = () => {
   return [
@@ -9,5 +9,5 @@ export const meta: MetaFunction = () => {
 }
 
 export default function Index() {
-  return <Dashboard />
+  return <CustomerList />
 }

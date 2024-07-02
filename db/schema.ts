@@ -5,6 +5,7 @@ import {
   varchar,
   index,
   text,
+  primaryKey,
 } from 'drizzle-orm/mysql-core'
 
 export const page = mysqlTable('page', {
@@ -173,7 +174,8 @@ export const product = mysqlTable(
     coverImage: varchar('cover_image', { length: 255 }).notNull(),
     currencyId: tinyint('currency_id').notNull(),
     basePrice: varchar('base_price', { length: 20 }).notNull(),
-    categoryId: varchar('cat_id', { length: 36 }).notNull(),
+    categoryId: varchar('category_id', { length: 36 }).notNull(),
+    subCategoryId: varchar('subcategory_id', { length: 36 }).notNull(),
     createdBy: varchar('created_by', { length: 36 }).notNull(),
     createdOn: int('created_on').notNull(),
     updatedBy: varchar('updated_by', { length: 36 }),
@@ -213,11 +215,41 @@ export const productCategory = mysqlTable('product_category', {
   status: tinyint('status').notNull(),
 })
 
-export const productGroup = mysqlTable('product_group', {
+export const productSubCategory = mysqlTable(
+  'product_subcategory',
+  {
+    id: varchar('id', { length: 36 }).primaryKey(),
+    name: varchar('name', { length: 60 }).notNull(),
+    categoryId: varchar('category_id', { length: 36 }),
+    status: tinyint('status').notNull(),
+  },
+  (table) => {
+    return {
+      categoryIdIdx: index('category_id_idx').on(table.categoryId),
+    }
+  },
+)
+
+export const collection = mysqlTable('collection', {
   id: varchar('id', { length: 36 }).primaryKey(),
   name: varchar('name', { length: 60 }).notNull(),
   status: tinyint('status').notNull(),
 })
+
+export const collectionProduct = mysqlTable(
+  'collection_product',
+  {
+    collectionId: varchar('collection_id', { length: 36 }),
+    productId: varchar('product_id', { length: 36 }),
+    name: varchar('name', { length: 60 }).notNull(),
+    status: tinyint('status').notNull(),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.collectionId, table.productId] }),
+    }
+  },
+)
 
 // color, size, weight etc...
 export const productVariantCategory = mysqlTable('product_variant_category', {

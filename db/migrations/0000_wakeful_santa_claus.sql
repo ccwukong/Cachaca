@@ -20,6 +20,21 @@ CREATE TABLE `checkout_item` (
 	CONSTRAINT `checkout_item_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
+CREATE TABLE `collection` (
+	`id` varchar(36) NOT NULL,
+	`name` varchar(60) NOT NULL,
+	`status` tinyint NOT NULL,
+	CONSTRAINT `collection_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `collection_product` (
+	`collection_id` varchar(36) NOT NULL,
+	`product_id` varchar(36) NOT NULL,
+	`name` varchar(60) NOT NULL,
+	`status` tinyint NOT NULL,
+	CONSTRAINT `collection_product_collection_id_product_id_pk` PRIMARY KEY(`collection_id`,`product_id`)
+);
+--> statement-breakpoint
 CREATE TABLE `currency` (
 	`id` tinyint NOT NULL,
 	`code` varchar(3) NOT NULL,
@@ -108,7 +123,8 @@ CREATE TABLE `product` (
 	`cover_image` varchar(255) NOT NULL,
 	`currency_id` tinyint NOT NULL,
 	`base_price` varchar(20) NOT NULL,
-	`cat_id` varchar(36) NOT NULL,
+	`category_id` varchar(36) NOT NULL,
+	`subcategory_id` varchar(36) NOT NULL,
 	`created_by` varchar(36) NOT NULL,
 	`created_on` int NOT NULL,
 	`updated_by` varchar(36),
@@ -125,13 +141,6 @@ CREATE TABLE `product_category` (
 	CONSTRAINT `product_category_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
-CREATE TABLE `product_group` (
-	`id` varchar(36) NOT NULL,
-	`name` varchar(60) NOT NULL,
-	`status` tinyint NOT NULL,
-	CONSTRAINT `product_group_id` PRIMARY KEY(`id`)
-);
---> statement-breakpoint
 CREATE TABLE `product_image` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`url` varchar(255) NOT NULL,
@@ -139,6 +148,14 @@ CREATE TABLE `product_image` (
 	`metadata` varchar(500) NOT NULL,
 	`status` tinyint NOT NULL,
 	CONSTRAINT `product_image_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `product_subcategory` (
+	`id` varchar(36) NOT NULL,
+	`name` varchar(60) NOT NULL,
+	`category_id` varchar(36),
+	`status` tinyint NOT NULL,
+	CONSTRAINT `product_subcategory_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
 CREATE TABLE `product_variant` (
@@ -214,8 +231,9 @@ CREATE INDEX `customer_id_idx` ON `customer_address` (`customer_id`);--> stateme
 CREATE INDEX `currency_id_idx` ON `order` (`currency_id`);--> statement-breakpoint
 CREATE INDEX `customer_id_idx` ON `order` (`customer_id`);--> statement-breakpoint
 CREATE INDEX `checkout_id_idx` ON `order` (`checkout_id`);--> statement-breakpoint
-CREATE INDEX `cat_id_idx` ON `product` (`cat_id`);--> statement-breakpoint
+CREATE INDEX `cat_id_idx` ON `product` (`category_id`);--> statement-breakpoint
 CREATE INDEX `product_id_idx` ON `product_image` (`product_id`);--> statement-breakpoint
+CREATE INDEX `category_id_idx` ON `product_subcategory` (`category_id`);--> statement-breakpoint
 CREATE INDEX `product_id_idx` ON `product_variant` (`product_id`);--> statement-breakpoint
 CREATE INDEX `variant_cat_id_idx` ON `product_variant` (`variant_cat_id`);--> statement-breakpoint
 CREATE INDEX `base_currency_id_idx` ON `shop` (`base_currency_id`);--> statement-breakpoint

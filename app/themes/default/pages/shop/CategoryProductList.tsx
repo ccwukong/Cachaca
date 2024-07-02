@@ -1,14 +1,8 @@
-import Autoplay from 'embla-carousel-autoplay'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from '~/themes/default/components/ui/carousel'
 import Header from '~/themes/default/components/ui/Header'
 import Footer from '~/themes/default/components/ui/Footer'
 import ProductCard from '~/themes/default/components/ui/ProductCard'
 
-const Home = () => {
+const CategoryProductList = () => {
   return (
     <div className="mx-6 overflow-hidden lg:mx-0">
       <Header
@@ -22,38 +16,7 @@ const Home = () => {
       />
 
       <div className="max-w-screen-xl mx-auto h-auto mt-8">
-        <Carousel
-          plugins={[
-            Autoplay({
-              delay: 3000,
-            }),
-          ]}
-        >
-          <CarouselContent>
-            <CarouselItem>
-              <img
-                src="https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHByb2R1Y3QlMjBwaG90b2dyYXBoeXxlbnwwfHwwfHx8Mg%3D%3D"
-                alt="iPhone"
-                className="object-cover w-full h-96"
-              />
-            </CarouselItem>
-            <CarouselItem>
-              <img
-                src="https://images.unsplash.com/photo-1626807236036-9cf12909b45a?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fHByb2R1Y3QlMjBwaG90b2dyYXBoeXxlbnwwfHwwfHx8Mg%3D%3D"
-                alt="promotion"
-                className="object-cover w-full h-96"
-              />
-            </CarouselItem>
-            <CarouselItem>
-              <img
-                src="https://images.unsplash.com/photo-1599360889420-da1afaba9edc?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjF8fHByb2R1Y3QlMjBwaG90b2dyYXBoeXxlbnwwfHwwfHx8Mg%3D%3D"
-                alt="Tesla"
-                className="object-cover w-full h-96"
-              />
-            </CarouselItem>
-          </CarouselContent>
-        </Carousel>
-        <h2 className="mt-16 mb-6 text-xl">Products</h2>
+        <h2 className="mb-6 text-xl">Mens</h2>
         <div className="grid grid-cols-1 lg:grid-cols-4 lg:gap-8">
           <ProductCard
             coverImage="https://images.unsplash.com/photo-1611930021698-a55ec4d5fe6e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDB8fHByb2R1Y3QlMjBwaG90b2dyYXBoeXxlbnwwfHwwfHx8Mg%3D%3D"
@@ -102,4 +65,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default CategoryProductList

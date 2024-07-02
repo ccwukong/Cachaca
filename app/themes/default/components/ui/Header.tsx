@@ -1,6 +1,12 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState } from 'react'
 import { Link } from '@remix-run/react'
 import { UserRound, ShoppingCart, Menu } from 'lucide-react'
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '~/themes/default/components/ui/hover-card'
 
 export interface MenuItem {
   title: string
@@ -18,7 +24,6 @@ const Header = ({
   menuItems?: MenuItem[]
   logoOnly?: boolean
 }) => {
-  const [state, setState] = useState(false)
   return (
     <nav className="bg-white w-full border-b md:border-0">
       <div className="items-center max-w-screen-xl mx-auto md:flex">
@@ -36,21 +41,28 @@ const Header = ({
               )}
             </h1>
           </Link>
-          <div className="md:hidden">
-            <button
-              className="text-gray-700 outline-none p-2 rounded-md focus:border-gray-400 focus:border"
-              onClick={() => setState(!state)}
-            >
-              <Menu />
-            </button>
-          </div>
+
+          <input type="checkbox" className="hidden" id="check" />
+          <label htmlFor="check">
+            <Menu size={36} className="cursor-pointer" />
+          </label>
         </div>
+
         {menuItems && (
           <div className="flex-1 justify-self-center pb-3 mt-8 md:pb-0 md:mt-0 md:block">
-            <ul className="justify-center items-center space-y-8 md:flex md:space-x-6 md:space-y-0">
+            <ul className="left-[100%] justify-center items-center space-y-8 md:flex md:space-x-6 md:space-y-0">
               {menuItems.map((item, idx) => (
-                <li key={idx} className="hover:text-indigo-600">
-                  <Link to={item.path}>{item.title}</Link>
+                <li key={item.title}>
+                  <HoverCard>
+                    <HoverCardTrigger>
+                      <Link to={item.path}>{item.title}</Link>
+                    </HoverCardTrigger>
+                    <HoverCardContent>
+                      <li key={idx} className="hover:text-indigo-600">
+                        <Link to={item.path}>{item.title}</Link>
+                      </li>
+                    </HoverCardContent>
+                  </HoverCard>
                 </li>
               ))}
             </ul>
@@ -58,10 +70,17 @@ const Header = ({
         )}
         {logoOnly || (
           <div className="md:flex justify-between w-16">
-            <UserRound className="cursor-pointer" />
-            <Link to="/cart">
-              <ShoppingCart className="mt-5 md:mt-0" />
+            <Link to="/account">
+              <UserRound className="cursor-pointer" />
             </Link>
+            <HoverCard>
+              <HoverCardTrigger>
+                <Link to="/cart">
+                  <ShoppingCart className="mt-5 md:mt-0" />
+                </Link>
+              </HoverCardTrigger>
+              <HoverCardContent>Items</HoverCardContent>
+            </HoverCard>
           </div>
         )}
       </div>

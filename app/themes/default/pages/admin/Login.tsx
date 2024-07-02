@@ -28,7 +28,7 @@ const Login = () => {
         <TabsContent value="account">
           <Card className="mx-auto max-w-sm">
             <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl font-bold">Login</CardTitle>
+              <CardTitle className="text-2xl font-bold">Admin login</CardTitle>
               <CardDescription>
                 Enter your email and password to login to your account
               </CardDescription>
@@ -54,30 +54,26 @@ const Login = () => {
               </div>
             </CardContent>
             <CardFooter className="flex justify-end">
-              <Link to="/register">Don't have an account?</Link>
+              <Link to="/admin/register">Don't have an account?</Link>
             </CardFooter>
           </Card>
         </TabsContent>
         <TabsContent value="password">
           <Card>
             <CardHeader>
-              <CardTitle>Password</CardTitle>
+              <CardTitle>Reset password</CardTitle>
               <CardDescription>
-                Change your password here. After saving, you'll be logged out.
+                Enter your email to reset your password
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="space-y-1">
-                <Label htmlFor="current">Current password</Label>
-                <Input id="current" type="password" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="new">New password</Label>
-                <Input id="new" type="password" />
+                <Label htmlFor="current">Email</Label>
+                <Input id="current" type="email" />
               </div>
             </CardContent>
             <CardFooter>
-              <Button>Save password</Button>
+              <Button>Submit</Button>
             </CardFooter>
           </Card>
         </TabsContent>
