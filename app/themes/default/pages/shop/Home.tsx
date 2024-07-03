@@ -10,7 +10,7 @@ import ProductCard from '~/themes/default/components/ui/ProductCard'
 
 const Home = () => {
   return (
-    <div className="mx-6 overflow-hidden lg:mx-0">
+    <div className="mx-6 overflow-hidden">
       <Header
         storeLogo=""
         storeName="Cachaca"
@@ -21,7 +21,7 @@ const Home = () => {
         ]}
       />
 
-      <div className="max-w-screen-xl mx-auto h-auto mt-8">
+      <div className="max-w-screen-xl mx-auto h-auto pt-28">
         <Carousel
           plugins={[
             Autoplay({

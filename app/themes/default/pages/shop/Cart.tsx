@@ -26,7 +26,7 @@ const Cart = ({ items }: { items: CartItem[] }) => {
           { title: 'Accessories', path: '/categories/accessories' },
         ]}
       />
-      <div className="max-w-screen-xl mx-auto h-auto mt-8">
+      <div className="max-w-screen-xl mx-auto h-auto pt-28">
         <p className="text-2xl font-light">
           {t('my_cart__ph').replace('{{no_of_items}}', `${items.length}`)}
         </p>

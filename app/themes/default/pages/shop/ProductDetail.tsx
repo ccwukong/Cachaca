@@ -23,7 +23,7 @@ const ProductDetail = () => {
           { title: 'Accessories', path: '/categories/accessories' },
         ]}
       />
-      <div className="max-w-screen-xl mx-auto h-auto mt-8">
+      <div className="max-w-screen-xl mx-auto h-auto pt-28">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           <div className="grid grid-cols-1 md:grid-cols-2 md:col-span-3 gap-2">
             <img

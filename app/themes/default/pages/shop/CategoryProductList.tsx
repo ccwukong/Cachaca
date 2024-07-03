@@ -15,7 +15,7 @@ const CategoryProductList = () => {
         ]}
       />
 
-      <div className="max-w-screen-xl mx-auto h-auto mt-8">
+      <div className="max-w-screen-xl mx-auto h-auto pt-28">
         <h2 className="mb-6 text-xl">Mens</h2>
         <div className="grid grid-cols-1 lg:grid-cols-4 lg:gap-8">
           <ProductCard
