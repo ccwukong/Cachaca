@@ -98,22 +98,23 @@ const Account = ({
   storeName: string
 }) => {
   return (
-    <div className="mx-6 overflow-hidden lg:mx-0">
+    <div className="mx-6 overflow-hidden">
       <div className="flex flex-col">
-        <div className="border-b fixed w-full flex justify-center">
+        <div className="left-0 bg-white border-b fixed w-full flex justify-center z-50">
           <div className="max-w-screen-xl w-full flex h-16 items-center px-4">
             <nav className="flex items-center mx-6 space-x-4 lg:space-x-6">
-              <h1 className="text-3xl font-bold text-purple-600">
-                {storeLogo ? (
-                  <img
-                    src={storeLogo}
-                    alt={storeName}
-                    className="object-cover h-18 w-32"
-                  />
-                ) : (
-                  storeName
-                )}
-              </h1>
+              {storeLogo ? (
+                <img
+                  src={storeLogo}
+                  alt={storeName}
+                  className="object-cover h-18 w-32"
+                />
+              ) : (
+                <h1 className="text-2xl font-bold text-purple-600">
+                  {storeName}
+                </h1>
+              )}
+
               <Link
                 to="/account"
                 className="text-sm font-medium transition-colors hover:text-primary"

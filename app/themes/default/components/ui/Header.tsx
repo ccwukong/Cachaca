@@ -30,7 +30,7 @@ const Header = ({
   logoOnly?: boolean
 }) => {
   return (
-    <nav className="left-0 bg-white w-full z-50 border-b border-slate-50 shadow-sm fixed">
+    <nav className="left-0 bg-white w-full z-50 border-b border-slate-50 shadow-sm h-20 fixed">
       <div className="items-center max-w-screen-xl mx-auto flex justify-between p-0">
         <div className="ml-6 flex items-center justify-between py-3 md:py-5">
           <Link to="/">
@@ -89,11 +89,11 @@ const Header = ({
         <label htmlFor="check" className="inline-block mr-6">
           <Menu size={36} className="cursor-pointer md:hidden" />
         </label>
-        <div className="left-[-100%] peer-checked:left-0 transition-all duration-250 fixed top-[8%] h-screen w-[100%] z-50 bg-stone-200 bg-opacity-95 block md:hidden">
+        <div className="left-[-100%] peer-checked:left-0 transition-all duration-500 fixed top-20 h-screen w-[100%] z-50 bg-stone-200 bg-opacity-95 block md:hidden">
           {menuItems && (
             <ul className="justify-center items-center md:flex">
               {menuItems.map((item, idx) => (
-                <li key={item.title}>
+                <li key={idx}>
                   <Accordion type="single" collapsible>
                     <AccordionItem value="item-1" className="text-center">
                       <AccordionTrigger>
