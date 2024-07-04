@@ -12,15 +12,17 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 }
 
 export const loader = async () => {
-  const model = new ProductModel()
+  const productModel = new ProductModel()
   return json({
     storeSettings: await PublicInfo.getStoreInfo(),
-    products: await model.findMany(1, 20),
+    products: await productModel.findMany(1, 20),
     banners: await PublicInfo.getHomeBanners(),
   })
 }
 
 export default function Index() {
-  const { products, banners } = useLoaderData<typeof loader>()
-  return <Home products={products} banners={banners} />
+  const { storeSettings, products, banners } = useLoaderData<typeof loader>()
+  return (
+    <Home products={products} banners={banners} storeSettings={storeSettings} />
+  )
 }

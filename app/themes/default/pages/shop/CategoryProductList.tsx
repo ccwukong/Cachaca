@@ -1,12 +1,14 @@
 import Header from '~/themes/default/components/ui/Header'
 import Footer from '~/themes/default/components/ui/Footer'
 import ProductCard from '~/themes/default/components/ui/ProductCard'
-import { ProductPublicInfo } from '~/model'
+import { ProductPublicInfo, StoreSettings } from '~/model'
 
 const CategoryProductList = ({
+  storeSettings,
   products,
 }: {
   products: ProductPublicInfo[]
+  storeSettings: StoreSettings
 }) => {
   return (
     <div className="mx-6 overflow-hidden lg:mx-0">
@@ -36,7 +38,7 @@ const CategoryProductList = ({
           })}
         </div>
       </div>
-      <Footer />
+      <Footer pageLinks={storeSettings.pageLinks} />
     </div>
   )
 }

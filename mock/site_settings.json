@@ -2,10 +2,44 @@
   "name": "Cachaca",
   "description": "Cachaca: An AI-powered, open-source e-commerce solution offering advanced features for seamless online store management and enhanced customer experience.",
   "logo": "",
+  "email": "",
   "currency": {
     "id": 1,
     "name": "US Dollar",
     "code": "USD",
     "symbol": "$"
-  }
+  },
+  "pageLinks": [
+    {
+      "title": "About",
+      "url": "/about",
+      "order": 1
+    },
+    {
+      "title": "Contact",
+      "url": "/contact",
+      "order": 2
+    },
+    {
+      "title": "Terms",
+      "url": "/terms",
+      "order": 3
+    },
+    {
+      "title": "Shipping",
+      "url": "/shipping",
+      "order": 4
+    },
+    {
+      "title": "Refund",
+      "url": "/refund",
+      "order": 5
+    },
+    {
+      "title": "Media",
+      "url": "/media",
+      "order": 6
+    }
+  ],
+  "copyright": "© Cachaca 2024"
 }

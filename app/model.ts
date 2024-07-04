@@ -311,11 +311,19 @@ export type HomeBannerSetting = {
   bannerItems: BannerItem[]
 }
 
+export type PageLink = {
+  title: string
+  url: string
+  order: number
+}
+
 export type StoreSettings = {
   name: string
   logo: string
   description: string
   currency: Currency
+  pageLinks: PageLink[]
+  copyright: string
 }
 
 export class PublicInfo {
@@ -333,6 +341,8 @@ export class PublicInfo {
       logo: settings.logo,
       description: settings.description,
       currency: settings.currency,
+      pageLinks: settings.pageLinks,
+      copyright: settings.copyright,
     }
   }
 }

@@ -7,17 +7,19 @@ import {
 import Header from '~/themes/default/components/ui/Header'
 import Footer from '~/themes/default/components/ui/Footer'
 import ProductCard from '~/themes/default/components/ui/ProductCard'
-import { ProductPublicInfo, HomeBannerSetting } from '~/model'
+import { ProductPublicInfo, HomeBannerSetting, StoreSettings } from '~/model'
 
 const Home = ({
+  storeSettings,
   banners,
   products,
 }: {
+  storeSettings: StoreSettings
   banners: HomeBannerSetting
   products: ProductPublicInfo[]
 }) => {
   return (
-    <div className="mx-6 overflow-hidden">
+    <div className="mx-6 overflow-hidden lg:mx-0">
       <Header
         storeLogo=""
         storeName="Cachaca"
@@ -69,7 +71,10 @@ const Home = ({
           })}
         </div>
       </div>
-      <Footer />
+      <Footer
+        pageLinks={storeSettings.pageLinks}
+        copyright={storeSettings.copyright}
+      />
     </div>
   )
 }

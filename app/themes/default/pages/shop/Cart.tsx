@@ -4,6 +4,7 @@ import Footer from '~/themes/default/components/ui/Footer'
 import CartItem from '~/themes/default/components/ui/CartItem'
 import ProductCard from '~/themes/default/components/ui/ProductCard'
 import { Button } from '~/themes/default/components/ui/button'
+import { ProductPublicInfo, StoreSettings } from '~/model'
 
 export interface CartItem {
   title: string
@@ -13,7 +14,15 @@ export interface CartItem {
   currency: string
 }
 
-const Cart = ({ items }: { items: CartItem[] }) => {
+const Cart = ({
+  storeSettings,
+  items,
+  suggestedProducts,
+}: {
+  storeSettings: StoreSettings
+  items: CartItem[]
+  suggestedProducts?: ProductPublicInfo[]
+}) => {
   const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden lg:mx-0">
@@ -169,29 +178,23 @@ const Cart = ({ items }: { items: CartItem[] }) => {
         </div>
         <h2 className="mt-16 mb-6 text-xl">You may also want to buy</h2>
         <div className="grid grid-cols-1 lg:grid-cols-4 lg:gap-8">
-          <ProductCard
-            coverImage="https://images.unsplash.com/photo-1611930021698-a55ec4d5fe6e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDB8fHByb2R1Y3QlMjBwaG90b2dyYXBoeXxlbnwwfHwwfHx8Mg%3D%3D"
-            title="Test product"
-            price="$12.59"
-          />
-          <ProductCard
-            coverImage="https://images.unsplash.com/photo-1620917669809-1af0497965de?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDh8fHByb2R1Y3QlMjBwaG90b2dyYXBoeXxlbnwwfHwwfHx8Mg%3D%3D"
-            title="Test product 2"
-            price="$18"
-          />
-          <ProductCard
-            coverImage="https://images.unsplash.com/photo-1617027185542-e87f1bce9091?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjJ8fHByb2R1Y3QlMjBwaG90b2dyYXBoeXxlbnwwfHwwfHx8Mg%3D%3D"
-            title="Test product 3"
-            price="$32.95"
-          />
-          <ProductCard
-            coverImage="https://images.unsplash.com/photo-1608721279136-cd41b752fa41?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTIyfHxwcm9kdWN0JTIwcGhvdG9ncmFwaHl8ZW58MHx8MHx8fDI%3D"
-            title="Test product 4"
-            price="$12"
-          />
+          {suggestedProducts.map((item) => {
+            return (
+              <ProductCard
+                key={item.id}
+                coverImage={item.coverImage}
+                title={item.name}
+                link={`/products/${item.slug}`}
+                price={`${item.currency.symbol}${item.basePrice}`}
+              />
+            )
+          })}
         </div>
       </div>
-      <Footer />
+      <Footer
+        pageLinks={storeSettings.pageLinks}
+        copyright={storeSettings.copyright}
+      />
     </div>
   )
 }

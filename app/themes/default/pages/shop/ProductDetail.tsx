@@ -9,9 +9,15 @@ import {
   SelectValue,
 } from '~/themes/default/components/ui/select'
 import { Button } from '~/themes/default/components/ui/button'
-import { ProductPublicInfo } from '~/model'
+import { ProductPublicInfo, StoreSettings } from '~/model'
 
-const ProductDetail = ({ product }: { product: ProductPublicInfo | null }) => {
+const ProductDetail = ({
+  storeSettings,
+  product,
+}: {
+  product: ProductPublicInfo | null
+  storeSettings: StoreSettings
+}) => {
   const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden lg:mx-0">
@@ -81,7 +87,7 @@ const ProductDetail = ({ product }: { product: ProductPublicInfo | null }) => {
           </div>
         )}
       </div>
-      <Footer />
+      <Footer pageLinks={storeSettings.pageLinks} />
     </div>
   )
 }
