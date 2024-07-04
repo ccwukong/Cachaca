@@ -2,7 +2,8 @@ import type { MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import Home from '~/themes/default/pages/shop/Home'
-import { ProductModel, PublicInfo } from '~/model'
+import { ProductModel } from '~/models'
+import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -14,9 +15,9 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export const loader = async () => {
   const productModel = new ProductModel()
   return json({
-    storeSettings: await PublicInfo.getStoreInfo(),
-    products: await productModel.findMany(1, 20),
-    banners: await PublicInfo.getHomeBanners(),
+    storeSettings: await mocks.getStoreInfo(),
+    products: await mocks.getMockProducts(),
+    banners: await mocks.getHomeBanners(),
   })
 }
 

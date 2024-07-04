@@ -8,9 +8,6 @@ import { user } from '../db/schema'
 import db from '../db/connection'
 import { makeStr } from '~/utils/string'
 import { ServerInternalError } from '~/utils/exception'
-import products from '../mock/products.json'
-import banners from '../mock/banners.json'
-import settings from '../mock/site_settings.json'
 
 interface CRUDMode<T> {
   find(id: string | number): Promise<T | null>
@@ -158,89 +155,51 @@ export type ProductPublicInfo = {
 
 export class ProductModel implements CRUDMode<ProductPublicInfo> {
   async find(id: string): Promise<ProductPublicInfo | null> {
-    if (process.env.ENVIRONMENT === 'dev') {
-      const item = products.find((item) => item.id === id || item.slug === id)
-      if (item) {
-        return {
-          id: item.id,
-          name: item.name,
-          slug: item.slug,
-          description: item.description,
-          basePrice: item.basePrice,
-          currency: item.currency,
-          coverImage: item.coverImage,
-          categoryId: item.categoryId,
-          subCategoryId: item.subCategoryId,
-          images: item.images,
-        }
-      }
+    const res = await db
+      .select()
+      .from(user)
+      .where(eq(user.id, id as string))
+
+    if (!res.length) {
+      return null
     }
 
-    return null
+    const data: ProductPublicInfo = {
+      id: id as string,
+      email: res[0].email,
+      phone: res[0].phone,
+      firstName: res[0].firstName,
+      lastName: res[0].lastName,
+      avatar: res[0].avatar,
+      role: res[0].role,
+      createdOn: res[0].createdOn,
+      updatedOn: res[0].updatedOn || undefined,
+    }
 
-    // const res = await db
-    //   .select()
-    //   .from(user)
-    //   .where(eq(user.id, id as string))
-
-    // if (!res.length) {
-    //   return null
-    // }
-
-    // const data: UserPublicInfo = {
-    //   id: id as string,
-    //   email: res[0].email,
-    //   phone: res[0].phone,
-    //   firstName: res[0].firstName,
-    //   lastName: res[0].lastName,
-    //   avatar: res[0].avatar,
-    //   role: res[0].role,
-    //   createdOn: res[0].createdOn,
-    //   updatedOn: res[0].updatedOn || undefined,
-    // }
-
-    // return data
+    return data
   }
 
   async findMany(page: number, size: number): Promise<ProductPublicInfo[]> {
-    if (process.env.ENVIRONMENT === 'dev') {
-      return products.map((item) => {
-        return {
-          id: item.id,
-          name: item.name,
-          slug: item.slug,
-          description: item.description,
-          basePrice: item.basePrice,
-          currency: item.currency,
-          coverImage: item.coverImage,
-          categoryId: item.categoryId,
-          subCategoryId: item.subCategoryId,
-          images: item.images,
-        }
-      })
-    }
+    const res = await db
+      .select()
+      .from(user)
+      .orderBy(desc(user.createdOn))
+      .limit(size)
+      .offset(page * size)
 
-    return []
-    // const res = await db
-    //   .select()
-    //   .from(user)
-    //   .orderBy(desc(user.createdOn))
-    //   .limit(size)
-    //   .offset(page * size)
-
-    // return res.map((item) => {
-    //   return {
-    //     id: item.id,
-    //     email: item.email,
-    //     phone: item.phone,
-    //     firstName: item.firstName,
-    //     lastName: item.lastName,
-    //     avatar: item.avatar,
-    //     role: item.role,
-    //     createdOn: item.createdOn,
-    //     updatedOn: item.updatedOn || undefined,
-    //   }
-    // })
+    return res.map((item) => {
+      return {
+        id: item.id,
+        email: item.email,
+        phone: item.phone,
+        firstName: item.firstName,
+        lastName: item.lastName,
+        avatar: item.avatar,
+        role: item.role,
+        createdOn: item.createdOn,
+        updatedOn: item.updatedOn || undefined,
+      }
+    })
   }
 
   async update(): Promise<boolean> {
@@ -298,6 +257,15 @@ export class ProductModel implements CRUDMode<ProductPublicInfo> {
   }
 }
 
+export type CartItemInfo = {
+  title: string
+  slug: string
+  coverImage: string
+  price: number
+  quantity: number
+  currency: Currency
+}
+
 export type BannerItem = {
   imageUrl: string
   link: string
@@ -305,7 +273,7 @@ export type BannerItem = {
   order: number
 }
 
-export type HomeBannerSetting = {
+export type HomeBannerSettings = {
   autoplay: boolean
   speed: number
   bannerItems: BannerItem[]
@@ -327,7 +295,7 @@ export type StoreSettings = {
 }
 
 export class PublicInfo {
-  public static async getHomeBanners(): Promise<HomeBannerSetting> {
+  public static async getHomeBanners(): Promise<HomeBannerSettings> {
     return {
       autoplay: banners.autoplay,
       speed: banners.speed,

@@ -87,7 +87,10 @@ const ProductDetail = ({
           </div>
         )}
       </div>
-      <Footer pageLinks={storeSettings.pageLinks} />
+      <Footer
+        pageLinks={storeSettings.pageLinks}
+        copyright={storeSettings.copyright}
+      />
     </div>
   )
 }

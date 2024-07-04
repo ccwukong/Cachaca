@@ -2,7 +2,8 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import ProductDetail from '~/themes/default/pages/shop/ProductDetail'
-import { ProductModel } from '~/model'
+import { ProductModel } from '~/models'
+import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   let desc = ''
@@ -34,12 +35,15 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const model = new ProductModel()
   return json({
-    product: await model.find(request.url.split('/').at(-1) as string),
+    storeSettings: await mocks.getStoreInfo(),
+    product: await mocks.getMockProductById(
+      request.url.split('/').at(-1) as string,
+    ),
   })
 }
 
 export default function Index() {
-  const { product } = useLoaderData<typeof loader>()
+  const { storeSettings, product } = useLoaderData<typeof loader>()
 
-  return <ProductDetail product={product} />
+  return <ProductDetail product={product} storeSettings={storeSettings} />
 }

@@ -4,15 +4,7 @@ import Footer from '~/themes/default/components/ui/Footer'
 import CartItem from '~/themes/default/components/ui/CartItem'
 import ProductCard from '~/themes/default/components/ui/ProductCard'
 import { Button } from '~/themes/default/components/ui/button'
-import { ProductPublicInfo, StoreSettings } from '~/model'
-
-export interface CartItem {
-  title: string
-  coverImage: string
-  price: number
-  quantity: number
-  currency: string
-}
+import { ProductPublicInfo, StoreSettings, CartItemInfo } from '~/models'
 
 const Cart = ({
   storeSettings,
@@ -20,7 +12,7 @@ const Cart = ({
   suggestedProducts,
 }: {
   storeSettings: StoreSettings
-  items: CartItem[]
+  items: CartItemInfo[]
   suggestedProducts?: ProductPublicInfo[]
 }) => {
   const { t } = useTranslation()
@@ -46,7 +38,7 @@ const Cart = ({
                 key={index}
                 coverImage={item.coverImage}
                 title={item.title}
-                currency={item.currency}
+                currency={item.currency.symbol}
                 price={item.price}
                 quantity={item.quantity}
               />
