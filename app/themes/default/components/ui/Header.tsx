@@ -30,8 +30,8 @@ const Header = ({
   logoOnly?: boolean
 }) => {
   return (
-    <nav className="left-0 bg-white w-full z-50 border-b border-slate-50 shadow-sm h-20 fixed">
-      <div className="items-center max-w-screen-xl mx-auto flex justify-between p-0">
+    <nav className="left-0 bg-white w-full z-50 border-b border-slate-100 shadow-inner h-16 fixed p-0">
+      <div className="items-center max-w-screen-xl mx-auto flex justify-between">
         <div className="ml-6 flex items-center justify-between py-3 md:py-5">
           <Link to="/">
             {storeLogo ? (
@@ -89,7 +89,7 @@ const Header = ({
         <label htmlFor="check" className="inline-block mr-6">
           <Menu size={36} className="cursor-pointer md:hidden" />
         </label>
-        <div className="left-[-100%] peer-checked:left-0 transition-all duration-500 fixed top-20 h-screen w-[100%] z-50 bg-stone-200 bg-opacity-95 block md:hidden">
+        <div className="left-[-100%] peer-checked:left-0 transition-all duration-500 fixed top-16 h-screen w-[100%] z-50 bg-stone-200 bg-opacity-95 block md:hidden">
           {menuItems && (
             <ul className="justify-center items-center md:flex">
               {menuItems.map((item, idx) => (

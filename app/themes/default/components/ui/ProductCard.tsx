@@ -20,15 +20,15 @@ const ProductCard = ({
   return (
     <Card className="py-10 md:pt-0 rounded-none border-none shadow-none">
       <Link to="/products/slug">
-        <CardContent className="h-72 p-0">
+        <CardContent className="h-80 p-0">
           <img
             src={coverImage}
             alt={title}
-            className="object-cover w-full h-full rounded-sm"
+            className="object-cover w-full h-[100%] rounded-sm"
           />
         </CardContent>
-        <CardFooter className="py-3 flex flex-col items-start">
-          <p className="font-weight-300">{title}</p>
+        <CardFooter className="px-0 pt-3 flex flex-col items-start">
+          <p className="font-weight-300 h-14">{title}</p>
           <p className="mt-3 text-lg">{price}</p>
         </CardFooter>
       </Link>
