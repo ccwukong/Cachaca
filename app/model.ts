@@ -10,6 +10,7 @@ import { makeStr } from '~/utils/string'
 import { ServerInternalError } from '~/utils/exception'
 import products from '../mock/products.json'
 import banners from '../mock/banners.json'
+import settings from '../mock/site_settings.json'
 
 interface CRUDMode<T> {
   find(id: string | number): Promise<T | null>
@@ -152,21 +153,26 @@ export type ProductPublicInfo = {
   coverImage: string
   categoryId: number
   subCategoryId: number
+  images: string[]
 }
 
 export class ProductModel implements CRUDMode<ProductPublicInfo> {
   async find(id: string): Promise<ProductPublicInfo | null> {
     if (process.env.ENVIRONMENT === 'dev') {
-      return {
-        id: products[0].id,
-        name: products[0].name,
-        slug: products[0].slug,
-        description: products[0].description,
-        basePrice: products[0].basePrice,
-        currency: products[0].currency,
-        coverImage: products[0].coverImage,
-        categoryId: products[0].categoryId,
-        subCategoryId: products[0].subCategoryId,
+      const item = products.find((item) => item.id === id || item.slug === id)
+      if (item) {
+        return {
+          id: item.id,
+          name: item.name,
+          slug: item.slug,
+          description: item.description,
+          basePrice: item.basePrice,
+          currency: item.currency,
+          coverImage: item.coverImage,
+          categoryId: item.categoryId,
+          subCategoryId: item.subCategoryId,
+          images: item.images,
+        }
       }
     }
 
@@ -209,6 +215,7 @@ export class ProductModel implements CRUDMode<ProductPublicInfo> {
           coverImage: item.coverImage,
           categoryId: item.categoryId,
           subCategoryId: item.subCategoryId,
+          images: item.images,
         }
       })
     }
@@ -304,12 +311,28 @@ export type HomeBannerSetting = {
   bannerItems: BannerItem[]
 }
 
-export class SiteSettings {
+export type StoreSettings = {
+  name: string
+  logo: string
+  description: string
+  currency: Currency
+}
+
+export class PublicInfo {
   public static async getHomeBanners(): Promise<HomeBannerSetting> {
     return {
       autoplay: banners.autoplay,
       speed: banners.speed,
       bannerItems: banners.items,
+    }
+  }
+
+  public static async getStoreInfo(): Promise<StoreSettings> {
+    return {
+      name: settings.name,
+      logo: settings.logo,
+      description: settings.description,
+      currency: settings.currency,
     }
   }
 }

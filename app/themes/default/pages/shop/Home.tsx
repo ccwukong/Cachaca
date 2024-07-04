@@ -62,6 +62,7 @@ const Home = ({
                 key={item.id}
                 coverImage={item.coverImage}
                 title={item.name}
+                link={`/products/${item.slug}`}
                 price={`${item.currency.symbol}${item.basePrice}`}
               />
             )

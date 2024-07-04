@@ -13,7 +13,13 @@
       "name": "US Dollar"
     },
     "categoryId": 1,
-    "subCategoryId": 1
+    "subCategoryId": 1,
+    "images": [
+      "https://images.pexels.com/photos/7670761/pexels-photo-7670761.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "https://images.pexels.com/photos/3373739/pexels-photo-3373739.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "https://images.pexels.com/photos/3735655/pexels-photo-3735655.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "https://images.pexels.com/photos/1191533/pexels-photo-1191533.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+    ]
   },
   {
     "id": "93b400e5-e708-434e-9543-3047619bccf6",
@@ -29,7 +35,10 @@
       "name": "US Dollar"
     },
     "categoryId": 1,
-    "subCategoryId": 1
+    "subCategoryId": 1,
+    "images": [
+      "https://images.pexels.com/photos/8128071/pexels-photo-8128071.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+    ]
   },
   {
     "id": "7cf0cb23-4a88-4454-b820-ff62ecc7028a",
@@ -45,7 +54,10 @@
       "name": "US Dollar"
     },
     "categoryId": 1,
-    "subCategoryId": 2
+    "subCategoryId": 2,
+    "images": [
+      "https://images.pexels.com/photos/8558514/pexels-photo-8558514.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+    ]
   },
 
   {
@@ -62,7 +74,10 @@
       "name": "US Dollar"
     },
     "categoryId": 1,
-    "subCategoryId": 1
+    "subCategoryId": 1,
+    "images": [
+      "https://images.pexels.com/photos/4416763/pexels-photo-4416763.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+    ]
   },
 
   {
@@ -79,7 +94,10 @@
       "name": "US Dollar"
     },
     "categoryId": 8,
-    "subCategoryId": 1
+    "subCategoryId": 1,
+    "images": [
+      "https://images.pexels.com/photos/3731256/pexels-photo-3731256.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+    ]
   },
 
   {
@@ -96,7 +114,10 @@
       "name": "US Dollar"
     },
     "categoryId": 2,
-    "subCategoryId": 1
+    "subCategoryId": 1,
+    "images": [
+      "https://images.pexels.com/photos/4465124/pexels-photo-4465124.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ]
   },
 
   {
@@ -113,7 +134,10 @@
       "name": "US Dollar"
     },
     "categoryId": 3,
-    "subCategoryId": 1
+    "subCategoryId": 1,
+    "images": [
+      "https://images.pexels.com/photos/4210866/pexels-photo-4210866.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+    ]
   },
 
   {
@@ -130,6 +154,9 @@
       "name": "US Dollar"
     },
     "categoryId": 3,
-    "subCategoryId": 2
+    "subCategoryId": 2,
+    "images": [
+      "https://images.pexels.com/photos/2090785/pexels-photo-2090785.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+    ]
   }
 ]

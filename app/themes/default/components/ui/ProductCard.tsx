@@ -10,16 +10,18 @@ import { Button } from '~/themes/default/components/ui/button'
 const ProductCard = ({
   coverImage,
   title,
+  link,
   price,
 }: {
   coverImage: string
   title: string
+  link: string
   price: string
 }) => {
   const { t } = useTranslation()
   return (
     <Card className="py-10 md:pt-0 rounded-none border-none shadow-none">
-      <Link to="/products/slug">
+      <Link to={link}>
         <CardContent className="h-80 p-0">
           <img
             src={coverImage}

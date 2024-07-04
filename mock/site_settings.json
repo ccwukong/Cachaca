@@ -1,0 +1,11 @@
+{
+  "name": "Cachaca",
+  "description": "Cachaca: An AI-powered, open-source e-commerce solution offering advanced features for seamless online store management and enhanced customer experience.",
+  "logo": "",
+  "currency": {
+    "id": 1,
+    "name": "US Dollar",
+    "code": "USD",
+    "symbol": "$"
+  }
+}
