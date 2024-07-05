@@ -2,6 +2,13 @@
 
 An AI-powered open source e-commerce solution.
 
+The project is developed on top of:
+
+- [Remix](https://remix.run/)
+- [Tailwind](https://tailwindcss.com/)
+- [Shadcn](https://ui.shadcn.com/)
+- [Drizzle](https://orm.drizzle.team/)
+
 ## Development
 
 Run the dev server:
@@ -26,15 +33,6 @@ yarn start
 
 Now you'll need to pick a host to deploy it to.
 
-### DIY
+## Attribution
 
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `yarn build`
-
-- `build/server`
-- `build/client`
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+The photos/images that are used for development and demo purposes are from [https://www.pexels.com/](https://www.pexels.com/)
