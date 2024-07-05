@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "2bb7d1b6-2560-430c-ad41-3a39794465eb",
+  "id": "12c618ed-e477-4683-a95e-4a1a9f15880e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "checkout": {
@@ -679,13 +679,6 @@
         }
       },
       "indexes": {
-        "currency_id_idx": {
-          "name": "currency_id_idx",
-          "columns": [
-            "currency_id"
-          ],
-          "isUnique": false
-        },
         "customer_id_idx": {
           "name": "customer_id_idx",
           "columns": [
@@ -818,13 +811,6 @@
         "cover_image": {
           "name": "cover_image",
           "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "currency_id": {
-          "name": "currency_id",
-          "type": "tinyint",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -1336,15 +1322,7 @@
           "autoincrement": false
         }
       },
-      "indexes": {
-        "base_currency_id_idx": {
-          "name": "base_currency_id_idx",
-          "columns": [
-            "base_currency_id"
-          ],
-          "isUnique": false
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {

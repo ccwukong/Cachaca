@@ -7,7 +7,7 @@ import {
 import Header from '~/themes/default/components/ui/Header'
 import Footer from '~/themes/default/components/ui/Footer'
 import ProductCard from '~/themes/default/components/ui/ProductCard'
-import { ProductPublicInfo, HomeBannerSetting, StoreSettings } from '~/model'
+import { ProductPublicInfo, HomeBannerSettings, StoreSettings } from '~/models'
 
 const Home = ({
   storeSettings,
@@ -15,7 +15,7 @@ const Home = ({
   products,
 }: {
   storeSettings: StoreSettings
-  banners: HomeBannerSetting
+  banners: HomeBannerSettings
   products: ProductPublicInfo[]
 }) => {
   return (
@@ -65,7 +65,7 @@ const Home = ({
                 coverImage={item.coverImage}
                 title={item.name}
                 link={`/products/${item.slug}`}
-                price={`${item.currency.symbol}${item.basePrice}`}
+                price={`${storeSettings.currency.symbol}${item.basePrice}`}
               />
             )
           })}

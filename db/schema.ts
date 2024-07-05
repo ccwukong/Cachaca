@@ -126,35 +126,27 @@ export const checkoutItem = mysqlTable(
   },
 )
 
-export const shop = mysqlTable(
-  'shop',
-  {
-    name: varchar('name', { length: 120 }).notNull().unique(),
-    slug: varchar('slug', { length: 120 }).notNull().unique(),
-    domain: varchar('domain', { length: 100 }).notNull().unique(),
-    logo: varchar('logo', { length: 255 }).notNull(),
-    email: varchar('email', { length: 60 }),
-    phone: varchar('phone', { length: 30 }),
-    addressLine1: varchar('address_line_1', { length: 120 }),
-    addressLine2: varchar('address_line_2', { length: 120 }),
-    city: varchar('city', { length: 50 }),
-    state: varchar('state', { length: 60 }),
-    country: varchar('country', { length: 60 }),
-    zipcode: varchar('zipcode', { length: 10 }),
-    baseCurrencyId: tinyint('base_currency_id').notNull(),
-    description: varchar('description', { length: 500 }),
-    createdBy: varchar('created_by', { length: 36 }).notNull(),
-    createdOn: int('created_on').notNull(),
-    updatedBy: varchar('updated_by', { length: 36 }),
-    updatedOn: int('updated_on'),
-    status: tinyint('status').notNull(),
-  },
-  (shop) => {
-    return {
-      baseCurrencyIdIdx: index('base_currency_id_idx').on(shop.baseCurrencyId),
-    }
-  },
-)
+export const shop = mysqlTable('shop', {
+  name: varchar('name', { length: 120 }).notNull().unique(),
+  slug: varchar('slug', { length: 120 }).notNull().unique(),
+  domain: varchar('domain', { length: 100 }).notNull().unique(),
+  logo: varchar('logo', { length: 255 }).notNull(),
+  email: varchar('email', { length: 60 }),
+  phone: varchar('phone', { length: 30 }),
+  addressLine1: varchar('address_line_1', { length: 120 }),
+  addressLine2: varchar('address_line_2', { length: 120 }),
+  city: varchar('city', { length: 50 }),
+  state: varchar('state', { length: 60 }),
+  country: varchar('country', { length: 60 }),
+  zipcode: varchar('zipcode', { length: 10 }),
+  baseCurrencyId: tinyint('base_currency_id').notNull(),
+  description: varchar('description', { length: 500 }),
+  createdBy: varchar('created_by', { length: 36 }).notNull(),
+  createdOn: int('created_on').notNull(),
+  updatedBy: varchar('updated_by', { length: 36 }),
+  updatedOn: int('updated_on'),
+  status: tinyint('status').notNull(),
+})
 
 export const currency = mysqlTable('currency', {
   id: tinyint('id').primaryKey(),
@@ -172,7 +164,6 @@ export const product = mysqlTable(
     name: varchar('name', { length: 120 }).notNull(),
     description: varchar('description', { length: 500 }).notNull(),
     coverImage: varchar('cover_image', { length: 255 }).notNull(),
-    currencyId: tinyint('currency_id').notNull(),
     basePrice: varchar('base_price', { length: 20 }).notNull(),
     categoryId: varchar('category_id', { length: 36 }).notNull(),
     subCategoryId: varchar('subcategory_id', { length: 36 }).notNull(),
@@ -315,7 +306,6 @@ export const order = mysqlTable(
   },
   (table) => {
     return {
-      currencyIdIdx: index('currency_id_idx').on(table.currencyId),
       customerIdIdx: index('customer_id_idx').on(table.customerId),
       checkoutIdIdx: index('checkout_id_idx').on(table.checkoutId),
     }

@@ -6,12 +6,6 @@
     "coverImage": "https://images.pexels.com/photos/7670761/pexels-photo-7670761.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     "basePrice": "29",
     "description": "Achieve flawless radiance with our new Radiant Glow Foundation in Light Pink. Formulated with advanced light-diffusing technology, this foundation effortlessly evens out skin tone and blurs imperfections for a smooth, natural finish that lasts all day.<br /><br />Infused with skin-loving ingredients like Vitamin E and hyaluronic acid, our Light Pink shade enhances your complexion with a subtle, luminous tint that brightens and revitalizes dull skin. Perfect for everyday wear, its lightweight formula provides buildable coverage that adapts to your skin’s needs, ensuring a breathable and comfortable feel.<br /><br />Discover the secret to a luminous complexion with Radiant Glow Foundation - Light Pink. Illuminate your natural beauty effortlessly.",
-    "currency": {
-      "id": 1,
-      "code": "USD",
-      "symbol": "$",
-      "name": "US Dollar"
-    },
     "categoryId": 1,
     "subCategoryId": 1,
     "images": [
@@ -28,12 +22,6 @@
     "coverImage": "https://images.pexels.com/photos/8128071/pexels-photo-8128071.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     "basePrice": "159",
     "description": "Enhance your pout with our Luminous Lips Lip Gloss, now available in a stunning Multi-Color Collection. Experience the ultimate versatility with a range of shades designed to complement every mood and occasion.<br /><br />Infused with nourishing oils and enriched with vitamin E, our lip gloss delivers a hydrating, glossy finish that keeps lips feeling soft and smooth. Whether you're aiming for a subtle shimmer or a bold pop of color, each shade in our collection glides on effortlessly, providing long-lasting wear without any sticky residue.<br /><br />From sophisticated neutrals to vibrant hues, the Luminous Lips Lip Gloss Multi-Color Collection ensures there’s a perfect shade for every makeup lover. Elevate your look with a touch of luscious color and irresistible shine that lasts.",
-    "currency": {
-      "id": 1,
-      "code": "USD",
-      "symbol": "$",
-      "name": "US Dollar"
-    },
     "categoryId": 1,
     "subCategoryId": 1,
     "images": [
@@ -47,12 +35,6 @@
     "coverImage": "https://images.pexels.com/photos/8558514/pexels-photo-8558514.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     "basePrice": "65",
     "description": "Transform your lashes with our revolutionary Lash Amplify Mascara, the ultimate must-have for voluminous, dramatic eyes. Engineered with a cutting-edge formula, this mascara instantly lengthens, curls, and adds incredible volume to your lashes with just one coat.<br /><br />The uniquely designed brush features densely packed bristles that coat each lash from root to tip, ensuring maximum definition and separation without clumping or flaking. Our smudge-proof and water-resistant formula guarantees long-lasting wear, keeping your lashes looking bold and beautiful all day and night.<br /><br />Whether you desire a natural look or full-on glam, Lash Amplify Mascara is your go-to for achieving intensified, captivating lashes. Elevate your eye makeup game effortlessly and embrace lashes that speak volumes.",
-    "currency": {
-      "id": 1,
-      "code": "USD",
-      "symbol": "$",
-      "name": "US Dollar"
-    },
     "categoryId": 1,
     "subCategoryId": 2,
     "images": [
@@ -67,12 +49,7 @@
     "coverImage": "https://images.pexels.com/photos/4416763/pexels-photo-4416763.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     "basePrice": "29",
     "description": "Unleash your inner confidence with Velvet Rouge Lipstick in Red Seduction. Our luxurious formula glides on effortlessly, delivering a rich, velvety finish that lasts from day to night.<br /><br />Indulge in the timeless allure of a classic red hue that complements every skin tone. Enriched with moisturizing ingredients like shea butter and jojoba oil, this lipstick not only provides intense color but also nourishes and hydrates your lips for a smooth, comfortable feel.<br /><br />Whether you're attending a glamorous event or simply want to elevate your everyday look, Velvet Rouge Lipstick promises bold, statement-making lips that demand attention. Embrace the power of red and embrace your beauty with confidence and sophistication.",
-    "currency": {
-      "id": 1,
-      "code": "USD",
-      "symbol": "$",
-      "name": "US Dollar"
-    },
+
     "categoryId": 1,
     "subCategoryId": 1,
     "images": [
@@ -87,12 +64,6 @@
     "coverImage": "https://images.pexels.com/photos/3731256/pexels-photo-3731256.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     "basePrice": "38",
     "description": "Elevate your everyday style with our Urban Chic Backpack from the Cityscape Collection. This fashion-forward accessory blends functionality with contemporary design, perfect for the modern adventurer.<br /><br />Crafted from high-quality faux leather and durable nylon, our backpack is as resilient as it is stylish. Featuring multiple compartments and pockets, it offers ample space for all your essentials, whether you're commuting to work or exploring the city.",
-    "currency": {
-      "id": 1,
-      "code": "USD",
-      "symbol": "$",
-      "name": "US Dollar"
-    },
     "categoryId": 8,
     "subCategoryId": 1,
     "images": [
@@ -107,12 +78,6 @@
     "coverImage": "https://images.pexels.com/photos/4465124/pexels-photo-4465124.jpeg?auto=compress&cs=tinysrgb&w=800",
     "basePrice": "22",
     "description": "Pamper your hands with our luxurious Silk Touch Hand Cream, a decadent treat for soft, supple skin. Enriched with a blend of nourishing botanical extracts and vitamin E, this cream provides intense hydration and revitalization for dry, tired hands.<br /><br />The lightweight formula absorbs quickly without greasy residue, leaving your hands feeling silky-smooth and delicately scented. Whether you're battling winter dryness or simply seeking a daily indulgence, our Silk Touch Hand Cream is your go-to solution for maintaining beautifully moisturized hands.<br /><br />Infused with a soothing fragrance that lingers gently, our hand cream offers a sensory experience that uplifts and rejuvenates. Treat yourself to the luxury of silky-soft hands with every application of our Silk Touch Hand Cream.",
-    "currency": {
-      "id": 1,
-      "code": "USD",
-      "symbol": "$",
-      "name": "US Dollar"
-    },
     "categoryId": 2,
     "subCategoryId": 1,
     "images": [
@@ -127,12 +92,6 @@
     "coverImage": "https://images.pexels.com/photos/4210866/pexels-photo-4210866.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     "basePrice": "106",
     "description": "Discover timeless style and exceptional comfort with our Denim Deluxe Jeans in Classic Indigo. Crafted from premium denim fabric, these jeans offer a perfect blend of durability and flexibility, ensuring a flattering fit that hugs your curves in all the right places.<br /><br />Designed for versatility, our jeans feature a classic five-pocket styling with rivet details and a zip fly closure. The medium-rise waist provides a comfortable and flattering silhouette, making them ideal for everyday wear and casual outings.<br /><br />Available in a range of sizes to suit every body type, our Denim Deluxe Jeans are a wardrobe essential that seamlessly transitions from day to night. Embrace effortless chic with jeans that embody the essence of timeless denim fashion.",
-    "currency": {
-      "id": 1,
-      "code": "USD",
-      "symbol": "$",
-      "name": "US Dollar"
-    },
     "categoryId": 3,
     "subCategoryId": 1,
     "images": [
@@ -147,12 +106,6 @@
     "coverImage": "https://images.pexels.com/photos/2090785/pexels-photo-2090785.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     "basePrice": "65",
     "description": "Stride confidently through city streets with our Urban Edge High-Heel Shoes, crafted for the modern woman who embraces urban sophistication. Made from premium leather and featuring a contemporary design, these heels combine style with practicality.<br /><br />The edgy yet versatile silhouette features a block heel for stability and comfort, ensuring all-day wearability without compromising on fashion-forward appeal. Whether you're navigating bustling sidewalks or attending a chic rooftop gathering, our Urban Edge High-Heel Shoes effortlessly elevate your ensemble.<br /><br />Available in chic neutral tones that effortlessly blend with urban fashion trends, these shoes are adorned with subtle details like sleek buckles or metallic accents for an extra touch of urban flair. Embrace the essence of city life with shoes that embody both style and substance—our Urban Edge High-Heel Shoes are your go-to for making a statement on every city adventure.",
-    "currency": {
-      "id": 1,
-      "code": "USD",
-      "symbol": "$",
-      "name": "US Dollar"
-    },
     "categoryId": 3,
     "subCategoryId": 2,
     "images": [

@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from '~/themes/default/components/ui/select'
 import { Button } from '~/themes/default/components/ui/button'
-import { ProductPublicInfo, StoreSettings } from '~/model'
+import { ProductPublicInfo, StoreSettings } from '~/models'
 
 const ProductDetail = ({
   storeSettings,
@@ -47,7 +47,7 @@ const ProductDetail = ({
             </div>
             <div className="md:col-span-2">
               <p className="text-xl font-light">{product.name}</p>
-              <p className="text-2xl mt-5">{`${product.currency.symbol}${product.basePrice}`}</p>
+              <p className="text-2xl mt-5">{`${storeSettings.currency.symbol}${product.basePrice}`}</p>
               <p
                 className="mt-5"
                 dangerouslySetInnerHTML={{ __html: product.description }}

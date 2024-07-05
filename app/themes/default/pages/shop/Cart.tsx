@@ -38,7 +38,7 @@ const Cart = ({
                 key={index}
                 coverImage={item.coverImage}
                 title={item.title}
-                currency={item.currency.symbol}
+                currency={storeSettings.currency.symbol}
                 price={item.price}
                 quantity={item.quantity}
               />
@@ -46,7 +46,12 @@ const Cart = ({
             <div className="border-t border-gray-200 mt-4">
               <div className="flex justify-between mb-2">
                 <div>Subtotal</div>
-                <div>$129.00</div>
+                <div>
+                  {items.reduce(
+                    (accu, item) => accu + item.price * item.quantity,
+                    0,
+                  )}
+                </div>
               </div>
               <div className="flex justify-between mb-2">
                 <div>Shipping</div>

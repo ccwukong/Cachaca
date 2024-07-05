@@ -1,7 +1,7 @@
 import Header from '~/themes/default/components/ui/Header'
 import Footer from '~/themes/default/components/ui/Footer'
 import ProductCard from '~/themes/default/components/ui/ProductCard'
-import { ProductPublicInfo, StoreSettings } from '~/model'
+import { ProductPublicInfo, StoreSettings } from '~/models'
 
 const CategoryProductList = ({
   storeSettings,
@@ -32,13 +32,16 @@ const CategoryProductList = ({
                 coverImage={item.coverImage}
                 title={item.name}
                 link={`/products/${item.slug}`}
-                price={`${item.currency.symbol}${item.basePrice}`}
+                price={`${storeSettings.currency.symbol}${item.basePrice}`}
               />
             )
           })}
         </div>
       </div>
-      <Footer pageLinks={storeSettings.pageLinks} />
+      <Footer
+        pageLinks={storeSettings.pageLinks}
+        copyright={storeSettings.copyright}
+      />
     </div>
   )
 }

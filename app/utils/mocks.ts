@@ -83,7 +83,7 @@ export function getCart(): Promise<CartItemInfo[]> {
           coverImage: item.coverImage,
           price: item.price,
           quantity: item.quantity,
-          currency: item.quantity,
+          currency: item.currency,
         }
       }),
     ),

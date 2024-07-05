@@ -31,6 +31,7 @@ const CartItem = ({
             type="number"
             value={quantity}
             className="px-2 py-1 h-auto w-14"
+            onChange={() => {}}
           />
         </div>
       </div>

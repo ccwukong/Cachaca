@@ -121,7 +121,6 @@ CREATE TABLE `product` (
 	`name` varchar(120) NOT NULL,
 	`description` varchar(500) NOT NULL,
 	`cover_image` varchar(255) NOT NULL,
-	`currency_id` tinyint NOT NULL,
 	`base_price` varchar(20) NOT NULL,
 	`category_id` varchar(36) NOT NULL,
 	`subcategory_id` varchar(36) NOT NULL,
@@ -228,7 +227,6 @@ CREATE INDEX `product_variant_id_idx` ON `checkout_item` (`product_variant_id`);
 CREATE INDEX `email_idx` ON `customer` (`email`);--> statement-breakpoint
 CREATE INDEX `phone_idx` ON `customer` (`phone`);--> statement-breakpoint
 CREATE INDEX `customer_id_idx` ON `customer_address` (`customer_id`);--> statement-breakpoint
-CREATE INDEX `currency_id_idx` ON `order` (`currency_id`);--> statement-breakpoint
 CREATE INDEX `customer_id_idx` ON `order` (`customer_id`);--> statement-breakpoint
 CREATE INDEX `checkout_id_idx` ON `order` (`checkout_id`);--> statement-breakpoint
 CREATE INDEX `cat_id_idx` ON `product` (`category_id`);--> statement-breakpoint
@@ -236,6 +234,5 @@ CREATE INDEX `product_id_idx` ON `product_image` (`product_id`);--> statement-br
 CREATE INDEX `category_id_idx` ON `product_subcategory` (`category_id`);--> statement-breakpoint
 CREATE INDEX `product_id_idx` ON `product_variant` (`product_id`);--> statement-breakpoint
 CREATE INDEX `variant_cat_id_idx` ON `product_variant` (`variant_cat_id`);--> statement-breakpoint
-CREATE INDEX `base_currency_id_idx` ON `shop` (`base_currency_id`);--> statement-breakpoint
 CREATE INDEX `email_idx` ON `user` (`email`);--> statement-breakpoint
 CREATE INDEX `phone_idx` ON `user` (`phone`);
