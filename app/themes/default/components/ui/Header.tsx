@@ -116,10 +116,7 @@ const Header = ({
                         <AccordionContent>
                           {item.subCategories.map((sub) => {
                             return (
-                              <li
-                                key={idx}
-                                className="hover:text-indigo-600 inline-block"
-                              >
+                              <li key={idx} className="block py-2 text-lg">
                                 <Link
                                   to={`/categories/${item.slug}/s/${sub.slug}`}
                                 >
