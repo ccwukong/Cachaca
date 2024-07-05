@@ -9,6 +9,10 @@ The project is developed on top of:
 - [Shadcn](https://ui.shadcn.com/)
 - [Drizzle](https://orm.drizzle.team/)
 
+## Demo
+
+[https://main--roaring-gnome-50b6e1.netlify.app/](https://main--roaring-gnome-50b6e1.netlify.app/)
+
 ## Development
 
 Run the dev server:
