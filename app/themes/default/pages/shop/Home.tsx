@@ -7,28 +7,27 @@ import {
 import Header from '~/themes/default/components/ui/Header'
 import Footer from '~/themes/default/components/ui/Footer'
 import ProductCard from '~/themes/default/components/ui/ProductCard'
-import { ProductPublicInfo, HomeBannerSettings, StoreSettings } from '~/models'
+import {
+  ProductPublicInfo,
+  HomeBannerSettings,
+  StoreSettings,
+  CategoryItem,
+} from '~/models'
 
 const Home = ({
+  categories,
   storeSettings,
   banners,
   products,
 }: {
+  categories: CategoryItem[]
   storeSettings: StoreSettings
   banners: HomeBannerSettings
   products: ProductPublicInfo[]
 }) => {
   return (
     <div className="mx-6 overflow-hidden lg:mx-0">
-      <Header
-        storeLogo=""
-        storeName="Cachaca"
-        menuItems={[
-          { title: 'Men', path: '/categories/men' },
-          { title: 'Women', path: '/categories/women' },
-          { title: 'Accessories', path: '/categories/accessories' },
-        ]}
-      />
+      <Header storeLogo="" storeName="Cachaca" menuItems={categories} />
 
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
         <Carousel

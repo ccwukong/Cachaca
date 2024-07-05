@@ -146,7 +146,6 @@ export type ProductPublicInfo = {
   slug: string
   description: string
   basePrice: string
-  currency: Currency
   coverImage: string
   categoryId: number
   subCategoryId: number
@@ -261,9 +260,15 @@ export type CartItemInfo = {
   title: string
   slug: string
   coverImage: string
-  price: number
+  price: string
   quantity: number
-  currency: Currency
+}
+
+export type CategoryItem = {
+  id: number
+  name: string
+  slug: string
+  subCategories?: CategoryItem[]
 }
 
 export type BannerItem = {

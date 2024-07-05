@@ -9,28 +9,22 @@ import {
   SelectValue,
 } from '~/themes/default/components/ui/select'
 import { Button } from '~/themes/default/components/ui/button'
-import { ProductPublicInfo, StoreSettings } from '~/models'
+import { ProductPublicInfo, StoreSettings, CategoryItem } from '~/models'
 
 const ProductDetail = ({
+  categories,
   storeSettings,
   product,
 }: {
+  categories: CategoryItem[]
   product: ProductPublicInfo | null
   storeSettings: StoreSettings
 }) => {
   const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden lg:mx-0">
-      <Header
-        storeLogo=""
-        storeName="Cachaca"
-        menuItems={[
-          { title: 'Men', path: '/categories/men' },
-          { title: 'Women', path: '/categories/women' },
-          { title: 'Accessories', path: '/categories/accessories' },
-        ]}
-      />
-      <div className="max-w-screen-xl mx-auto h-auto pt-28">
+      <Header storeLogo="" storeName="Cachaca" menuItems={categories} />
+      <div className="max-w-screen-xl mx-auto h-auto pt-24">
         {product && (
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
             <div className="grid grid-cols-1 md:grid-cols-2 md:col-span-3 gap-2">

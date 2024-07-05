@@ -12,11 +12,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '~/themes/default/components/ui/accordion'
-
-export interface MenuItem {
-  title: string
-  path: string
-}
+import { CategoryItem } from '~/models'
 
 const Header = ({
   storeLogo,
@@ -26,7 +22,7 @@ const Header = ({
 }: {
   storeLogo: string
   storeName: string
-  menuItems?: MenuItem[]
+  menuItems?: CategoryItem[]
   logoOnly?: boolean
 }) => {
   return (
@@ -52,16 +48,27 @@ const Header = ({
           <div className="hidden pb-3 mt-8 md:pb-0 md:mt-0 md:flex-1 md:block">
             <ul className="justify-center items-center space-y-8 md:flex md:space-x-6 md:space-y-0">
               {menuItems.map((item, idx) => (
-                <li key={item.title}>
+                <li key={item.id}>
                   <HoverCard>
                     <HoverCardTrigger>
-                      <Link to={item.path}>{item.title}</Link>
+                      <Link to={`/categories/${item.slug}`}>{item.name}</Link>
                     </HoverCardTrigger>
-                    <HoverCardContent>
-                      <li key={idx} className="hover:text-indigo-600">
-                        <Link to={item.path}>{item.title}</Link>
-                      </li>
-                    </HoverCardContent>
+                    {item.subCategories && (
+                      <HoverCardContent className="flex justify-around">
+                        {item.subCategories.map((sub) => {
+                          return (
+                            <li
+                              key={idx}
+                              className="hover:text-indigo-600 inline-block"
+                            >
+                              <Link to={`/categories/${item.slug}/${sub.slug}`}>
+                                {sub.name}
+                              </Link>
+                            </li>
+                          )
+                        })}
+                      </HoverCardContent>
+                    )}
                   </HoverCard>
                 </li>
               ))}
@@ -98,12 +105,29 @@ const Header = ({
                     <AccordionItem value="item-1" className="text-center">
                       <AccordionTrigger>
                         <div className="w-full">
-                          <Link to={item.path}>{item.title}</Link>
+                          <Link to={`/categories/${item.slug}`}>
+                            {item.name}
+                          </Link>
                         </div>
                       </AccordionTrigger>
-                      <AccordionContent>
-                        <Link to={item.path}>{item.title}</Link>
-                      </AccordionContent>
+                      {item.subCategories && (
+                        <AccordionContent>
+                          {item.subCategories.map((sub) => {
+                            return (
+                              <li
+                                key={idx}
+                                className="hover:text-indigo-600 inline-block"
+                              >
+                                <Link
+                                  to={`/categories/${item.slug}/${sub.slug}`}
+                                >
+                                  {sub.name}
+                                </Link>
+                              </li>
+                            )
+                          })}
+                        </AccordionContent>
+                      )}
                     </AccordionItem>
                   </Accordion>
                 </li>

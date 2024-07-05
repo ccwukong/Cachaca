@@ -15,14 +15,19 @@ export const meta: MetaFunction = () => {
 export const loader = async () => {
   const model = new ProductModel()
   return json({
+    categories: await mocks.getCategories(),
     storeSettings: await mocks.getStoreInfo(),
     products: await mocks.getMockProducts(),
   })
 }
 
 export default function Index() {
-  const { storeSettings, products } = useLoaderData<typeof loader>()
+  const { categories, storeSettings, products } = useLoaderData<typeof loader>()
   return (
-    <CategoryProductList products={products} storeSettings={storeSettings} />
+    <CategoryProductList
+      categories={categories}
+      products={products}
+      storeSettings={storeSettings}
+    />
   )
 }

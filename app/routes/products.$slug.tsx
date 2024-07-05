@@ -35,6 +35,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const model = new ProductModel()
   return json({
+    categories: await mocks.getCategories(),
     storeSettings: await mocks.getStoreInfo(),
     product: await mocks.getMockProductById(
       request.url.split('/').at(-1) as string,
@@ -43,7 +44,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const { storeSettings, product } = useLoaderData<typeof loader>()
+  const { categories, storeSettings, product } = useLoaderData<typeof loader>()
 
-  return <ProductDetail product={product} storeSettings={storeSettings} />
+  return (
+    <ProductDetail
+      product={product}
+      storeSettings={storeSettings}
+      categories={categories}
+    />
+  )
 }

@@ -3,12 +3,6 @@
     "coverImage": "https://images.pexels.com/photos/7670761/pexels-photo-7670761.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     "title": "Radiant Glow Foundation - Light Pink",
     "slug": "radian-glow-foundation",
-    "currency": {
-      "id": 1,
-      "code": "USD",
-      "symbol": "$",
-      "name": "US Dollar"
-    },
     "price": "29",
     "quantity": 3
   },
@@ -16,12 +10,6 @@
     "coverImage": "https://images.pexels.com/photos/4210866/pexels-photo-4210866.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     "title": "Denim Deluxe Jeans - Classic Indigo",
     "slug": "denim-deluxe-jeans-classic-indigo",
-    "currency": {
-      "id": 1,
-      "code": "USD",
-      "symbol": "$",
-      "name": "US Dollar"
-    },
     "price": "106",
     "quantity": 2
   }

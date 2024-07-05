@@ -1,28 +1,22 @@
 import Header from '~/themes/default/components/ui/Header'
 import Footer from '~/themes/default/components/ui/Footer'
 import ProductCard from '~/themes/default/components/ui/ProductCard'
-import { ProductPublicInfo, StoreSettings } from '~/models'
+import { ProductPublicInfo, StoreSettings, CategoryItem } from '~/models'
 
 const CategoryProductList = ({
+  categories,
   storeSettings,
   products,
 }: {
+  categories: CategoryItem[]
   products: ProductPublicInfo[]
   storeSettings: StoreSettings
 }) => {
   return (
     <div className="mx-6 overflow-hidden lg:mx-0">
-      <Header
-        storeLogo=""
-        storeName="Cachaca"
-        menuItems={[
-          { title: 'Men', path: '/categories/men' },
-          { title: 'Women', path: '/categories/women' },
-          { title: 'Accessories', path: '/categories/accessories' },
-        ]}
-      />
+      <Header storeLogo="" storeName="Cachaca" menuItems={categories} />
 
-      <div className="max-w-screen-xl mx-auto h-auto pt-28">
+      <div className="max-w-screen-xl mx-auto h-auto pt-24">
         <h2 className="mb-6 text-xl">Mens</h2>
         <div className="grid grid-cols-1 lg:grid-cols-4 lg:gap-8">
           {products.map((item) => {

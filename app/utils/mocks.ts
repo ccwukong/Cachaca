@@ -2,11 +2,13 @@ import products from '../../mockdata/products.json'
 import banners from '../../mockdata/banners.json'
 import settings from '../../mockdata/site_settings.json'
 import cart from '../../mockdata/cart.json'
+import categories from '../../mockdata/categories.json'
 import {
   StoreSettings,
   HomeBannerSettings,
   ProductPublicInfo,
   CartItemInfo,
+  CategoryItem,
 } from '~/models'
 
 export function getMockProductById(id: string) {
@@ -18,7 +20,6 @@ export function getMockProductById(id: string) {
       slug: item.slug,
       description: item.description,
       basePrice: item.basePrice,
-      currency: item.currency,
       coverImage: item.coverImage,
       categoryId: item.categoryId,
       subCategoryId: item.subCategoryId,
@@ -39,7 +40,6 @@ export function getMockProducts(): Promise<ProductPublicInfo[]> {
           slug: item.slug,
           description: item.description,
           basePrice: item.basePrice,
-          currency: item.currency,
           coverImage: item.coverImage,
           categoryId: item.categoryId,
           subCategoryId: item.subCategoryId,
@@ -83,7 +83,21 @@ export function getCart(): Promise<CartItemInfo[]> {
           coverImage: item.coverImage,
           price: item.price,
           quantity: item.quantity,
-          currency: item.currency,
+        } as CartItemInfo
+      }),
+    ),
+  )
+}
+
+export function getCategories(): Promise<CategoryItem[]> {
+  return new Promise((resolve) =>
+    resolve(
+      categories.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+          slug: item.slug,
+          subCategories: item.subCategories,
         }
       }),
     ),
