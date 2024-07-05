@@ -7,17 +7,19 @@ const CategoryProductList = ({
   categories,
   storeSettings,
   products,
+  category,
 }: {
   categories: CategoryItem[]
   products: ProductPublicInfo[]
   storeSettings: StoreSettings
+  category: string
 }) => {
   return (
     <div className="mx-6 overflow-hidden lg:mx-0">
       <Header storeLogo="" storeName="Cachaca" menuItems={categories} />
 
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
-        <h2 className="mb-6 text-xl">Mens</h2>
+        <h2 className="mb-6 text-xl">{category}</h2>
         <div className="grid grid-cols-1 lg:grid-cols-4 lg:gap-8">
           {products.map((item) => {
             return (
