@@ -11,22 +11,22 @@ const CartItem = ({
   coverImage: string
   title: string
   currency: string
-  price: number
+  price: string
   quantity: number
 }) => {
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-3 border border-slate-100 rounded py-3 px-6 shadow-md mb-6">
+    <div className="w-full grid grid-cols-1 md:grid-cols-3 border border-slate-100 rounded md:py-3 md:px-6 shadow-md mb-6">
       <div>
         <img
           src={coverImage}
           alt={title}
-          className="object-cover w-28 h-36 rounded"
+          className="object-cover w-full h-76 md:w-28 md:h-36 rounded"
         />
       </div>
-      <div className="md:cols-span-2">
+      <div className="p-3 md:p-0 md:cols-span-2">
         <div className="text-xl font-light font-weight-300">{title}</div>
         <div className="flex items-center space-x-3 mt-3">
-          <div>Quantity:</div>{' '}
+          <div>Quantity:</div>
           <Input
             type="number"
             value={quantity}
@@ -35,9 +35,9 @@ const CartItem = ({
           />
         </div>
       </div>
-      <div className="flex flex-col justify-between items-end">
+      <div className="p-3 md:p-0 flex mt-3 md:mt-0 md:flex-col justify-between items-end">
         <div className="text-xl text-black ">{`${currency} ${
-          price * quantity
+          Number(price) * quantity
         }`}</div>
         <Trash2 className="cursor-pointer" />
       </div>

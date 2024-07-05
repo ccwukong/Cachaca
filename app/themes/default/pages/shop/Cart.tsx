@@ -38,7 +38,7 @@ const Cart = ({
       <Header storeLogo="" storeName="Cachaca" menuItems={categories} />
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
         <p className="text-2xl font-light">
-          {t('my_cart__ph').replace('{{no_of_items}}', `${items.length}`)}
+          {t('default.my_cart__ph', { no_of_items: items.length })}
         </p>
         <div className="mt-6 grid grid-cols-1 md:grid-cols-5 gap-8">
           <div className="md:col-span-3">
@@ -67,7 +67,7 @@ const Cart = ({
               <div className="flex justify-between font-bold">
                 <div>Total due</div>
                 <div>{`${storeSettings.currency.symbol}${
-                  subtotal + shippingFee
+                  Number(subtotal) + Number(shippingFee)
                 }`}</div>
               </div>
             </div>

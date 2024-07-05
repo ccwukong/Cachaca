@@ -6,8 +6,6 @@ import {
   ScrollRestoration,
   json,
   useLoaderData,
-  isRouteErrorResponse,
-  useRouteError,
 } from '@remix-run/react'
 import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node'
 import { useChangeLanguage } from 'remix-i18next/react'

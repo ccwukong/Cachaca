@@ -1,4 +1,7 @@
 {
-  "add_cart": "Add to cart",
-  "my_cart__ph": "My shopping cart ({{no_of_items}})"
+  "default.add_cart": "Add to cart",
+  "default.my_cart__ph": "My shopping cart ({{no_of_items}})",
+  "default.register": "Register",
+  "default.login": "Login",
+  "default.cart_voucher_hint": "Do you have an voucher?"
 }

@@ -75,7 +75,7 @@ const ProductDetail = ({
                 </Select>
               </div>
               <Button variant="secondary" className="w-full mt-10">
-                {t('add_cart')}
+                {t('default.add_cart')}
               </Button>
             </div>
           </div>
