@@ -53,6 +53,8 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "@netlify/functions": "^2.8.1",
+    "@netlify/remix-adapter": "^2.4.0",
     "@remix-run/dev": "^2.10.0",
     "@types/md5": "^2.3.5",
     "@types/react": "^18.2.20",
@@ -75,6 +77,6 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "engines": {
-    "node": ">=18.20.3"
+    "node": ">=18.0.0"
   }
 }
