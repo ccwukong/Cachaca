@@ -6,6 +6,8 @@ import {
   ScrollRestoration,
   json,
   useLoaderData,
+  isRouteErrorResponse,
+  useRouteError,
 } from '@remix-run/react'
 import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node'
 import { useChangeLanguage } from 'remix-i18next/react'
@@ -23,12 +25,12 @@ export const links: LinksFunction = () => [
 ]
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { locale } = useLoaderData<typeof loader>()
+  const loaderData = useLoaderData<typeof loader>()
   const { i18n } = useTranslation()
-  useChangeLanguage(locale)
+  useChangeLanguage(loaderData?.locale || 'en')
 
   return (
-    <html lang={locale} dir={i18n.dir()}>
+    <html lang={loaderData?.locale || 'en'} dir={i18n.dir()}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

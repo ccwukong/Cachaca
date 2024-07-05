@@ -61,7 +61,9 @@ const Header = ({
                               key={idx}
                               className="hover:text-indigo-600 inline-block"
                             >
-                              <Link to={`/categories/${item.slug}/${sub.slug}`}>
+                              <Link
+                                to={`/categories/${item.slug}/s/${sub.slug}`}
+                              >
                                 {sub.name}
                               </Link>
                             </li>
@@ -119,7 +121,7 @@ const Header = ({
                                 className="hover:text-indigo-600 inline-block"
                               >
                                 <Link
-                                  to={`/categories/${item.slug}/${sub.slug}`}
+                                  to={`/categories/${item.slug}/s/${sub.slug}`}
                                 >
                                   {sub.name}
                                 </Link>
