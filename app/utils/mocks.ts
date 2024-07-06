@@ -3,13 +3,7 @@ import banners from '../../mockdata/banners.json'
 import settings from '../../mockdata/site_settings.json'
 import cart from '../../mockdata/cart.json'
 import categories from '../../mockdata/categories.json'
-import {
-  StoreSettings,
-  HomeBannerSettings,
-  ProductPublicInfo,
-  CartItemInfo,
-  CategoryItem,
-} from '~/models'
+import orders from '../../mockdata/orders.json'
 
 export function getMockProductById(id: string) {
   const item = products.find((item) => item.id === id || item.slug === id)
@@ -30,7 +24,7 @@ export function getMockProductById(id: string) {
   }
 }
 
-export function getMockProducts(): Promise<ProductPublicInfo[]> {
+export function getMockProducts(): Promise<object[]> {
   return new Promise((resolve) => {
     resolve(
       products.map((item) => {
@@ -50,7 +44,7 @@ export function getMockProducts(): Promise<ProductPublicInfo[]> {
   })
 }
 
-export function getHomeBanners(): Promise<HomeBannerSettings> {
+export function getHomeBanners(): Promise<object> {
   return new Promise((resolve) =>
     resolve({
       autoplay: banners.autoplay,
@@ -60,7 +54,7 @@ export function getHomeBanners(): Promise<HomeBannerSettings> {
   )
 }
 
-export function getStoreInfo(): Promise<StoreSettings> {
+export function getStoreInfo(): Promise<object> {
   return new Promise((resolve) =>
     resolve({
       name: settings.name,
@@ -73,7 +67,7 @@ export function getStoreInfo(): Promise<StoreSettings> {
   )
 }
 
-export function getCart(): Promise<CartItemInfo[]> {
+export function getCart(): Promise<object[]> {
   return new Promise((resolve) =>
     resolve(
       cart.map((item) => {
@@ -83,13 +77,13 @@ export function getCart(): Promise<CartItemInfo[]> {
           coverImage: item.coverImage,
           price: item.price,
           quantity: item.quantity,
-        } as CartItemInfo
+        }
       }),
     ),
   )
 }
 
-export function getCategories(): Promise<CategoryItem[]> {
+export function getCategories(): Promise<object[]> {
   return new Promise((resolve) =>
     resolve(
       categories.map((item) => {
@@ -102,4 +96,8 @@ export function getCategories(): Promise<CategoryItem[]> {
       }),
     ),
   )
+}
+
+export function getOrders(): Promise<object[]> {
+  return new Promise((resolve) => resolve(orders))
 }

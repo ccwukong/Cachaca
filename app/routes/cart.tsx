@@ -2,7 +2,13 @@ import type { MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import Cart from '~/themes/default/pages/storefront/Cart'
-import { PublicInfo, ProductModel } from '~/models'
+import {
+  CartItemInfo,
+  ProductModel,
+  CategoryItem,
+  StoreSettings,
+  ProductPublicInfo,
+} from '~/models'
 import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction = () => {
@@ -28,10 +34,10 @@ export default function Index() {
     useLoaderData<typeof loader>()
   return (
     <Cart
-      categories={categories}
-      items={items}
-      storeSettings={storeSettings}
-      suggestedProducts={suggestedProducts}
+      categories={categories as CategoryItem[]}
+      items={items as CartItemInfo[]}
+      storeSettings={storeSettings as StoreSettings}
+      suggestedProducts={suggestedProducts as ProductPublicInfo[]}
       shippingFee={shippingFee}
       allowVoucher={true}
       allowGuestCheckout={true}

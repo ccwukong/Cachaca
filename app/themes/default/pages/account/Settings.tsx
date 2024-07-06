@@ -92,7 +92,7 @@ const Settings = ({
             </div>
           </div>
         </div>
-        <div className="max-w-screen-xl md:max-w-screen-md w-full flex-1 space-y-4 p-8 mx-auto h-auto mt-24">
+        <div className="max-w-screen-xl md:max-w-screen-md w-full flex-1 space-y-4 md:p-8 mx-auto h-auto mt-24">
           <Card>
             <CardHeader>
               <CardTitle className="text-xl font-normal">Name</CardTitle>
