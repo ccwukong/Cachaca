@@ -1,0 +1,60 @@
+[
+  {
+    "id": "e8489207-df3a-4b41-8e96-6a93590dd183",
+    "cartId": "9468a902-c620-41ef-923e-c8d306d497fa",
+    "currency": {
+      "id": 1,
+      "code": "USD",
+      "name": "US Dollar",
+      "symbol": "$"
+    },
+    "voucher": "",
+    "amount": "289",
+    "shippingStatus": "Shipped",
+    "paymentStatus": "Paid",
+    "paymentMethod": "Credit card",
+    "items": [
+      {
+        "id": "93b400e5-e708-434e-9543-3047619bccf6",
+        "name": "Luminous Lips Lip Gloss - Multi-Color Collection",
+        "slug": "luminous-lips-lip-gloss",
+        "coverImage": "https://images.pexels.com/photos/8128071/pexels-photo-8128071.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "basePrice": "159",
+        "quantity": 1
+      },
+      {
+        "id": "7cf0cb23-4a88-4454-b820-ff62ecc7028a",
+        "name": "Lash Amplify Mascara",
+        "slug": "lash-amplify-mascara",
+        "coverImage": "https://images.pexels.com/photos/8558514/pexels-photo-8558514.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "basePrice": "65",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "id": "9ffd58f3-a291-4e1f-93da-7bd94bc4f340",
+    "cartId": "18603d68-1745-4ca0-8889-2de0659e03d8",
+    "currency": {
+      "id": 1,
+      "code": "USD",
+      "name": "US Dollar",
+      "symbol": "$"
+    },
+    "voucher": "",
+    "amount": "150",
+    "shippingStatus": "Pending",
+    "paymentStatus": "Paid",
+    "paymentMethod": "Credit card",
+    "items": [
+      {
+        "id": "93b400e5-e708-434e-9543-3047619bccf6",
+        "name": "Luminous Lips Lip Gloss - Multi-Color Collection",
+        "slug": "luminous-lips-lip-gloss",
+        "coverImage": "https://images.pexels.com/photos/4416763/pexels-photo-4416763.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "basePrice": "150",
+        "quantity": 1
+      }
+    ]
+  }
+]

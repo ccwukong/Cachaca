@@ -1,0 +1,21 @@
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  db:
+    image: mysql
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - app-tier
+    expose:
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
+      - MYSQL_DATABASE=${DB_NAME}
+    volumes:
+      - app-db:/var/lib/mysql
+volumes:
+  app-db:

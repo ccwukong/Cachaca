@@ -23,6 +23,32 @@ Run the dev server:
 yarn dev
 ```
 
+### Database
+
+We use MySQL database as the default database. It's recommended to use Docker containers for your local development to ensure consistency of development environment among contributors.
+
+To set up the database using Docker, first make sure you have the database environment variables configured in your **.env** file in the root directory.
+
+Then, you can run the following command:
+
+```shellscript
+docker compose up -d
+```
+
+The default template of the **.env** file
+
+```
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=<database username>
+DB_PASS=<database user's password>
+DB_ROOT_PASS=<database root user's password, used by docker-compose>
+DB_NAME=<database name>
+JWT_TOKEN_SECRET=<a long random string that is used to sign JWT auth token>
+SESSION_COOKIE_SECRET=<a long random string that is used to sign cookie message>
+OPENAI_API_KEY=<this key is for all the AI features, you can create one on OpenAI developer console>
+```
+
 ### i18n localization
 
 We use the **remix-i18next** package. To add a translation item, you should:
