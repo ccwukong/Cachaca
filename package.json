@@ -14,7 +14,8 @@
     "db:migrate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:seed": "npx tsx ./db/seed.ts",
-    "precommit": "yarn lint && yarn test"
+    "precommit": "yarn lint && yarn test",
+    "prepare": "husky"
   },
   "husky": {
     "hooks": {
