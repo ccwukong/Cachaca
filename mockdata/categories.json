@@ -24,7 +24,7 @@
     "name": "Accessories",
     "slug": "accessories",
     "subCategories": [
-      { "id": 7, "name": "Sun glasses", "slug": "sun-glasses" },
+      { "id": 7, "name": "Sunglasses", "slug": "sunglasses" },
       { "id": 8, "name": "Backpack", "slug": "backpack" }
     ]
   }

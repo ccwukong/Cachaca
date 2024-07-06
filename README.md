@@ -1,4 +1,4 @@
-# Cachaca
+# ![Cachaca logo](https://github.com/ccwukong/Cachaca/blob/main/public/favicon.ico) Cachaca
 
 An AI-powered open source e-commerce solution.
 
