@@ -13,7 +13,13 @@
     "typecheck": "tsc",
     "db:migrate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
-    "db:seed": "npx tsx ./db/seed.ts"
+    "db:seed": "npx tsx ./db/seed.ts",
+    "precommit": "yarn lint && yarn test"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn precommit"
+    }
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.0",
@@ -76,6 +82,7 @@
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^9.0.11",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "postcss": "^8.4.38",
