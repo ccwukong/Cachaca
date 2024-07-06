@@ -23,6 +23,18 @@ Run the dev server:
 yarn dev
 ```
 
+### i18 localization
+
+We use the **remix-i18next** package. To add a translation item, you should:
+
+1. Create a new **translation.json** file under the _**public/locales/<locale_code>/**_ directory if the file does not exist yet, and make sure you copy all the translation items from the _**public/locales/en/translation.json**_ file.
+
+2. Follow the naming convention for the translation keys:
+
+   - All pre-defined translation keys have the **system.** prefix, for example, **system.login** is translated as **Login** in English. These keys are used for the static instructions/description of the UI components.
+
+   - If you wish to add your own UI components with custome translation, please use the prefix **custom.**. For instance, if you want to add translation for the word **Dropshipping**, you should add a new key `{"custom.dropshipping": "Dropshipping"}` in the translation.json files.
+
 ## Deployment
 
 First, build your app for production:
