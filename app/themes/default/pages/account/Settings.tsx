@@ -23,7 +23,6 @@ import {
 } from '~/themes/default/components/ui/dropdown-menu'
 import { Button } from '~/themes/default/components/ui/button'
 import { Input } from '~/themes/default/components/ui/input'
-import { cn } from '~/themes/lib/utils'
 
 const Settings = ({
   storeLogo,
@@ -93,8 +92,8 @@ const Settings = ({
             </div>
           </div>
         </div>
-        <div className="max-w-screen-xl md:max-w-screen-md w-full flex-1 space-y-4 p-8 mx-auto h-auto mt-24 border border-slate-100 shadow-sm rounded-md">
-          <Card className="border-0 shadow-none">
+        <div className="max-w-screen-xl md:max-w-screen-md w-full flex-1 space-y-4 p-8 mx-auto h-auto mt-24">
+          <Card>
             <CardHeader>
               <CardTitle className="text-xl font-normal">Name</CardTitle>
             </CardHeader>
@@ -108,7 +107,7 @@ const Settings = ({
               <Button>Save</Button>
             </CardFooter>
           </Card>
-          <Card className="border-0 shadow-none">
+          <Card>
             <CardHeader>
               <CardTitle className="text-xl font-normal">
                 Change Password
@@ -123,7 +122,7 @@ const Settings = ({
               <Button>Save</Button>
             </CardFooter>
           </Card>
-          <Card className="border-0 shadow-none">
+          <Card>
             <CardHeader>
               <CardTitle className="text-xl font-normal">Email</CardTitle>
             </CardHeader>

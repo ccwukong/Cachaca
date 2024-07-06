@@ -29,7 +29,7 @@ import {
 } from '~/themes/default/components/ui/popover'
 import { Calendar } from '~/themes/default/components/ui/calendar'
 import { Button } from '~/themes/default/components/ui/button'
-import AdminHeader from '~/themes/default/components/ui/AdminHeader'
+import AdminHeader from '~/themes/default/components/ui/admin/Header'
 import { cn } from '~/themes/lib/utils'
 
 const data = [

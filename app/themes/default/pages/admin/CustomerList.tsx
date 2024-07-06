@@ -16,7 +16,7 @@ import {
   TableRow,
 } from '~/themes/default/components/ui/table'
 import { Switch } from '~/themes/default/components/ui/switch'
-import AdminHeader from '~/themes/default/components/ui/AdminHeader'
+import AdminHeader from '~/themes/default/components/ui/admin/Header'
 
 const CustomerList = () => {
   return (

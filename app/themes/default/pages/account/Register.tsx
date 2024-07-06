@@ -10,7 +10,7 @@ import {
 import { Label } from '~/themes/default/components/ui/label'
 import { Input } from '~/themes/default/components/ui/input'
 import { Button } from '~/themes/default/components/ui/button'
-import Header from '~/themes/default/components/ui/Header'
+import Header from '~/themes/default/components/ui/storefront/Header'
 
 const Register = () => {
   return (

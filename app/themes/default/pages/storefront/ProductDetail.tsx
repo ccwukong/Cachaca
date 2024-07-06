@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
-import Header from '~/themes/default/components/ui/Header'
-import Footer from '~/themes/default/components/ui/Footer'
+import Header from '~/themes/default/components/ui/storefront/Header'
+import Footer from '~/themes/default/components/ui/storefront/Footer'
 import {
   Select,
   SelectContent,
@@ -75,7 +75,7 @@ const ProductDetail = ({
                 </Select>
               </div>
               <Button variant="secondary" className="w-full mt-10">
-                {t('default.add_cart')}
+                {t('system.add_cart')}
               </Button>
             </div>
           </div>

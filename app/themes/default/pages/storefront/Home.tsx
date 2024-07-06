@@ -4,9 +4,9 @@ import {
   CarouselContent,
   CarouselItem,
 } from '~/themes/default/components/ui/carousel'
-import Header from '~/themes/default/components/ui/Header'
-import Footer from '~/themes/default/components/ui/Footer'
-import ProductCard from '~/themes/default/components/ui/ProductCard'
+import Header from '~/themes/default/components/ui/storefront/Header'
+import Footer from '~/themes/default/components/ui/storefront/Footer'
+import ProductCard from '~/themes/default/components/ui/storefront/ProductCard'
 import {
   ProductPublicInfo,
   HomeBannerSettings,

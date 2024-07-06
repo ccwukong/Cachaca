@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next'
-import Header from '~/themes/default/components/ui/Header'
-import Footer from '~/themes/default/components/ui/Footer'
-import CartItem from '~/themes/default/components/ui/CartItem'
-import ProductCard from '~/themes/default/components/ui/ProductCard'
+import Header from '~/themes/default/components/ui/storefront/Header'
+import Footer from '~/themes/default/components/ui/storefront/Footer'
+import CartItem from '~/themes/default/components/ui/storefront/CartItem'
+import ProductCard from '~/themes/default/components/ui/storefront/ProductCard'
 import { Button } from '~/themes/default/components/ui/button'
 import {
   ProductPublicInfo,
@@ -38,7 +38,7 @@ const Cart = ({
       <Header storeLogo="" storeName="Cachaca" menuItems={categories} />
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
         <p className="text-2xl font-light">
-          {t('default.my_cart__ph', { no_of_items: items.length })}
+          {t('system.my_cart_ph', { no_of_items: items.length })}
         </p>
         <div className="mt-6 grid grid-cols-1 md:grid-cols-5 gap-8">
           <div className="md:col-span-3">
@@ -54,18 +54,17 @@ const Cart = ({
             ))}
             <div className="border-t border-gray-200 pt-4">
               <div className="flex justify-between mb-2">
-                <div>Subtotal</div>
+                <div>{t('system.subtotal')}</div>
                 <div>{`${storeSettings.currency.symbol}${subtotal}`}</div>
               </div>
               <div className="flex justify-between mb-2">
-                <div>Shipping</div>
-                <div className="text-sm text-gray-500">
-                  Ground shipping (3-5 business days)
-                </div>
+                <div> {t('system.shipping')}</div>
                 <div>{`${storeSettings.currency.symbol}${shippingFee}`}</div>
               </div>
               <div className="flex justify-between font-bold">
-                <div>Total due</div>
+                <div>
+                  <div> {t('system.total_due')}</div>
+                </div>
                 <div>{`${storeSettings.currency.symbol}${
                   Number(subtotal) + Number(shippingFee)
                 }`}</div>
@@ -75,7 +74,7 @@ const Cart = ({
               <div className="mt-4 w-full flex justify-end">
                 <div>
                   <p className="text-lg font-light text-red-400">
-                    Do you have any voucher?
+                    {t('system.cart_voucher_hint')}
                   </p>
                   <div className="flex mt-3 justify-between">
                     <input
@@ -84,7 +83,7 @@ const Cart = ({
                       className="block w-3/4 p-2 mb-2 border border-gray-300 rounded-md"
                       placeholder="Voucher code"
                     />
-                    <Button variant="secondary">Add</Button>
+                    <Button variant="secondary">{t('system.add')}</Button>
                   </div>
                 </div>
               </div>

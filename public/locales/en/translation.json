@@ -1,7 +1,19 @@
 {
-  "default.add_cart": "Add to cart",
-  "default.my_cart__ph": "My shopping cart ({{no_of_items}})",
-  "default.register": "Register",
-  "default.login": "Login",
-  "default.cart_voucher_hint": "Do you have an voucher?"
+  "system.add_cart": "Add to cart",
+  "system.my_cart_ph": "My shopping cart ({{no_of_items}})",
+  "system.register": "Register",
+  "system.login": "Login",
+  "system.login_hint": "Enter your email below to login to your account",
+  "system.email": "Email",
+  "system.name": "Name",
+  "system.firstname": "First name",
+  "system.lastname": "Last name",
+  "system.password": "Password",
+  "system.forgot_password_hint": "Forgot your password?",
+  "system.cart_voucher_hint": "Do you have an voucher?",
+  "system.sign_up": "Sign up",
+  "system.subtotal": "Subtotal",
+  "system.add": "Add",
+  "system.shipping": "Shipping",
+  "system.total_due": "Total due"
 }

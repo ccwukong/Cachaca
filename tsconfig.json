@@ -7,9 +7,10 @@
     "**/.client/**/*.ts",
     "**/.client/**/*.tsx"
   ],
+  "exclude": ["**/tests/*.test.(ts|tsx)"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": ["@remix-run/node", "vite/client"],
+    "types": ["@remix-run/node", "vite/client", "jest", "node"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",

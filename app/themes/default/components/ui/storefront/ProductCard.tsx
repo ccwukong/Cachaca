@@ -35,7 +35,7 @@ const ProductCard = ({
         </CardFooter>
       </Link>
       <Button variant="secondary" className="w-full">
-        {t('default.add_cart')}
+        {t('system.add_cart')}
       </Button>
     </Card>
   )

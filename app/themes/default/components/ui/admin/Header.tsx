@@ -30,6 +30,7 @@ const Header = ({ navItems }: { navItems: NavItem[] }) => {
           {navItems.map(({ title, link }) => {
             return (
               <Link
+                key={title}
                 to={link}
                 className="text-sm font-medium transition-colors hover:text-primary"
               >

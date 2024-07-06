@@ -12,8 +12,6 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '~/themes/default/components/ui/card'
@@ -31,8 +29,6 @@ import {
   DropdownMenuTrigger,
 } from '~/themes/default/components/ui/dropdown-menu'
 import { Button } from '~/themes/default/components/ui/button'
-import { Input } from '~/themes/default/components/ui/input'
-import { cn } from '~/themes/lib/utils'
 
 const Account = ({
   storeLogo,

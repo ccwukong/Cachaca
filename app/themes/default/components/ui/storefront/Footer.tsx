@@ -1,5 +1,5 @@
 import { Link } from '@remix-run/react'
-import { PageLink } from '~/model'
+import { PageLink } from '~/models'
 
 const Footer = ({
   pageLinks,

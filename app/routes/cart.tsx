@@ -1,7 +1,7 @@
 import type { MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import Cart from '~/themes/default/pages/shop/Cart'
+import Cart from '~/themes/default/pages/storefront/Cart'
 import { PublicInfo, ProductModel } from '~/models'
 import * as mocks from '~/utils/mocks'
 
