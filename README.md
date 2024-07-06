@@ -23,7 +23,7 @@ Run the dev server:
 yarn dev
 ```
 
-### i18 localization
+### i18n localization
 
 We use the **remix-i18next** package. To add a translation item, you should:
 
