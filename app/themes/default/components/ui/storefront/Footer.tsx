@@ -9,7 +9,7 @@ const Footer = ({
   copyright: string
 }) => {
   return (
-    <footer className="py-8 border-t-0 border-slate-300 shadow-inner">
+    <footer className="pt-8 pb-4 mt-10">
       <div className="max-w-screen-xl mx-auto grid grid-cols-4">
         <div>
           {pageLinks
