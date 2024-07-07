@@ -35,7 +35,7 @@ yarn dev
 
 We use MySQL database as the default database. It's recommended to use Docker containers for your local development to ensure consistency of development environment among contributors.
 
-To set up the database using Docker, first make sure you have the database environment variables configured in your **.env** file in the root directory.
+To set up the database using Docker, first make sure you have the database environment variables configured in your **.env** file under the root directory.
 
 Then, you can run the following command:
 
@@ -61,7 +61,7 @@ OPENAI_API_KEY=<this key is for all the AI features, you can create one on OpenA
 
 We use the **remix-i18next** package. To add a translation item, you should:
 
-1. Create a new **<language code>.json** file under the _**/i18n/**_ directory if the file does not exist yet, and make sure you copy all the translation keys from the _**/i18n/en.json**_ file. For example, to add Japanese as a new language, you need to create **ja.json** in the _**/i18n/**_ directory, and make sure to copy all the tranlation keys from _**/i18n/en.json**_ file to the new **ja.json** file.
+1. Create a new **<language code>.json** file under the _**/public/i18n/**_ directory if the file does not exist yet, and make sure you copy all the translation keys from the _**/public/i18n/en.json**_ file. For example, to add Japanese as a new language, you need to create **ja.json** under the _**/public/i18n/**_ directory, and make sure to copy all the tranlation keys from _**/public/i18n/en.json**_ file to the new **ja.json** file.
 
 2. Follow the naming convention for the translation keys:
 
@@ -84,6 +84,8 @@ If you wish to create a custom theme for any reasons, you shall follow the guide
 - In your own theme directory, you should separate your UI components into **components** and **pages**, where components consists of common React UI components and shadcn components, and pages directory consists of container components of each **Route**, for instance, one of the pre-defined routes **/app/routes/cart.tsx** invokes the **<Cart {...props} />** container component from the **/app/themes/default/pages/storefront/Cart.tsx** file.
 
 - If you only wanted to customize the UI components for storefront, and use the default components from the **default** theme, you can copy the rest of the directories and files into your own theme directory.
+
+- Make sure you add all the new translation keys under the **/public/i18n/** directory accordingly.
 
 ## Deployment
 
