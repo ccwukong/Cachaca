@@ -1,12 +1,7 @@
-import { drizzle } from 'drizzle-orm/mysql2';
-import mysql from 'mysql2/promise';
-import dotenv from 'dotenv';
-dotenv.config();
+import { drizzle } from 'drizzle-orm/mysql2'
+import mysql from 'mysql2/promise'
 
-const connection = mysql.createPool(
-  `mysql://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
-);
+const connection = mysql.createPool(process.env.CONNECTION_STRING!)
+const db = drizzle(connection)
 
-const db = drizzle(connection);
-
-export default db;
+export default db

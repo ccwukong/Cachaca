@@ -43,18 +43,12 @@ Then, you can run the following command:
 docker compose up -d
 ```
 
-The default template of the **.env** file
+The default template of the **.env.dev** file
 
 ```
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=<database username>
-DB_PASS=<database user's password>
-DB_ROOT_PASS=<database root user's password, used by docker-compose>
-DB_NAME=<database name>
+CONNECTION_STRING=mysql://<user>:<password>@<host>:<port>/<database name>
 JWT_TOKEN_SECRET=<a long random string that is used to sign JWT auth token>
 SESSION_COOKIE_SECRET=<a long random string that is used to sign cookie message>
-OPENAI_API_KEY=<this key is for all the AI features, you can create one on OpenAI developer console>
 ```
 
 ### i18n localization

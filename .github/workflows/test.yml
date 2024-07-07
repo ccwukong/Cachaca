@@ -12,5 +12,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18.x'
+        env:
+          CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
       - run: yarn install
+      - run: yarn db:migrate
+      - run: yarn db:push
       - run: yarn test
