@@ -1,4 +1,4 @@
-name: Main branch testing
+name: Demo deployment
 on:
   push:
     branches:
@@ -13,6 +13,11 @@ jobs:
         with:
           node-version: '18.x'
       - run: yarn install
+      - run: yarn test
+  deploy_demo:
+    runs-on: ubuntu-latest
+    needs: test
+    environment: demo
+    steps:
       - run: yarn db:migrate
       - run: CONNECTION_STRING=${{ secrets.CONNECTION_STRING }} yarn db:push
-      - run: yarn test
