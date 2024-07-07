@@ -96,13 +96,15 @@ const Cart = ({
               </Button>
               {allowGuestCheckout && (
                 <>
-                  <div className="text-center mb-4">Or checkout as Guest</div>
+                  <div className="text-center mb-4">
+                    {t('system.checkout_as_guest')}
+                  </div>
                   <div className="mb-4">
                     <label
                       htmlFor="email"
                       className="block mb-2 text-sm font-medium"
                     >
-                      Email
+                      {t('system.email')}
                     </label>
                     <input
                       type="email"
@@ -116,7 +118,7 @@ const Cart = ({
                       htmlFor="country"
                       className="block mb-2 text-sm font-medium"
                     >
-                      Shipping address
+                      {t('system.shipping_address')}
                     </label>
                     <input
                       type="text"
@@ -143,7 +145,7 @@ const Cart = ({
                         className="w-4 h-4 mr-2"
                       />
                       <label htmlFor="billing-address" className="text-sm">
-                        Billing address is same as shipping
+                        {t('system.billing_address_same_shipping_address')}
                       </label>
                     </div>
                   </div>
@@ -152,7 +154,7 @@ const Cart = ({
                       htmlFor="card-info"
                       className="block mb-2 text-sm font-medium"
                     >
-                      Payment details
+                      {t('system.payment_details')}
                     </label>
                     <input
                       type="text"
@@ -177,7 +179,11 @@ const Cart = ({
                   </div>
 
                   <Button className="w-full" variant="default">
-                    Pay $134.00
+                    {t('system.pay_amount', {
+                      amount: `${storeSettings.currency.symbol}${
+                        Number(subtotal) + Number(shippingFee)
+                      }`,
+                    })}
                   </Button>
                 </>
               )}

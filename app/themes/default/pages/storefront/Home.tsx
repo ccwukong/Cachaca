@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import Autoplay from 'embla-carousel-autoplay'
 import {
   Carousel,
@@ -25,6 +26,7 @@ const Home = ({
   banners: HomeBannerSettings
   products: ProductPublicInfo[]
 }) => {
+  const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden lg:mx-0">
       <Header storeLogo="" storeName="Cachaca" menuItems={categories} />
@@ -55,7 +57,7 @@ const Home = ({
             })}
           </CarouselContent>
         </Carousel>
-        <h2 className="mt-16 mb-6 text-xl">Products</h2>
+        <h2 className="mt-16 mb-6 text-xl">{t('system.products')}</h2>
         <div className="grid grid-cols-1 lg:grid-cols-4 lg:gap-8">
           {products.map((item) => {
             return (

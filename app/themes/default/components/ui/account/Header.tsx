@@ -1,5 +1,4 @@
 import { Link } from '@remix-run/react'
-import { useTranslation } from 'react-i18next'
 import {
   Avatar,
   AvatarFallback,
@@ -8,46 +7,50 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/themes/default/components/ui/dropdown-menu'
 import { Button } from '~/themes/default/components/ui/button'
-import { Input } from '~/themes/default/components/ui/input'
+import { PageLink } from '~/models'
 
-export interface NavItem {
-  title: string
-  link: string
-}
-
-const Header = ({ navItems }: { navItems: NavItem[] }) => {
-  const { t } = useTranslation()
+const Header = ({
+  storeLogo,
+  storeName,
+  pageLinks,
+}: {
+  storeLogo: string
+  storeName: string
+  pageLinks: PageLink[]
+}) => {
   return (
-    <div className="border-b fixed w-full flex justify-center bg-white z-50">
+    <div className="left-0 bg-white border-b fixed w-full flex justify-center z-50">
       <div className="max-w-screen-xl w-full flex h-16 items-center px-4">
         <nav className="flex items-center mx-6 space-x-4 lg:space-x-6">
-          {navItems.map(({ title, link }) => {
-            return (
-              <Link
-                key={title}
-                to={link}
-                className="text-sm font-medium transition-colors hover:text-primary"
-              >
-                {title}
-              </Link>
-            )
-          })}
+          {storeLogo ? (
+            <img
+              src={storeLogo}
+              alt={storeName}
+              className="object-cover h-18 w-32"
+            />
+          ) : (
+            <h1 className="text-2xl font-bold text-purple-600">{storeName}</h1>
+          )}
+          <Link
+            to="/account"
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+          >
+            Orders
+          </Link>
+          <Link
+            to="/account/settings"
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+          >
+            Settings
+          </Link>
         </nav>
         <div className="ml-auto flex items-center space-x-4">
-          <div>
-            <Input
-              type="search"
-              placeholder="Search..."
-              className="md:w-[100px] lg:w-[300px]"
-            />
-          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -60,20 +63,14 @@ const Header = ({ navItems }: { navItems: NavItem[] }) => {
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">shadcn</p>
+                  <p className="text-sm font-medium leading-none">John Doe</p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    m@example.com
+                    john.doe@example.com
                   </p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Billing</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>{t('system.logout')}</DropdownMenuItem>
+              <DropdownMenuItem>Log out</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

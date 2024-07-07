@@ -1,4 +1,5 @@
 import { Link } from '@remix-run/react'
+import { useTranslation } from 'react-i18next'
 import {
   Card,
   CardHeader,
@@ -18,12 +19,15 @@ import {
 } from '~/themes/default/components/ui/tabs'
 
 const Login = () => {
+  const { t } = useTranslation()
   return (
     <div className="max-w-screen-xl mx-auto h-full pt-24 flex justify-center">
       <Tabs defaultValue="account" className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="account">Account</TabsTrigger>
-          <TabsTrigger value="password">Forgot password?</TabsTrigger>
+          <TabsTrigger value="password">
+            {t('system.forgot_password_hint')}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="account">
           <Card className="mx-auto max-w-sm">
@@ -36,7 +40,7 @@ const Login = () => {
             <CardContent>
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">{t('system.email')}</Label>
                   <Input
                     id="email"
                     type="email"
@@ -45,11 +49,11 @@ const Login = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">{t('system.password')}</Label>
                   <Input id="password" type="password" required />
                 </div>
                 <Button type="submit" className="w-full">
-                  Login
+                  {t('system.login')}
                 </Button>
               </div>
             </CardContent>
@@ -68,12 +72,12 @@ const Login = () => {
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="space-y-1">
-                <Label htmlFor="current">Email</Label>
+                <Label htmlFor="current">{t('system.email')}</Label>
                 <Input id="current" type="email" />
               </div>
             </CardContent>
             <CardFooter>
-              <Button>Submit</Button>
+              <Button>{t('system.submit')}</Button>
             </CardFooter>
           </Card>
         </TabsContent>

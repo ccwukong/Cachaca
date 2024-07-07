@@ -5,7 +5,7 @@ import Home from '~/themes/default/pages/account/Home'
 import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'My orders' }, { name: 'description', content: 'My orders' }]
+  return [{ title: 'My Acccount - Orders' }]
 }
 
 export const loader = async () => {

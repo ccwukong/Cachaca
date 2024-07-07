@@ -1,13 +1,10 @@
 import type { MetaFunction } from '@remix-run/node'
-import Dashboard from '~/themes/default/pages/admin/Dashboard'
+import MemberList from '~/themes/default/pages/admin/MemberList'
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: 'Admin Dashboard' },
-    { name: 'description', content: 'Admin Dashboard' },
-  ]
+  return [{ title: 'Admin Dashboard - Store members' }]
 }
 
 export default function Index() {
-  return <Dashboard />
+  return <MemberList />
 }

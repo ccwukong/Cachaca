@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from '@remix-run/react'
+import { useTranslation } from 'react-i18next'
 import {
   Card,
   CardContent,
@@ -31,6 +32,7 @@ const Settings = ({
   storeLogo: string
   storeName: string
 }) => {
+  const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden">
       <div className="flex flex-col">

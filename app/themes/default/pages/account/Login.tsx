@@ -50,7 +50,7 @@ const Login = () => {
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{' '}
             <Link to="#" className="underline">
-              Sign up
+              {t('system.sign_up')}
             </Link>
           </div>
         </CardContent>
