@@ -1,4 +1,4 @@
-name: Testing and building
+name: Main branch testing
 on:
   push:
     branches:
