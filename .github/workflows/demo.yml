@@ -12,12 +12,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18.x'
-      - run: yarn install
-      - run: yarn test
+      - run: npm run install
+      - run: npm run test
   deploy_demo:
     runs-on: ubuntu-latest
     needs: test
     environment: demo
     steps:
-      - run: yarn db:migrate
-      - run: CONNECTION_STRING=${{ secrets.CONNECTION_STRING }} yarn db:push
+      - run: npm run db:migrate
+      - run: CONNECTION_STRING=${{ secrets.CONNECTION_STRING }} npm run db:push
