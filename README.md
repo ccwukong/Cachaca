@@ -53,13 +53,15 @@ OPENAI_API_KEY=<this key is for all the AI features, you can create one on OpenA
 
 We use the **remix-i18next** package. To add a translation item, you should:
 
-1. Create a new **translation.json** file under the _**/public/locales/<locale_code>/**_ directory if the file does not exist yet, and make sure you copy all the translation items from the _**/public/locales/en/translation.json**_ file.
+1. Create a new **<language code>.json** file under the _**/i18n/**_ directory if the file does not exist yet, and make sure you copy all the translation keys from the _**/i18n/en.json**_ file. For example, to add Japanese as a new language, you need to create **ja.json** in the _**/i18n/**_ directory, and make sure to copy all the tranlation keys from _**/i18n/en.json**_ file to the new **ja.json** file.
 
 2. Follow the naming convention for the translation keys:
 
    - All pre-defined translation keys have the **system.** prefix, for example, **system.login** is translated as **Login** in English. These keys are used for the static instructions/description of the UI components.
 
    - If you wish to add your own UI components with new translation items, please use the prefix **custom.**. For instance, if you want to add translation for the word **Dropshipping**, you should add a new key `{"custom.dropshipping": "Dropshipping"}` in the translation.json files.
+
+3. Add the new language code as a supported language in the **/app/i18n.ts** file.
 
 ## Deployment
 
