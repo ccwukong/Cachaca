@@ -1,6 +1,6 @@
 # ![Cachaca logo](https://github.com/ccwukong/Cachaca/blob/main/public/favicon.ico) Cachaca
 
-![example workflow](https://github.com/github/docs/actions/workflows/test.yml/badge.svg)
+[![Main branch](https://github.com/ccwukong/Cachaca/actions/workflows/test.yml/badge.svg)](https://github.com/ccwukong/Cachaca/actions/workflows/test.yml)
 
 An AI-powered open source e-commerce solution.
 
