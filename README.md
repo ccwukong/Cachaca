@@ -77,6 +77,10 @@ yarn start
 
 Now you'll need to pick a host to deploy it to.
 
+## License
+
+[Open Software License ("OSL") v. 3.0](LICENSE)
+
 ## Attribution
 
 The photos/images that are used for development and demo purposes are from [https://www.pexels.com/](https://www.pexels.com/)
