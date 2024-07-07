@@ -63,6 +63,20 @@ We use the **remix-i18next** package. To add a translation item, you should:
 
 3. Add the new language code as a supported language in the **/app/i18n.ts** file.
 
+### Customization
+
+Cachaca allows you to develop your own themes and plugins on top of default UI components and features to a great extent. However, there are a few development guidelines you should adopt in order to keep this project scalable and maintainable.
+
+#### Creating a new theme
+
+If you wish to create a custom theme for any reasons, you shall follow the guidelines below:
+
+- Create a new directory under the **/app/themes** directory with the name of your theme, for instance, if you want to create a new theme called **Urban**, you should create a new directory named **urban** _**(all theme names should be in lower case)**_ and the directory structure will look like this **/app/themes/urban**.
+
+- In your own theme directory, you should separate your UI components into **components** and **pages**, where components consists of common React UI components and shadcn components, and pages directory consists of container components of each **Route**, for instance, one of the pre-defined routes **/app/routes/cart.tsx** invokes the **<Cart {...props} />** container component from the **/app/themes/default/pages/storefront/Cart.tsx** file.
+
+- If you only wanted to customize the UI components for storefront, and use the default components from the **default** theme, you can copy the rest of the directories and files into your own theme directory.
+
 ## Deployment
 
 First, build your app for production:
