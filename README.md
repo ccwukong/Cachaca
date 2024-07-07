@@ -17,6 +17,12 @@ The project is developed on top of:
 
 ## Development
 
+### Development environment
+
+- Node.js >= 18.0.0
+- MySQL 8
+- Remix v2
+
 Run the dev server:
 
 ```shellscript
@@ -99,4 +105,6 @@ Now you'll need to pick a host to deploy it to.
 
 ## Attribution
 
-The photos/images that are used for development and demo purposes are from [https://www.pexels.com/](https://www.pexels.com/)
+- The dummy product photos/images that are used for development and demo purposes are from [https://www.pexels.com/](https://www.pexels.com/)
+
+- The logo/icon of Cachaca project is from [https://www.freepik.com/](https://www.freepik.com/)

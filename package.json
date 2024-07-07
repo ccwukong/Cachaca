@@ -7,7 +7,7 @@
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
-    "test": "jest",
+    "test": "DEBUG_PRINT_LIMIT=20000 jest",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc",
@@ -67,6 +67,7 @@
     "@remix-run/dev": "^2.10.0",
     "@testing-library/dom": "^10.3.1",
     "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^29.5.12",
     "@types/md5": "^2.3.5",
     "@types/react": "^18.3.3",
