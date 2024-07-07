@@ -14,5 +14,5 @@ jobs:
           node-version: '18.x'
       - run: yarn install
       - run: yarn db:migrate
-      - run: 'CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }} yarn db:push'
+      - run: 'CONNECTION_STRING=${{ secrets.CONNECTION_STRING }} yarn db:push'
       - run: yarn test
