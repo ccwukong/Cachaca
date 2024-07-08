@@ -15,8 +15,7 @@ jobs:
           node-version: '18.x'
       - run: yarn install
       - run: yarn test
-      - run: mkdir -p ~/ssl/certs
-      - run: sudo echo "${{ secrets.CA_DATA }}" > ~/ssl/certs/ca-certificates.crt
+      - run: mkdir -p /etc/ssl/certs/ || touch ca-certificates.crt || sudo echo "${{ secrets.CA_DATA }}" >> /etc/ssl/certs/ca-certificates.crt
       - run: yarn db:migrate
       - run: >-
           DB_USER=${{ secrets.DB_USER }} 
@@ -24,5 +23,5 @@ jobs:
           DB_HOST=${{ vars.DB_HOST }} 
           DB_PORT=${{ vars.DB_PORT }} 
           DB_NAME=${{ vars.DB_NAME }} 
-          DB_SSL_CA=~/ssl/certs/ca-certificates.crt
+          DB_SSL_CA=/etc/ssl/certs/ca-certificates.crt
           yarn db:push
