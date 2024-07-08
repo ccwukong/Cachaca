@@ -76,6 +76,7 @@ export const customerAddress = mysqlTable(
     state: varchar('state', { length: 60 }),
     country: varchar('country', { length: 60 }),
     zipcode: varchar('zipcode', { length: 10 }),
+    type: varchar('type', { length: 10 }).notNull(),
     createdOn: int('created_on').notNull(),
     updatedOn: int('updated_on'),
     status: tinyint('status').notNull(),

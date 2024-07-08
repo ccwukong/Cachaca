@@ -51,6 +51,19 @@ JWT_TOKEN_SECRET=<a long random string that is used to sign JWT auth token>
 SESSION_COOKIE_SECRET=<a long random string that is used to sign cookie message>
 ```
 
+### File hosting
+
+Cachaca is designed to be deployed in different environments including Serverless environments, therefore, it is our design decision to use a file/object hosting service to host all multimedia files such as product images, audio/video files etc.
+
+By default, Cachaca uses [Cloudflare R2](https://www.cloudflare.com/developer-platform/r2/) as it provides a generous free tier hosting quota.
+
+You can also use other file/object storage service providers by customizing the integration yourself:
+
+- [AWS S3](https://aws.amazon.com/s3/) - 12 months free tier available
+- [Cloudinary](https://cloudinary.com/pricing) - Free tier available
+- [Google cloud storage](https://cloud.google.com/storage/pricing#price-tables)
+- Many more...
+
 ### i18n localization
 
 We use the **remix-i18next** package. To add a translation item, you should:

@@ -1,4 +1,6 @@
 {
+  "system.installation": "Installation",
+  "system.install": "Install",
   "system.add_cart": "Add to cart",
   "system.my_cart_ph": "My shopping cart ({{no_of_items}})",
   "system.register": "Register",
@@ -29,5 +31,11 @@
   "system.checkout_as_guest": "Or checkout as a guest",
   "system.save": "Save",
   "system.submit": "Submit",
+  "system.next": "Next",
+  "system.store_information": "Store information",
+  "system.store_name": "Store name",
+  "system.description": "Description",
+  "system.logo": "Logo",
+  "system.admin_account": "Admin account",
   "system.products": "Products"
 }

@@ -37,9 +37,7 @@ const Header = ({
                 className="object-cover h-18 w-32"
               />
             ) : (
-              <h1 className="text-2xl font-bold text-purple-600">
-                {storeName}
-              </h1>
+              <h1 className="text-2xl font-bold">{storeName}</h1>
             )}
           </Link>
         </div>
