@@ -5,6 +5,13 @@ export default defineConfig({
   out: './db/migrations',
   dialect: 'mysql',
   dbCredentials: {
-    url: process.env.CONNECTION_STRING!,
+    host: process.env.DB_HOST!,
+    user: process.env.DB_USER!,
+    password: process.env.DB_PASS!,
+    database: process.env.DB_NAME!,
+    port: Number(process.env.DB_PORT!),
+    ssl: {
+      ca: process.env.DB_SSL_CA || '',
+    },
   },
 })
