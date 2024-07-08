@@ -46,7 +46,11 @@ docker compose up -d
 The default template of the **.env.dev** file
 
 ```
-CONNECTION_STRING=mysql://<user>:<password>@<host>:<port>/<database name>
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=<database username>
+DB_PASS=<database user password>
+DB_NAME=<database name>
 JWT_TOKEN_SECRET=<a long random string that is used to sign JWT auth token>
 SESSION_COOKIE_SECRET=<a long random string that is used to sign cookie message>
 ```

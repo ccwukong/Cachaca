@@ -2,7 +2,7 @@ import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { render, screen } from '@testing-library/react'
 import * as mocks from '~/utils/mocks'
-import { PageLink, StoreSettings } from '~/models'
+import { PageLink, StoreSettings } from '~/types'
 import Footer from '../Footer'
 
 describe('Testing storefront Footer component', () => {

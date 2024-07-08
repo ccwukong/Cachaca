@@ -4,10 +4,17 @@
 
 import { eq, desc } from 'drizzle-orm'
 import md5 from 'md5'
-import { user } from '../db/schema'
+import { user, shop } from '../db/schema'
 import db from '../db/connection'
 import { makeStr } from '~/utils/string'
 import { ServerInternalError } from '~/utils/exception'
+import {
+  UserPublicInfo,
+  ProductPublicInfo,
+  HomeBannerSettings,
+  StoreSettings,
+  Role,
+} from '~/types'
 
 interface CRUDMode<T> {
   find(id: string | number): Promise<T | null>
@@ -17,16 +24,46 @@ interface CRUDMode<T> {
   delete(id: string | number): Promise<boolean>
 }
 
-export interface UserPublicInfo {
-  id: string
-  email: string
-  phone: string
-  firstName: string
-  lastName: string
-  avatar: string
-  role: number
-  createdOn: number
-  updatedOn?: number
+export class Installer {
+  public static async create(data: {
+    name: string
+    description: string
+    createdBy: string
+    logo?: string
+    email?: string
+    phone?: string
+    addressLine1?: string
+    addressLine2?: string
+    city?: string
+    state?: string
+    country?: string
+    zipcode?: string
+    baseCurrencyId?: number
+  }): Promise<boolean> {
+    const result = await db.insert(shop).values({
+      name: data.name,
+      logo: data.logo ?? '',
+      email: data.email ?? '',
+      phone: data.phone ?? '',
+      addressLine1: data.addressLine1 ?? '',
+      addressLine2: data.addressLine2 ?? '',
+      city: data.city ?? '',
+      state: data.state ?? '',
+      country: data.country ?? '',
+      zipcode: data.zipcode ?? '',
+      baseCurrencyId: data.baseCurrencyId ?? 1,
+      description: data.description,
+      createdBy: data.createdBy,
+      createdOn: Math.floor(Date.now() / 1000),
+      status: 1,
+    })
+
+    if (!result[0].affectedRows) {
+      throw new ServerInternalError()
+    }
+
+    return true
+  }
 }
 
 export class UserModel implements CRUDMode<UserPublicInfo> {
@@ -89,7 +126,7 @@ export class UserModel implements CRUDMode<UserPublicInfo> {
     password: string
     firstName: string
     lastName: string
-    role: number
+    role: Role
     avatar: string
   }): Promise<UserPublicInfo> {
     const salt = makeStr(8)
@@ -133,189 +170,127 @@ export class UserModel implements CRUDMode<UserPublicInfo> {
   }
 }
 
-export type Currency = {
-  id: number
-  code: string
-  symbol: string
-  name: string
-}
+// export class ProductModel implements CRUDMode<ProductPublicInfo> {
+//   async find(id: string): Promise<ProductPublicInfo | null> {
+//     const res = await db
+//       .select()
+//       .from(user)
+//       .where(eq(user.id, id as string))
 
-export type ProductPublicInfo = {
-  id: string
-  name: string
-  slug: string
-  description: string
-  basePrice: string
-  coverImage: string
-  categoryId: number
-  subCategoryId: number
-  images: string[]
-}
+//     if (!res.length) {
+//       return null
+//     }
 
-export class ProductModel implements CRUDMode<ProductPublicInfo> {
-  async find(id: string): Promise<ProductPublicInfo | null> {
-    const res = await db
-      .select()
-      .from(user)
-      .where(eq(user.id, id as string))
+//     const data: ProductPublicInfo = {
+//       id: id as string,
+//       email: res[0].email,
+//       phone: res[0].phone,
+//       firstName: res[0].firstName,
+//       lastName: res[0].lastName,
+//       avatar: res[0].avatar,
+//       role: res[0].role,
+//       createdOn: res[0].createdOn,
+//       updatedOn: res[0].updatedOn || undefined,
+//     }
 
-    if (!res.length) {
-      return null
-    }
+//     return data
+//   }
 
-    const data: ProductPublicInfo = {
-      id: id as string,
-      email: res[0].email,
-      phone: res[0].phone,
-      firstName: res[0].firstName,
-      lastName: res[0].lastName,
-      avatar: res[0].avatar,
-      role: res[0].role,
-      createdOn: res[0].createdOn,
-      updatedOn: res[0].updatedOn || undefined,
-    }
+//   async findMany(page: number, size: number): Promise<ProductPublicInfo[]> {
+//     const res = await db
+//       .select()
+//       .from(user)
+//       .orderBy(desc(user.createdOn))
+//       .limit(size)
+//       .offset(page * size)
 
-    return data
-  }
+//     return res.map((item) => {
+//       return {
+//         id: item.id,
+//         email: item.email,
+//         phone: item.phone,
+//         firstName: item.firstName,
+//         lastName: item.lastName,
+//         avatar: item.avatar,
+//         role: item.role,
+//         createdOn: item.createdOn,
+//         updatedOn: item.updatedOn || undefined,
+//       }
+//     })
+//   }
 
-  async findMany(page: number, size: number): Promise<ProductPublicInfo[]> {
-    const res = await db
-      .select()
-      .from(user)
-      .orderBy(desc(user.createdOn))
-      .limit(size)
-      .offset(page * size)
+//   async update(): Promise<boolean> {
+//     return true
+//   }
 
-    return res.map((item) => {
-      return {
-        id: item.id,
-        email: item.email,
-        phone: item.phone,
-        firstName: item.firstName,
-        lastName: item.lastName,
-        avatar: item.avatar,
-        role: item.role,
-        createdOn: item.createdOn,
-        updatedOn: item.updatedOn || undefined,
-      }
-    })
-  }
+//   async create(newUser: {
+//     id: string
+//     email: string
+//     phone: string
+//     password: string
+//     firstName: string
+//     lastName: string
+//     role: number
+//     avatar: string
+//   }): Promise<UserPublicInfo> {
+//     const salt = makeStr(8)
+//     const { id, email, phone, password, firstName, lastName, role, avatar } =
+//       newUser
 
-  async update(): Promise<boolean> {
-    return true
-  }
+//     const data = {
+//       id,
+//       email,
+//       phone,
+//       password: md5(password + salt),
+//       salt,
+//       firstName,
+//       lastName,
+//       avatar,
+//       role,
+//       createdOn: Math.floor(Date.now() / 1000),
+//       status: 1,
+//     }
 
-  async create(newUser: {
-    id: string
-    email: string
-    phone: string
-    password: string
-    firstName: string
-    lastName: string
-    role: number
-    avatar: string
-  }): Promise<UserPublicInfo> {
-    const salt = makeStr(8)
-    const { id, email, phone, password, firstName, lastName, role, avatar } =
-      newUser
+//     const result = await db.insert(user).values(data)
 
-    const data = {
-      id,
-      email,
-      phone,
-      password: md5(password + salt),
-      salt,
-      firstName,
-      lastName,
-      avatar,
-      role,
-      createdOn: Math.floor(Date.now() / 1000),
-      status: 1,
-    }
+//     if (!result[0].affectedRows) {
+//       throw new ServerInternalError()
+//     }
 
-    const result = await db.insert(user).values(data)
+//     return {
+//       id,
+//       email,
+//       phone,
+//       firstName,
+//       lastName,
+//       avatar,
+//       role,
+//       createdOn: data.createdOn,
+//     } as UserPublicInfo
+//   }
 
-    if (!result[0].affectedRows) {
-      throw new ServerInternalError()
-    }
+//   async delete(): Promise<boolean> {
+//     return true
+//   }
+// }
 
-    return {
-      id,
-      email,
-      phone,
-      firstName,
-      lastName,
-      avatar,
-      role,
-      createdOn: data.createdOn,
-    } as UserPublicInfo
-  }
+// export class PublicInfo {
+//   public static async getHomeBanners(): Promise<HomeBannerSettings> {
+//     return {
+//       autoplay: banners.autoplay,
+//       speed: banners.speed,
+//       bannerItems: banners.items,
+//     }
+//   }
 
-  async delete(): Promise<boolean> {
-    return true
-  }
-}
-
-export type CartItemInfo = {
-  title: string
-  slug: string
-  coverImage: string
-  price: string
-  quantity: number
-}
-
-export type CategoryItem = {
-  id: number
-  name: string
-  slug: string
-  subCategories?: CategoryItem[]
-}
-
-export type BannerItem = {
-  imageUrl: string
-  link: string
-  caption: string
-  order: number
-}
-
-export type HomeBannerSettings = {
-  autoplay: boolean
-  speed: number
-  bannerItems: BannerItem[]
-}
-
-export type PageLink = {
-  title: string
-  url: string
-  order: number
-}
-
-export type StoreSettings = {
-  name: string
-  logo: string
-  description: string
-  currency: Currency
-  pageLinks: PageLink[]
-  copyright: string
-}
-
-export class PublicInfo {
-  public static async getHomeBanners(): Promise<HomeBannerSettings> {
-    return {
-      autoplay: banners.autoplay,
-      speed: banners.speed,
-      bannerItems: banners.items,
-    }
-  }
-
-  public static async getStoreInfo(): Promise<StoreSettings> {
-    return {
-      name: settings.name,
-      logo: settings.logo,
-      description: settings.description,
-      currency: settings.currency,
-      pageLinks: settings.pageLinks,
-      copyright: settings.copyright,
-    }
-  }
-}
+//   public static async getStoreInfo(): Promise<StoreSettings> {
+//     return {
+//       name: settings.name,
+//       logo: settings.logo,
+//       description: settings.description,
+//       currency: settings.currency,
+//       pageLinks: settings.pageLinks,
+//       copyright: settings.copyright,
+//     }
+//   }
+// }

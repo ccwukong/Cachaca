@@ -12,7 +12,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '~/themes/default/components/ui/accordion'
-import { CategoryItem } from '~/models'
+import { CategoryItem } from '~/types'
 
 const Header = ({
   storeLogo,

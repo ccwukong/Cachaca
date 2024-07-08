@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import * as mocks from '~/utils/mocks'
-import { CategoryItem } from '~/models'
+import { CategoryItem } from '~/types'
 import Header from '../Header'
 
 describe('Testing storefront Header component', () => {

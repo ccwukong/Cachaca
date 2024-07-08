@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "12c618ed-e477-4683-a95e-4a1a9f15880e",
+  "id": "ef4ee738-6447-40c0-a7d5-b89c6af94725",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "checkout": {
@@ -455,6 +455,13 @@
           "type": "varchar(10)",
           "primaryKey": false,
           "notNull": false,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true,
           "autoincrement": false
         },
         "created_on": {
@@ -1195,20 +1202,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "slug": {
-          "name": "slug",
-          "type": "varchar(120)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "domain": {
-          "name": "domain",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
         "logo": {
           "name": "logo",
           "type": "varchar(255)",
@@ -1330,18 +1323,6 @@
           "name": "shop_name_unique",
           "columns": [
             "name"
-          ]
-        },
-        "shop_slug_unique": {
-          "name": "shop_slug_unique",
-          "columns": [
-            "slug"
-          ]
-        },
-        "shop_domain_unique": {
-          "name": "shop_domain_unique",
-          "columns": [
-            "domain"
           ]
         }
       }

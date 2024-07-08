@@ -68,6 +68,7 @@ CREATE TABLE `customer_address` (
 	`state` varchar(60),
 	`country` varchar(60),
 	`zipcode` varchar(10),
+	`type` varchar(10) NOT NULL,
 	`created_on` int NOT NULL,
 	`updated_on` int,
 	`status` tinyint NOT NULL,
@@ -180,8 +181,6 @@ CREATE TABLE `product_variant_category` (
 --> statement-breakpoint
 CREATE TABLE `shop` (
 	`name` varchar(120) NOT NULL,
-	`slug` varchar(120) NOT NULL,
-	`domain` varchar(100) NOT NULL,
 	`logo` varchar(255) NOT NULL,
 	`email` varchar(60),
 	`phone` varchar(30),
@@ -198,9 +197,7 @@ CREATE TABLE `shop` (
 	`updated_by` varchar(36),
 	`updated_on` int,
 	`status` tinyint NOT NULL,
-	CONSTRAINT `shop_name_unique` UNIQUE(`name`),
-	CONSTRAINT `shop_slug_unique` UNIQUE(`slug`),
-	CONSTRAINT `shop_domain_unique` UNIQUE(`domain`)
+	CONSTRAINT `shop_name_unique` UNIQUE(`name`)
 );
 --> statement-breakpoint
 CREATE TABLE `user` (
