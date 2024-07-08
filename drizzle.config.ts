@@ -11,7 +11,8 @@ export default defineConfig({
     database: process.env.DB_NAME!,
     port: Number(process.env.DB_PORT!),
     ssl: {
-      ca: process.env.DB_SSL_CA || '',
+      ca: '/Users/chencheng/Documents/certificate.pem',
+      rejectUnauthorized: false,
     },
   },
 })
