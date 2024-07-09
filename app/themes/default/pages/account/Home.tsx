@@ -9,19 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from '~/themes/default/components/ui/table'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '~/themes/default/components/ui/card'
 import Header from '~/themes/default/components/ui/account/Header'
+import { OrderItem } from '~/types'
 
-const Account = ({
-  orders,
-}: {
-  orders: object[] //TODO: create OrderItem model
-}) => {
+const Account = ({ orders }: { orders: OrderItem[] }) => {
   const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden lg:mx-0">
@@ -34,13 +25,17 @@ const Account = ({
               <TableRow>
                 <TableHead>Order #</TableHead>
                 <TableHead className="hidden sm:table-cell">
-                  Shipping Status
+                  {t('system.shipping_status')}
                 </TableHead>
                 <TableHead className="hidden sm:table-cell">
-                  Payment Status
+                  {t('system.payment_status')}
                 </TableHead>
-                <TableHead className="hidden md:table-cell">Date</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
+                <TableHead className="hidden md:table-cell">
+                  {t('system.date')}
+                </TableHead>
+                <TableHead className="text-right">
+                  {t('system.amount')}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -59,7 +54,7 @@ const Account = ({
                       </Badge>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      2023-06-23
+                      {item.createdOn}
                     </TableCell>
                     <TableCell className="text-right">$250.00</TableCell>
                   </TableRow>
