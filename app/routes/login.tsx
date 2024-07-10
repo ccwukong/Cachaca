@@ -9,8 +9,10 @@ export const meta: MetaFunction = () => {
 }
 
 export const loader = async () => {
-  if (fs.existsSync(path.join(path.resolve(), 'app', 'routes', 'setup.tsx'))) {
-    return redirect('/setup')
+  if (
+    fs.existsSync(path.join(path.resolve(), 'app', 'routes', 'install.tsx'))
+  ) {
+    return redirect('/install')
   }
 }
 

@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
-import { Form, redirect } from '@remix-run/react'
+import { useState, useEffect, FormEvent } from 'react'
+import { Form, useSubmit } from '@remix-run/react'
 import { useTranslation } from 'react-i18next'
+import { AlertCircle } from 'lucide-react'
 import {
   Tabs,
   TabsContent,
@@ -11,11 +12,17 @@ import { Label } from '~/themes/default/components/ui/label'
 import { Input } from '~/themes/default/components/ui/input'
 import { Button } from '~/themes/default/components/ui/button'
 import { Textarea } from '~/themes/default/components/ui/textarea'
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from '~/themes/default/components/ui/alert'
 
 type SetupFormData = {
   firstName: string
   lastName: string
   email: string
+  phone: string
   password: string
   storeName: string
   description: string
@@ -25,24 +32,34 @@ const initFormData: SetupFormData = {
   firstName: '',
   lastName: '',
   email: '',
+  phone: '',
   password: '',
   storeName: '',
   description: '',
 }
 
-const Install = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
+const Install = ({ isSubmitError = false }: { isSubmitError: boolean }) => {
   const { t } = useTranslation()
+  const submit = useSubmit()
   const [formCompleted, setFormCompleted] = useState<boolean>(false)
   const [formData, SetFormData] = useState<SetupFormData>(initFormData)
 
   useEffect(() => {
-    const { firstName, lastName, email, password, storeName, description } =
-      formData
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      password,
+      storeName,
+      description,
+    } = formData
 
     if (
       firstName &&
       lastName &&
       email &&
+      phone &&
       password &&
       storeName &&
       description
@@ -53,13 +70,37 @@ const Install = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
     }
   }, [formData])
 
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      password,
+      storeName,
+      description,
+    } = formData
+
+    if (
+      firstName &&
+      lastName &&
+      email &&
+      phone &&
+      password &&
+      storeName &&
+      description
+    ) {
+      submit(formData, { method: 'POST' })
+    }
+  }
   return (
     <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
       <div className="mx-auto grid w-full max-w-2xl gap-2">
         <h1 className="text-3xl font-semibold">{t('system.installation')}</h1>
       </div>
       <div className="mx-auto grid w-full max-w-2xl items-center">
-        <Form method="post">
+        <Form method="post" onSubmit={submitHandler}>
           <Tabs defaultValue="account" className="w-full">
             <TabsList>
               <TabsTrigger value="account">
@@ -72,7 +113,7 @@ const Install = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
             <TabsContent value="account">
               <div className="grid gap-6">
                 <div className="grid gap-3">
-                  <Label htmlFor="name">{t('system.store_name')}</Label>
+                  <Label htmlFor="store-name">{t('system.store_name')}</Label>
                   <Input
                     id="store-name"
                     name="store-name"
@@ -148,6 +189,19 @@ const Install = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
                   />
                 </div>
                 <div className="grid gap-2">
+                  <Label htmlFor="phone">{t('system.phone')}</Label>
+                  <Input
+                    id="phone"
+                    name="phone"
+                    type="string"
+                    required
+                    value={formData.phone}
+                    onChange={(e) =>
+                      SetFormData({ ...formData, phone: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="grid gap-2">
                   <Label htmlFor="password">{t('system.password')}</Label>
                   <Input
                     id="password"
@@ -167,6 +221,13 @@ const Install = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
             {t('system.install')}
           </Button>
         </Form>
+        {!isSubmitError && (
+          <Alert variant="destructive" className="mt-3">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>{t('system.error')}</AlertTitle>
+            <AlertDescription>{t('system.install_failed')}</AlertDescription>
+          </Alert>
+        )}
       </div>
     </main>
   )

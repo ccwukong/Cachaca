@@ -2,6 +2,7 @@ import type { MetaFunction } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { json } from '@remix-run/node'
 import Home from '~/themes/default/pages/account/Home'
+import { OrderItem } from '~/types'
 import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction = () => {
@@ -10,7 +11,7 @@ export const meta: MetaFunction = () => {
 
 export const loader = async () => {
   return json({
-    orders: await mocks.getOrders(),
+    orders: (await mocks.getOrders()) as OrderItem[],
   })
 }
 

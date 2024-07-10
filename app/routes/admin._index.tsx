@@ -1,24 +1,26 @@
 import type { MetaFunction } from '@remix-run/node'
+import fs from 'node:fs'
+import path from 'node:path'
 import Dashboard from '~/themes/default/pages/admin/Dashboard'
 import { json, redirect, LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import { getSession, commitSession } from '~/sessions'
+import { cookie } from '~/cookie'
 
-// export async function loader({ request }: LoaderFunctionArgs) {
-//   const session = await getSession(request.headers.get('Cookie'))
+export async function loader({ request }: LoaderFunctionArgs) {
+  // delete the installer files on production
+  if ((process.env.NODE_ENV || '') !== 'development') {
+    const installRoute = path.join(
+      path.resolve(),
+      'app',
+      'routes',
+      'install.tsx',
+    )
 
-//   if (!session.has('userId')) {
-//     return redirect('/admin/login')
-//   }
-
-//   const data = { error: session.get('error') }
-
-//   return json(data, {
-//     headers: {
-//       'Set-Cookie': await commitSession(session),
-//     },
-//   })
-// }
+    if (fs.existsSync(installRoute)) {s
+      fs.unlinkSync(installRoute)
+    }
+  }
+}
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Admin Dashboard' }]

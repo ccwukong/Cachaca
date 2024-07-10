@@ -3,12 +3,14 @@ import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import Cart from '~/themes/default/pages/storefront/Cart'
 import {
-  CartItemInfo,
   ProductModel,
+} from '~/models'
+import {
+  CartItemInfo,
   CategoryItem,
   StoreSettings,
   ProductPublicInfo,
-} from '~/models'
+} from '~/types'
 import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction = () => {

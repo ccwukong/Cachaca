@@ -8,6 +8,7 @@
   "system.logout": "Log out",
   "system.login_hint": "Enter your email below to login to your account",
   "system.email": "Email",
+  "system.phone": "Phone",
   "system.name": "Name",
   "system.firstname": "First name",
   "system.lastname": "Last name",
@@ -39,5 +40,7 @@
   "system.description": "Description",
   "system.logo": "Logo",
   "system.admin_account": "Admin account",
-  "system.products": "Products"
+  "system.products": "Products",
+  "system.error": "Error",
+  "system.install_failed": "Installation unsuccessful. You may already have registered the store already."
 }

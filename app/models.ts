@@ -11,10 +11,10 @@ import { makeStr } from '~/utils/string'
 import { ServerInternalError } from '~/utils/exception'
 import {
   UserPublicInfo,
+  Role,
   ProductPublicInfo,
   HomeBannerSettings,
   StoreSettings,
-  Role,
 } from '~/types'
 
 interface CRUDMode<T> {
@@ -31,17 +31,24 @@ export class Installer {
       firstName: string
       lastName: string
       email: string
+      phone: string
       password: string
     }
     store: {
       name: string
       description: string
     }
-  }): Promise<boolean> {
+  }): Promise<UserPublicInfo> {
+    const salt = makeStr(8)
+    const adminId = uuidv4()
+    const createdOn = Math.floor(Date.now() / 1000)
+    const check = await db.select().from(shop)
+    if (check.length) {
+      throw new ServerInternalError('Store has already been created.')
+    }
+
     await db.transaction(async (tx) => {
       const { adminUser, store } = data
-      const salt = makeStr(8)
-      const adminId = uuidv4()
 
       await tx.insert(user).values({
         id: adminId,
@@ -50,10 +57,10 @@ export class Installer {
         email: adminUser.email,
         salt,
         password: md5(adminUser.password + salt),
-        phone: '',
+        phone: adminUser.phone,
         avatar: '',
         role: Role.Admin,
-        createdOn: Math.floor(Date.now() / 1000),
+        createdOn,
         status: 1,
       })
 
@@ -68,15 +75,24 @@ export class Installer {
         state: '',
         country: '',
         zipcode: '',
-        baseCurrencyId: 1,
+        baseCurrencyId: 1, //Default to USD
         description: store.description,
         createdBy: adminId,
-        createdOn: Math.floor(Date.now() / 1000),
+        createdOn,
         status: 1,
       })
     })
 
-    return true
+    return {
+      id: adminId,
+      email: data.adminUser.email,
+      firstName: data.adminUser.firstName,
+      lastName: data.adminUser.lastName,
+      phone: '',
+      avatar: '',
+      role: Role.Admin,
+      createdOn,
+    }
   }
 }
 
@@ -184,127 +200,127 @@ export class UserModel implements CRUDMode<UserPublicInfo> {
   }
 }
 
-// export class ProductModel implements CRUDMode<ProductPublicInfo> {
-//   async find(id: string): Promise<ProductPublicInfo | null> {
-//     const res = await db
-//       .select()
-//       .from(user)
-//       .where(eq(user.id, id as string))
+export class ProductModel implements CRUDMode<ProductPublicInfo> {
+  async find(id: string): Promise<ProductPublicInfo | null> {
+    const res = await db
+      .select()
+      .from(user)
+      .where(eq(user.id, id as string))
 
-//     if (!res.length) {
-//       return null
-//     }
+    if (!res.length) {
+      return null
+    }
 
-//     const data: ProductPublicInfo = {
-//       id: id as string,
-//       email: res[0].email,
-//       phone: res[0].phone,
-//       firstName: res[0].firstName,
-//       lastName: res[0].lastName,
-//       avatar: res[0].avatar,
-//       role: res[0].role,
-//       createdOn: res[0].createdOn,
-//       updatedOn: res[0].updatedOn || undefined,
-//     }
+    const data: ProductPublicInfo = {
+      id: id as string,
+      email: res[0].email,
+      phone: res[0].phone,
+      firstName: res[0].firstName,
+      lastName: res[0].lastName,
+      avatar: res[0].avatar,
+      role: res[0].role,
+      createdOn: res[0].createdOn,
+      updatedOn: res[0].updatedOn || undefined,
+    }
 
-//     return data
-//   }
+    return data
+  }
 
-//   async findMany(page: number, size: number): Promise<ProductPublicInfo[]> {
-//     const res = await db
-//       .select()
-//       .from(user)
-//       .orderBy(desc(user.createdOn))
-//       .limit(size)
-//       .offset(page * size)
+  async findMany(page: number, size: number): Promise<ProductPublicInfo[]> {
+    const res = await db
+      .select()
+      .from(user)
+      .orderBy(desc(user.createdOn))
+      .limit(size)
+      .offset(page * size)
 
-//     return res.map((item) => {
-//       return {
-//         id: item.id,
-//         email: item.email,
-//         phone: item.phone,
-//         firstName: item.firstName,
-//         lastName: item.lastName,
-//         avatar: item.avatar,
-//         role: item.role,
-//         createdOn: item.createdOn,
-//         updatedOn: item.updatedOn || undefined,
-//       }
-//     })
-//   }
+    return res.map((item) => {
+      return {
+        id: item.id,
+        email: item.email,
+        phone: item.phone,
+        firstName: item.firstName,
+        lastName: item.lastName,
+        avatar: item.avatar,
+        role: item.role,
+        createdOn: item.createdOn,
+        updatedOn: item.updatedOn || undefined,
+      }
+    })
+  }
 
-//   async update(): Promise<boolean> {
-//     return true
-//   }
+  async update(): Promise<boolean> {
+    return true
+  }
 
-//   async create(newUser: {
-//     id: string
-//     email: string
-//     phone: string
-//     password: string
-//     firstName: string
-//     lastName: string
-//     role: number
-//     avatar: string
-//   }): Promise<UserPublicInfo> {
-//     const salt = makeStr(8)
-//     const { id, email, phone, password, firstName, lastName, role, avatar } =
-//       newUser
+  async create(newUser: {
+    id: string
+    email: string
+    phone: string
+    password: string
+    firstName: string
+    lastName: string
+    role: number
+    avatar: string
+  }): Promise<UserPublicInfo> {
+    const salt = makeStr(8)
+    const { id, email, phone, password, firstName, lastName, role, avatar } =
+      newUser
 
-//     const data = {
-//       id,
-//       email,
-//       phone,
-//       password: md5(password + salt),
-//       salt,
-//       firstName,
-//       lastName,
-//       avatar,
-//       role,
-//       createdOn: Math.floor(Date.now() / 1000),
-//       status: 1,
-//     }
+    const data = {
+      id,
+      email,
+      phone,
+      password: md5(password + salt),
+      salt,
+      firstName,
+      lastName,
+      avatar,
+      role,
+      createdOn: Math.floor(Date.now() / 1000),
+      status: 1,
+    }
 
-//     const result = await db.insert(user).values(data)
+    const result = await db.insert(user).values(data)
 
-//     if (!result[0].affectedRows) {
-//       throw new ServerInternalError()
-//     }
+    if (!result[0].affectedRows) {
+      throw new ServerInternalError()
+    }
 
-//     return {
-//       id,
-//       email,
-//       phone,
-//       firstName,
-//       lastName,
-//       avatar,
-//       role,
-//       createdOn: data.createdOn,
-//     } as UserPublicInfo
-//   }
+    return {
+      id,
+      email,
+      phone,
+      firstName,
+      lastName,
+      avatar,
+      role,
+      createdOn: data.createdOn,
+    } as UserPublicInfo
+  }
 
-//   async delete(): Promise<boolean> {
-//     return true
-//   }
-// }
+  async delete(): Promise<boolean> {
+    return true
+  }
+}
 
-// export class PublicInfo {
-//   public static async getHomeBanners(): Promise<HomeBannerSettings> {
-//     return {
-//       autoplay: banners.autoplay,
-//       speed: banners.speed,
-//       bannerItems: banners.items,
-//     }
-//   }
+export class PublicInfo {
+  public static async getHomeBanners(): Promise<HomeBannerSettings> {
+    return {
+      autoplay: banners.autoplay,
+      speed: banners.speed,
+      bannerItems: banners.items,
+    }
+  }
 
-//   public static async getStoreInfo(): Promise<StoreSettings> {
-//     return {
-//       name: settings.name,
-//       logo: settings.logo,
-//       description: settings.description,
-//       currency: settings.currency,
-//       pageLinks: settings.pageLinks,
-//       copyright: settings.copyright,
-//     }
-//   }
-// }
+  public static async getStoreInfo(): Promise<StoreSettings> {
+    return {
+      name: settings.name,
+      logo: settings.logo,
+      description: settings.description,
+      currency: settings.currency,
+      pageLinks: settings.pageLinks,
+      copyright: settings.copyright,
+    }
+  }
+}
