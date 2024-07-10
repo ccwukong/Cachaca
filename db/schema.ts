@@ -128,7 +128,7 @@ export const checkoutItem = mysqlTable(
 )
 
 export const shop = mysqlTable('shop', {
-  name: varchar('name', { length: 120 }).notNull().unique(),
+  name: varchar('name', { length: 120 }).notNull().primaryKey(),
   logo: varchar('logo', { length: 255 }).notNull(),
   email: varchar('email', { length: 60 }),
   phone: varchar('phone', { length: 30 }),

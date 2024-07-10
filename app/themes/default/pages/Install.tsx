@@ -30,7 +30,7 @@ const initFormData: SetupFormData = {
   description: '',
 }
 
-const Setup = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
+const Install = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
   const { t } = useTranslation()
   const [formCompleted, setFormCompleted] = useState<boolean>(false)
   const [formData, SetFormData] = useState<SetupFormData>(initFormData)
@@ -110,6 +110,7 @@ const Setup = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
                     <Label htmlFor="first-name">{t('system.firstname')}</Label>
                     <Input
                       id="first-name"
+                      name="first-name"
                       required
                       value={formData.firstName}
                       onChange={(e) =>
@@ -124,6 +125,7 @@ const Setup = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
                     <Label htmlFor="last-name">{t('system.lastname')}</Label>
                     <Input
                       id="last-name"
+                      name="last-name"
                       required
                       value={formData.lastName}
                       onChange={(e) =>
@@ -136,6 +138,7 @@ const Setup = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
                   <Label htmlFor="email">{t('system.email')}</Label>
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     required
                     value={formData.email}
@@ -148,6 +151,7 @@ const Setup = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
                   <Label htmlFor="password">{t('system.password')}</Label>
                   <Input
                     id="password"
+                    name="password"
                     type="password"
                     required
                     value={formData.password}
@@ -168,4 +172,4 @@ const Setup = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
   )
 }
 
-export default Setup
+export default Install

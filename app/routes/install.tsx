@@ -1,7 +1,7 @@
 import type { MetaFunction, ActionFunctionArgs } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useActionData } from '@remix-run/react'
-import Setup from '~/themes/default/pages/Setup'
+import Install from '~/themes/default/pages/Install'
 import { Installer } from '~/models'
 
 export const meta: MetaFunction = () => {
@@ -11,23 +11,32 @@ export const meta: MetaFunction = () => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     const body = await request.formData()
+
     const result = await Installer.create({
-      name: String(body.get('store-name')),
-      description: String(body.get('description')),
-      createdBy: '123',
+      adminUser: {
+        firstName: String(body.get('first-name')),
+        lastName: String(body.get('last-name')),
+        email: String(body.get('email')),
+        password: String(body.get('password')),
+      },
+      store: {
+        name: String(body.get('store-name')),
+        description: String(body.get('description')),
+      },
     })
 
     if (result) {
-      return redirect('/admin')
+      return redirect('/admin?installed=true')
     } else {
       return json({ data: false })
     }
   } catch (e) {
+    console.log(e)
     return json({ data: false })
   }
 }
 
 export default function Index() {
   const result = useActionData<typeof action>()
-  return <Setup isSubmitSuccessful={result ? result.data : false} />
+  return <Install isSubmitSuccessful={result ? result.data : false} />
 }

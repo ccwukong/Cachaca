@@ -3,6 +3,7 @@
  */
 
 import { eq, desc } from 'drizzle-orm'
+import { v4 as uuidv4 } from 'uuid'
 import md5 from 'md5'
 import { user, shop } from '../db/schema'
 import db from '../db/connection'
@@ -26,41 +27,54 @@ interface CRUDMode<T> {
 
 export class Installer {
   public static async create(data: {
-    name: string
-    description: string
-    createdBy: string
-    logo?: string
-    email?: string
-    phone?: string
-    addressLine1?: string
-    addressLine2?: string
-    city?: string
-    state?: string
-    country?: string
-    zipcode?: string
-    baseCurrencyId?: number
-  }): Promise<boolean> {
-    const result = await db.insert(shop).values({
-      name: data.name,
-      logo: data.logo ?? '',
-      email: data.email ?? '',
-      phone: data.phone ?? '',
-      addressLine1: data.addressLine1 ?? '',
-      addressLine2: data.addressLine2 ?? '',
-      city: data.city ?? '',
-      state: data.state ?? '',
-      country: data.country ?? '',
-      zipcode: data.zipcode ?? '',
-      baseCurrencyId: data.baseCurrencyId ?? 1,
-      description: data.description,
-      createdBy: data.createdBy,
-      createdOn: Math.floor(Date.now() / 1000),
-      status: 1,
-    })
-
-    if (!result[0].affectedRows) {
-      throw new ServerInternalError()
+    adminUser: {
+      firstName: string
+      lastName: string
+      email: string
+      password: string
     }
+    store: {
+      name: string
+      description: string
+    }
+  }): Promise<boolean> {
+    await db.transaction(async (tx) => {
+      const { adminUser, store } = data
+      const salt = makeStr(8)
+      const adminId = uuidv4()
+
+      await tx.insert(user).values({
+        id: adminId,
+        firstName: adminUser.firstName,
+        lastName: adminUser.lastName,
+        email: adminUser.email,
+        salt,
+        password: md5(adminUser.password + salt),
+        phone: '',
+        avatar: '',
+        role: Role.Admin,
+        createdOn: Math.floor(Date.now() / 1000),
+        status: 1,
+      })
+
+      await tx.insert(shop).values({
+        name: store.name,
+        logo: '',
+        email: '',
+        phone: '',
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
+        state: '',
+        country: '',
+        zipcode: '',
+        baseCurrencyId: 1,
+        description: store.description,
+        createdBy: adminId,
+        createdOn: Math.floor(Date.now() / 1000),
+        status: 1,
+      })
+    })
 
     return true
   }

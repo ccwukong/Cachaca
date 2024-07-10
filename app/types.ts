@@ -88,44 +88,45 @@ export type OrderItem = {
 }
 
 export enum Role {
-  ADMIN = 1,
-  USER = 2,
+  Admin = 1,
+  User = 2,
 }
 
 export enum ShippingStatus {
-  PENDING = 1,
-  SHIPPED = 2,
-  DELIVERED = 3,
-  CANCELED = 5,
-  FAILED = 6,
+  Pending = 1,
+  Shipped = 2,
+  Delivered = 3,
+  Canceled = 5,
+  Failed = 6,
 }
 
 export enum PaymentStatus {
-  PENDING = 1,
-  CAPTURED = 2,
-  COMPLETED = 3,
-  PROCESSING = 4,
-  CANCELED = 5,
-  FAILED = 6,
+  Pending = 1,
+  Captured = 2,
+  Completed = 3,
+  Processing = 4,
+  Canceled = 5,
+  Failed = 6,
 }
 
 export enum OrderStatus {
-  PROCESSING = 1,
-  REFUNDED = 2,
-  PARTIAL_REFUNDED = 3,
-  COMPLETED = 4,
-  CANCELED = 5,
+  Processing = 1,
+  Refunded = 2,
+  PartialRefunded = 3,
+  Completed = 4,
+  Canceled = 5,
 }
 
 export enum PaymentMethod {
-  CASH = 1,
-  CREDIT_CARD = 2,
-  PAYPAL = 3,
-  STRIPE = 4,
-  BANK_TRANSFER = 5,
+  Cash = 1,
+  CreditCard = 2,
+  Paypal = 3,
+  Stripe = 4,
+  BankTransfer = 5,
+  CashOnDelivery = 6,
 }
 
 export enum ShippingMethod {
-  PICKUP = 1,
-  DELIVERY = 2,
+  PickUp = 1,
+  Delivery = 2,
 }
