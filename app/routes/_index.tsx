@@ -1,7 +1,5 @@
 import type { MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import fs from 'node:fs'
-import path from 'node:path'
 import { useLoaderData } from '@remix-run/react'
 import Home from '~/themes/default/pages/storefront/Home'
 import { ProductModel } from '~/models'
@@ -15,10 +13,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 }
 
 export const loader = async () => {
-  if (fs.existsSync(path.join(path.resolve(), 'app', 'routes', 'setup.tsx'))) {
-    return redirect('/setup')
-  }
-  
   return json({
     categories: await mocks.getCategories(),
     storeSettings: await mocks.getStoreInfo(),

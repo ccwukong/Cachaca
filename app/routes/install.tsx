@@ -1,13 +1,21 @@
 import type { MetaFunction, ActionFunctionArgs } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useActionData } from '@remix-run/react'
-import jwt from 'jsonwebtoken'
 import Install from '~/themes/default/pages/Install'
 import { cookie } from '~/cookie'
 import { Installer } from '~/models'
+import { encode } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Store setup' }]
+}
+
+export const loader = async () => {
+  if (await Installer.isInstalled()) {
+    return redirect('/admin')
+  }
+
+  return json({ message: 'test' })
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -28,30 +36,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     })
 
-    const [accessToken, refreshToken] = [
-      jwt.sign(
-        {
-          id: result.id,
-          firstName: result.firstName,
-          lastName: result.lastName,
-          email: result.email,
-        },
-        process.env.JWT_TOKEN_SECRET as string, // TODO: throw an error if the secret is not set
-        { expiresIn: '1h' },
-      ),
-      jwt.sign(
-        {
-          id: result.id,
-          firstName: result.firstName,
-          lastName: result.lastName,
-          email: result.email,
-        },
-        process.env.JWT_TOKEN_SECRET as string,
-        { expiresIn: '7d' },
-      ),
-    ]
+    const [accessToken, refreshToken] = await encode({
+      id: result.id,
+      firstName: result.firstName,
+      lastName: result.lastName,
+      email: result.email,
+    })
 
-    return redirect('/admin?installed=true', {
+    return redirect('/admin', {
       headers: {
         'Set-Cookie': await cookie.serialize({
           accessToken: accessToken,

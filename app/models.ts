@@ -26,6 +26,15 @@ interface CRUDMode<T> {
 }
 
 export class Installer {
+  public static async isInstalled(): Promise<boolean> {
+    const check = await db.select().from(shop)
+    if (check.length) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   public static async create(data: {
     adminUser: {
       firstName: string
