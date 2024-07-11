@@ -21,6 +21,7 @@ export const loader = async () => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   try {
+    console.log('environment varible:', process.env)
     const body = await request.formData()
 
     const result = await Installer.create({
