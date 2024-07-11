@@ -38,11 +38,12 @@ const initFormData: SetupFormData = {
   description: '',
 }
 
-const Install = ({ isSubmitError = false }: { isSubmitError: boolean }) => {
+const Install = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
   const { t } = useTranslation()
   const submit = useSubmit()
   const [formCompleted, setFormCompleted] = useState<boolean>(false)
   const [formData, SetFormData] = useState<SetupFormData>(initFormData)
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
   useEffect(() => {
     const {
@@ -91,6 +92,7 @@ const Install = ({ isSubmitError = false }: { isSubmitError: boolean }) => {
       storeName &&
       description
     ) {
+      setIsSubmitted(true)
       submit(formData, { method: 'POST' })
     }
   }
@@ -221,13 +223,13 @@ const Install = ({ isSubmitError = false }: { isSubmitError: boolean }) => {
             {t('system.install')}
           </Button>
         </Form>
-        {!isSubmitError && (
+        {!isSubmitSuccessful && isSubmitted ? (
           <Alert variant="destructive" className="mt-3">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>{t('system.error')}</AlertTitle>
             <AlertDescription>{t('system.install_failed')}</AlertDescription>
           </Alert>
-        )}
+        ) : null}
       </div>
     </main>
   )

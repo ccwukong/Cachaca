@@ -45,5 +45,8 @@
   "system.install_failed": "Installation unsuccessful. You may already have registered the store already.",
   "system.search": "Search",
   "system.base_price": "Base price",
-  "system.status": "Status"
+  "system.status": "Status",
+  "system.admin_login": "Admin login",
+  "system.reset_password": "Reset password",
+  "system.login_failed": "Incorrect email or password."
 }

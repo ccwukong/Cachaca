@@ -8,7 +8,7 @@ import { encode } from '~/utils/jwt'
 import { ServerInternalError } from '~/utils/exception'
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'Store setup' }]
+  return [{ title: 'Installation' }]
 }
 
 export const loader = async () => {
@@ -49,7 +49,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         lastName: result.lastName,
         email: result.email,
       },
-      process.env.JWT_TOKEN_SECRET!,
+      process.env.JWT_TOKEN_SECRET,
     )
 
     const refreshToken = await encode(
@@ -60,7 +60,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         lastName: result.lastName,
         email: result.email,
       },
-      process.env.JWT_TOKEN_SECRET!,
+      process.env.JWT_TOKEN_SECRET,
     )
 
     return redirect('/admin', {
@@ -72,11 +72,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     })
   } catch (e) {
-    return json({ data: false })
+    return json({ successful: false })
   }
 }
 
 export default function Index() {
   const result = useActionData<typeof action>()
-  return <Install isSubmitError={result ? false : true} />
+  return <Install isSubmitSuccessful={!!result?.successful} />
 }

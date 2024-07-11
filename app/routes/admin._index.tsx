@@ -13,14 +13,18 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {
     const cookieStr = request.headers.get('Cookie') || ''
+    if (!cookieStr) {
+      return redirect('/admin/login')
+    }
+
     const { accessToken, refreshToken } = await cookie.parse(cookieStr)
 
     if (!process.env.JWT_TOKEN_SECRET) {
       throw new ServerInternalError('Invalid JWT Token secret string.')
     }
 
-    if (!(await isValid(accessToken, process.env.JWT_TOKEN_SECRET!))) {
-      if (!(await isValid(refreshToken, process.env.JWT_TOKEN_SECRET!))) {
+    if (!(await isValid(accessToken, process.env.JWT_TOKEN_SECRET))) {
+      if (!(await isValid(refreshToken, process.env.JWT_TOKEN_SECRET))) {
         return redirect('/admin/login')
       } else {
         const data = (await decode(
@@ -41,7 +45,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             lastName: data.lastName,
             email: data.email,
           },
-          process.env.JWT_TOKEN_SECRET!,
+          process.env.JWT_TOKEN_SECRET,
         )
 
         const newRefreshToken = await encode(
@@ -52,7 +56,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             lastName: data.lastName,
             email: data.email,
           },
-          process.env.JWT_TOKEN_SECRET!,
+          process.env.JWT_TOKEN_SECRET,
         )
 
         return redirect('/admin', {

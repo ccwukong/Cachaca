@@ -8,7 +8,7 @@ import md5 from 'md5'
 import { user, shop } from '../db/schema'
 import db from '../db/connection'
 import { makeStr } from '~/utils/string'
-import { ServerInternalError } from '~/utils/exception'
+import { ServerInternalError, AuthException } from '~/utils/exception'
 import {
   UserPublicInfo,
   Role,
@@ -101,6 +101,36 @@ export class Installer {
       avatar: '',
       role: Role.Admin,
       createdOn,
+    }
+  }
+}
+
+export class Authtication {
+  public static async login(
+    email: string,
+    password: string,
+  ): Promise<UserPublicInfo> {
+    const res = await db.select().from(user).where(eq(user.email, email))
+
+    if (!res.length) {
+      throw new AuthException('User not found.')
+    }
+
+    const userData = res[0]
+
+    if (userData.password !== md5(password + userData.salt)) {
+      throw new AuthException('Password is incorrect.')
+    }
+
+    return {
+      id: userData.id,
+      email: userData.email,
+      phone: userData.phone,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      avatar: userData.avatar,
+      role: userData.role,
+      createdOn: userData.createdOn,
     }
   }
 }
