@@ -36,7 +36,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     })
 
-    const [accessToken, refreshToken] = await encode({
+    const accessToken = await encode('1h', {
+      id: result.id,
+      firstName: result.firstName,
+      lastName: result.lastName,
+      email: result.email,
+    })
+
+    const refreshToken = await encode('7d', {
       id: result.id,
       firstName: result.firstName,
       lastName: result.lastName,
