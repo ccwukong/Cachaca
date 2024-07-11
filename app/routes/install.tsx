@@ -6,6 +6,7 @@ import { cookie } from '~/cookie'
 import { Installer } from '~/models'
 import { encode } from '~/utils/jwt'
 import { ServerInternalError } from '~/utils/exception'
+import { s } from 'node_modules/vite/dist/node/types.d-aGj9QkWt'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Installation' }]
@@ -21,7 +22,6 @@ export const loader = async () => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   try {
-    console.log('environment varible:', process.env)
     const body = await request.formData()
 
     const result = await Installer.create({
@@ -78,6 +78,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 }
 
 export default function Index() {
-  const result = useActionData<typeof action>()
-  return <Install isSubmitSuccessful={!!result?.successful} />
+  let result = useActionData<typeof action>()
+  if (result === undefined) {
+    result = { successful: true }
+  }
+  return <Install isSubmitSuccessful={result.successful} />
 }

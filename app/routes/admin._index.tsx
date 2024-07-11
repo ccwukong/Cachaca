@@ -5,6 +5,7 @@ import { useLoaderData } from '@remix-run/react'
 import { cookie } from '~/cookie'
 import { isValid, decode, encode } from '~/utils/jwt'
 import { ServerInternalError } from '~/utils/exception'
+import { Installer } from '~/models'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Admin Dashboard' }]
@@ -12,6 +13,10 @@ export const meta: MetaFunction = () => {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {
+    if (!(await Installer.isInstalled())) {
+      return redirect('/install')
+    }
+
     const cookieStr = request.headers.get('Cookie') || ''
     if (!cookieStr) {
       return redirect('/admin/login')

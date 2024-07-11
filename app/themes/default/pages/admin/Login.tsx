@@ -23,6 +23,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from '~/themes/default/components/ui/alert'
+import { Spinner } from '~/themes/default/components/ui/spinner'
 
 const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
   const { t } = useTranslation()
@@ -49,7 +50,15 @@ const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">{t('system.email')}</Label>
-                    <Input id="email" name="email" type="email" required />
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      onChange={() => {
+                        setIsLoginSubmitted(false)
+                      }}
+                      required
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="password">{t('system.password')}</Label>
@@ -57,6 +66,9 @@ const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
                       id="password"
                       name="password"
                       type="password"
+                      onChange={() => {
+                        setIsLoginSubmitted(false)
+                      }}
                       required
                     />
                   </div>
@@ -67,7 +79,11 @@ const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
                       setIsLoginSubmitted(true)
                     }}
                   >
-                    {t('system.login')}
+                    {isLoginSubmitted ? (
+                      <Spinner size="small" className="text-white" />
+                    ) : (
+                      t('system.login')
+                    )}
                   </Button>
                   {!isLoginSuccessful && isLoginSubmitted ? (
                     <Alert variant="destructive" className="mt-3">

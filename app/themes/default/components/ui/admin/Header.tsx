@@ -1,10 +1,6 @@
 import { Link } from '@remix-run/react'
 import { useTranslation } from 'react-i18next'
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '~/themes/default/components/ui/avatar'
+import { Avatar, AvatarFallback } from '~/themes/default/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -48,7 +44,6 @@ const Header = ({ navItems }: { navItems: PageLink[] }) => {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src="/avatars/01.png" alt="@shadcn" />
                   <AvatarFallback>SC</AvatarFallback>
                 </Avatar>
               </Button>

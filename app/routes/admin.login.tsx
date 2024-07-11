@@ -3,12 +3,20 @@ import { redirect, json } from '@remix-run/node'
 import { useActionData } from '@remix-run/react'
 import Login from '~/themes/default/pages/admin/Login'
 import { cookie } from '~/cookie'
-import { Authtication } from '~/models'
+import { Installer, Authtication } from '~/models'
 import { encode } from '~/utils/jwt'
 import { ServerInternalError } from '~/utils/exception'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Admin Login' }]
+}
+
+export const loader = async () => {
+  if (!(await Installer.isInstalled())) {
+    return redirect('/install')
+  }
+
+  return json({ message: 'test' })
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -59,6 +67,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 }
 
 export default function Index() {
-  const result = useActionData<typeof action>()
-  return <Login isLoginSuccessful={!!result?.successful} />
+  let result = useActionData<typeof action>()
+  // when form submission is successful, result will be undefined becuase of the redirect
+  // It will cause the error message shown up unexpectedly
+  // Add this defensive code here for now
+  if (result === undefined) {
+    result = { successful: true }
+  }
+  return <Login isLoginSuccessful={result.successful} />
 }

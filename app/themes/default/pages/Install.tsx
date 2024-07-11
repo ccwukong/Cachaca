@@ -17,6 +17,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from '~/themes/default/components/ui/alert'
+import { Spinner } from '~/themes/default/components/ui/spinner'
 
 type SetupFormData = {
   firstName: string
@@ -69,6 +70,7 @@ const Install = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
     } else {
       setFormCompleted(false)
     }
+    setIsSubmitted(false)
   }, [formData])
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -220,7 +222,11 @@ const Install = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
             </TabsContent>
           </Tabs>
           <Button type="submit" className="mt-6" disabled={!formCompleted}>
-            {t('system.install')}
+            {isSubmitted ? (
+              <Spinner size="small" className="text-white" />
+            ) : (
+              t('system.install')
+            )}
           </Button>
         </Form>
         {!isSubmitSuccessful && isSubmitted ? (
