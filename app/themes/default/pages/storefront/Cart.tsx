@@ -9,7 +9,7 @@ import {
   StoreSettings,
   CartItemInfo,
   CategoryItem,
-} from '~/models'
+} from '~/types'
 
 const Cart = ({
   categories,

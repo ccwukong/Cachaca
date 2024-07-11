@@ -27,6 +27,7 @@ import { Calendar } from '~/themes/default/components/ui/calendar'
 import { Button } from '~/themes/default/components/ui/button'
 import AdminHeader from '~/themes/default/components/ui/admin/Header'
 import { cn } from '~/themes/lib/utils'
+import { PageLink } from '~/types'
 
 const data = [
   {
@@ -79,7 +80,7 @@ const data = [
   },
 ]
 
-const Dashboard = () => {
+const Dashboard = ({ navLinks }: { navLinks: PageLink[] }) => {
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(2023, 0, 20),
     to: addDays(new Date(2023, 0, 20), 20),
@@ -87,15 +88,7 @@ const Dashboard = () => {
 
   return (
     <div className="mx-6 overflow-hidden lg:mx-0">
-      <AdminHeader
-        navItems={[
-          { title: 'Overview', link: '/admin' },
-          { title: 'Customers', link: '/admin/customers' },
-          { title: 'Orders', link: '/admin/orders' },
-          { title: 'Products', link: '/admin/products' },
-          { title: 'Settings', link: '/admin/settings' },
-        ]}
-      />
+      <AdminHeader navItems={navLinks} />
       <div className="max-w-screen-xl w-full flex-1 space-y-4 p-8 pt-6 mx-auto h-auto mt-16">
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>

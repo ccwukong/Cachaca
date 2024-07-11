@@ -4,6 +4,7 @@ import { json, redirect, LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { cookie } from '~/cookie'
 import { isValid, decode, encode } from '~/utils/jwt'
+import { ServerInternalError } from '~/utils/exception'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Admin Dashboard' }]
@@ -14,30 +15,45 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const cookieStr = request.headers.get('Cookie') || ''
     const { accessToken, refreshToken } = await cookie.parse(cookieStr)
 
-    if (!(await isValid(accessToken))) {
-      if (!(await isValid(refreshToken))) {
+    if (!process.env.JWT_TOKEN_SECRET) {
+      throw new ServerInternalError('Invalid JWT Token secret string.')
+    }
+
+    if (!(await isValid(accessToken, process.env.JWT_TOKEN_SECRET!))) {
+      if (!(await isValid(refreshToken, process.env.JWT_TOKEN_SECRET!))) {
         return redirect('/admin/login')
       } else {
-        const data = (await decode(refreshToken)) as {
+        const data = (await decode(
+          refreshToken,
+          process.env.JWT_TOKEN_SECRET!,
+        )) as {
           id: string
           firstName: string
           lastName: string
           email: string
         }
 
-        const newAccessToken = await encode('1h', {
-          id: data.id,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-        })
+        const newAccessToken = await encode(
+          '1h',
+          {
+            id: data.id,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+          },
+          process.env.JWT_TOKEN_SECRET!,
+        )
 
-        const newRefreshToken = await encode('7d', {
-          id: data.id,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-        })
+        const newRefreshToken = await encode(
+          '7d',
+          {
+            id: data.id,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+          },
+          process.env.JWT_TOKEN_SECRET!,
+        )
 
         return redirect('/admin', {
           headers: {
@@ -58,5 +74,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function Index() {
   // const { error } = useLoaderData<typeof loader>()
-  return <Dashboard />
+  return (
+    <Dashboard
+      navLinks={[
+        { title: 'Overview', url: '/admin', order: 1 },
+        { title: 'Customers', url: '/admin/customers', order: 2 },
+        { title: 'Orders', url: '/admin/orders', order: 3 },
+        { title: 'Products', url: '/admin/products', order: 4 },
+        { title: 'Settings', url: '/admin/settings', order: 5 },
+      ]}
+    />
+  )
 }

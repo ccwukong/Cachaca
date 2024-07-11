@@ -8,6 +8,7 @@ export const encode = async (
     lastName: string
     email: string
   },
+  secret: string,
 ) => {
   const { id, firstName, lastName, email } = data
   return jwt.sign(
@@ -17,17 +18,14 @@ export const encode = async (
       lastName,
       email,
     },
-    process.env.JWT_TOKEN_SECRET || '', // TODO: throw an error if the secret is not set
+    secret,
     { expiresIn },
   )
 }
 
-export const isValid = async (token: string) => {
+export const isValid = async (token: string, secret: string) => {
   try {
-    const { exp } = (await jwt.verify(
-      token,
-      process.env.JWT_TOKEN_SECRET || '',
-    )) as JwtPayload
+    const { exp } = (await jwt.verify(token, secret)) as JwtPayload
 
     if ((exp ?? 0) <= Math.floor(Date.now() / 1000)) {
       return false
@@ -39,6 +37,6 @@ export const isValid = async (token: string) => {
   }
 }
 
-export const decode = async (token: string) => {
-  return await jwt.verify(token, process.env.JWT_TOKEN_SECRET || '')
+export const decode = async (token: string, secret: string) => {
+  return await jwt.verify(token, secret)
 }

@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from '~/themes/default/components/ui/select'
 import { Button } from '~/themes/default/components/ui/button'
-import { ProductPublicInfo, StoreSettings, CategoryItem } from '~/models'
+import { ProductPublicInfo, StoreSettings, CategoryItem } from '~/types'
 
 const ProductDetail = ({
   categories,

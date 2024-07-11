@@ -16,23 +16,19 @@ import {
 } from '~/themes/default/components/ui/dropdown-menu'
 import { Button } from '~/themes/default/components/ui/button'
 import { Input } from '~/themes/default/components/ui/input'
+import { PageLink } from '~/types'
 
-export interface NavItem {
-  title: string
-  link: string
-}
-
-const Header = ({ navItems }: { navItems: NavItem[] }) => {
+const Header = ({ navItems }: { navItems: PageLink[] }) => {
   const { t } = useTranslation()
   return (
     <div className="border-b fixed w-full flex justify-center bg-white z-50">
       <div className="max-w-screen-xl w-full flex h-16 items-center px-4">
         <nav className="flex items-center mx-6 space-x-4 lg:space-x-6">
-          {navItems.map(({ title, link }) => {
+          {navItems.map(({ title, url }) => {
             return (
               <Link
                 key={title}
-                to={link}
+                to={url}
                 className="text-sm font-medium transition-colors hover:text-primary"
               >
                 {title}

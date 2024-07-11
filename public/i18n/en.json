@@ -42,5 +42,8 @@
   "system.admin_account": "Admin account",
   "system.products": "Products",
   "system.error": "Error",
-  "system.install_failed": "Installation unsuccessful. You may already have registered the store already."
+  "system.install_failed": "Installation unsuccessful. You may already have registered the store already.",
+  "system.search": "Search",
+  "system.base_price": "Base price",
+  "system.status": "Status"
 }

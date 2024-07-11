@@ -13,7 +13,7 @@ import {
   HomeBannerSettings,
   StoreSettings,
   CategoryItem,
-} from '~/models'
+} from '~/types'
 
 const Home = ({
   categories,

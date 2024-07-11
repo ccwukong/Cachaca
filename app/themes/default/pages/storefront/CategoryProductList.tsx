@@ -1,7 +1,7 @@
 import Header from '~/themes/default/components/ui/storefront/Header'
 import Footer from '~/themes/default/components/ui/storefront/Footer'
 import ProductCard from '~/themes/default/components/ui/storefront/ProductCard'
-import { ProductPublicInfo, StoreSettings, CategoryItem } from '~/models'
+import { ProductPublicInfo, StoreSettings, CategoryItem } from '~/types'
 
 const CategoryProductList = ({
   categories,
