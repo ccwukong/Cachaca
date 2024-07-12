@@ -62,7 +62,7 @@ const Header = ({
             <ul className="justify-center items-center space-y-8 md:flex md:space-x-6 md:space-y-0">
               {menuItems.map((item, idx) => (
                 <li key={item.id}>
-                  <HoverCard>
+                  <HoverCard openDelay={50} closeDelay={50}>
                     <HoverCardTrigger>
                       <Link to={`/categories/${item.slug}`}>{item.name}</Link>
                     </HoverCardTrigger>
@@ -96,14 +96,12 @@ const Header = ({
             <Link to="/account">
               <UserRound className="cursor-pointer" />
             </Link>
-            <HoverCard>
-              <HoverCardTrigger>
-                <Link to="/cart" className="flex">
-                  <ShoppingCart className="mt-5 md:mt-0" />
-                  {cartItems && cartItems.length ? (
-                    <Badge variant="destructive">{cartItems.length}</Badge>
-                  ) : null}
-                </Link>
+            <HoverCard openDelay={50} closeDelay={50}>
+              <HoverCardTrigger className="flex">
+                <ShoppingCart className="mt-5 md:mt-0" />
+                {cartItems && cartItems.length ? (
+                  <Badge variant="destructive">{cartItems.length}</Badge>
+                ) : null}
               </HoverCardTrigger>
               <HoverCardContent className="w-[400px]">
                 {cartItems && cartItems.length ? (
@@ -148,10 +146,17 @@ const Header = ({
                   <span>{t('system.cart_empty')}</span>
                 )}
                 {cartItems && cartItems.length ? (
-                  <div className="flex justify-between mt-3">
-                    <div className="font-bold">{t('system.subtotal')}</div>
-                    <div>{`${cartItems[0].currency}${subtotal}`}</div>
-                  </div>
+                  <>
+                    <div className="flex justify-between mt-3">
+                      <div className="font-bold">{t('system.subtotal')}</div>
+                      <div>{`${cartItems[0].currency}${subtotal}`}</div>
+                    </div>
+                    <div className="mt-5">
+                      <Link to="/cart" className="flex justify-end font-bold">
+                        {t('system.go_to_cart')}
+                      </Link>
+                    </div>
+                  </>
                 ) : null}
               </HoverCardContent>
             </HoverCard>
