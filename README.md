@@ -57,7 +57,7 @@ JWT_TOKEN_SECRET=<a long random string that is used to sign JWT auth token>
 SESSION_COOKIE_SECRET=<a long random string that is used to sign cookie message>
 ```
 
-### File hosting
+### Multimedia file hosting
 
 Cachaca is designed to be deployed in different environments including Serverless environments, therefore, it is our design decision to use a file/object hosting service to host all multimedia files such as product images, audio/video files etc.
 
@@ -102,19 +102,31 @@ If you wish to create a custom theme for any reasons, you shall follow the guide
 
 ## Deployment
 
-First, build your app for production:
+If you plan to host the system mannually, you can simply configure the environment variable in your server, and
+
+- Build your app for production:
 
 ```sh
 yarn build
 ```
 
-Then run the app in production mode:
+- Run the app in production mode:
 
 ```sh
 yarn start
 ```
 
-Now you'll need to pick a host to deploy it to.
+You are recommended to use our auto deployment feature (WIP), and you can easily deploy your store within a minutes.
+
+Some recommended painless serverless options:
+
+### Web hosting
+
+- [Netlify](https://www.netlify.com/) - Our demo app is currenlty hosted by Netlify free-tier
+
+### Database
+
+- [TiDB serverless](https://www.pingcap.com/tidb-serverless/) - A MySQL compatible serverless database service provider, our demo database is currently hosted by TiDB
 
 ## License
 
