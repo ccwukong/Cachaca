@@ -48,5 +48,6 @@
   "system.status": "Status",
   "system.admin_login": "Admin login",
   "system.reset_password": "Reset password",
-  "system.login_failed": "Incorrect email or password."
+  "system.login_failed": "Incorrect email or password.",
+  "system.cart_empty": "Your cart is empty."
 }

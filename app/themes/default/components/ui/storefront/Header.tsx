@@ -104,40 +104,42 @@ const Header = ({
                 </Link>
               </HoverCardTrigger>
               <HoverCardContent className="w-[400px]">
-                {cartItems && cartItems.length
-                  ? cartItems.map((item) => {
-                      return (
-                        <div
-                          key={item.id}
-                          className="grid grid-cols-6 gap-2 py-1"
-                        >
-                          <div>
-                            <img
-                              src={item.coverImage as string}
-                              className="h-16"
-                              alt={item.name as string}
-                            />
-                          </div>
-                          <div className="col-span-3">
-                            <Link to={item.url as string} className="">
-                              {item.name}
-                            </Link>
-                          </div>
-                          <div>
-                            <Input
-                              type="number"
-                              value={item.quantity}
-                              className="px-2 py-1 h-auto w-14"
-                              onChange={() => {}}
-                            />
-                          </div>
-                          <div>{`${item.currency}${
-                            Number(item.quantity) * Number(item.price)
-                          }`}</div>
+                {cartItems && cartItems.length ? (
+                  cartItems.map((item) => {
+                    return (
+                      <div
+                        key={item.id}
+                        className="grid grid-cols-6 gap-2 py-1"
+                      >
+                        <div>
+                          <img
+                            src={item.coverImage as string}
+                            className="h-16"
+                            alt={item.name as string}
+                          />
                         </div>
-                      )
-                    })
-                  : null}
+                        <div className="col-span-3">
+                          <Link to={item.url as string} className="">
+                            {item.name}
+                          </Link>
+                        </div>
+                        <div>
+                          <Input
+                            type="number"
+                            value={item.quantity}
+                            className="px-2 py-1 h-auto w-14"
+                            onChange={() => {}}
+                          />
+                        </div>
+                        <div>{`${item.currency}${
+                          Number(item.quantity) * Number(item.price)
+                        }`}</div>
+                      </div>
+                    )
+                  })
+                ) : (
+                  <span>{t('system.cart_empty')}</span>
+                )}
                 {cartItems && cartItems.length ? (
                   <div className="flex justify-between mt-3">
                     <div className="font-bold">{t('system.subtotal')}</div>

@@ -5,7 +5,7 @@ import Footer from '~/themes/default/components/ui/storefront/Footer'
 import ProductCard from '~/themes/default/components/ui/storefront/ProductCard'
 import { ProductPublicInfo, StoreSettings, CategoryItem } from '~/types'
 import type { LocalCartItem } from '~/utils/indexedDB'
-import * as idb from '~/utils/indexedDB'
+import { idb } from '~/utils/indexedDB'
 
 const CategoryProductList = ({
   categories,
@@ -21,21 +21,27 @@ const CategoryProductList = ({
   const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
     {},
   )
+
   useEffect(() => {
     const addItem = async () => {
       const { id, name, coverImage, slug, url, price, currency, quantity } =
         cartItem as LocalCartItem
 
-      await idb.cart.add({
-        id,
-        name,
-        coverImage,
-        slug,
-        url,
-        price,
-        currency,
-        quantity,
-      })
+      const item = await idb.cart.get(id)
+      if (item) {
+        await idb.cart.update(id, { quantity: item.quantity + 1 })
+      } else {
+        await idb.cart.add({
+          id,
+          name,
+          coverImage,
+          slug,
+          url,
+          price,
+          currency,
+          quantity,
+        })
+      }
     }
     if (Object.keys(cartItem).length) {
       addItem()

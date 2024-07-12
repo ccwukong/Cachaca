@@ -40,16 +40,21 @@ const Home = ({
       const { id, name, coverImage, slug, url, price, currency, quantity } =
         cartItem as LocalCartItem
 
-      await idb.cart.add({
-        id,
-        name,
-        coverImage,
-        slug,
-        url,
-        price,
-        currency,
-        quantity,
-      })
+      const item = await idb.cart.get(id)
+      if (item) {
+        await idb.cart.update(id, { quantity: item.quantity + 1 })
+      } else {
+        await idb.cart.add({
+          id,
+          name,
+          coverImage,
+          slug,
+          url,
+          price,
+          currency,
+          quantity,
+        })
+      }
     }
     if (Object.keys(cartItem).length) {
       addItem()
