@@ -126,7 +126,7 @@ Some recommended painless serverless options:
 
 ### Database
 
-- [TiDB serverless](https://www.pingcap.com/tidb-serverless/) - A MySQL compatible serverless database service provider, our demo database is currently hosted by TiDB
+- [TiDB serverless](https://www.pingcap.com/tidb-serverless/) - A MySQL compatible serverless database service provider, our demo database is currently hosted by TiDB free-tier
 
 ## License
 
