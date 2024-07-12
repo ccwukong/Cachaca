@@ -1,7 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie'
 import { CartItem } from '~/types'
 
-type LocalCartItem = CartItem & { url: string }
+type LocalCartItem = CartItem & { url: string; currency: string }
 const idb = new Dexie('cart') as Dexie & {
   cart: EntityTable<LocalCartItem, 'id'>
 }

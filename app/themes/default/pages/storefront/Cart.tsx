@@ -7,7 +7,7 @@ import { Button } from '~/themes/default/components/ui/button'
 import {
   ProductPublicInfo,
   StoreSettings,
-  CartItemInfo,
+  CartItem as CartItemInfo,
   CategoryItem,
 } from '~/types'
 
@@ -46,7 +46,7 @@ const Cart = ({
               <CartItem
                 key={index}
                 coverImage={item.coverImage}
-                title={item.title}
+                title={item.name}
                 currency={storeSettings.currency.symbol}
                 price={item.price}
                 quantity={item.quantity}

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
+import { useLiveQuery } from 'dexie-react-hooks'
 import Header from '~/themes/default/components/ui/storefront/Header'
 import Footer from '~/themes/default/components/ui/storefront/Footer'
 import ProductCard from '~/themes/default/components/ui/storefront/ProductCard'
 import { ProductPublicInfo, StoreSettings, CategoryItem } from '~/types'
+import type { LocalCartItem } from '~/utils/indexedDB'
 import * as idb from '~/utils/indexedDB'
 
 const CategoryProductList = ({
@@ -16,38 +18,27 @@ const CategoryProductList = ({
   storeSettings: StoreSettings
   category: string
 }) => {
-  const [db, setDb] = useState<IDBDatabase | null>(null)
   const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
     {},
   )
-  const [cart, setCart] = useState<{ [key: string]: string | number }[]>([])
-
   useEffect(() => {
-    const request = window.indexedDB.open('temp_cart')
+    const addItem = async () => {
+      const { id, name, coverImage, slug, url, price, currency, quantity } =
+        cartItem as LocalCartItem
 
-    request.onerror = (e) => {
-      console.log(e)
+      await idb.cart.add({
+        id,
+        name,
+        coverImage,
+        slug,
+        url,
+        price,
+        currency,
+        quantity,
+      })
     }
-
-    request.onsuccess = (e) => {
-      setDb(request.result)
-      setCart(idb.findMany(request.result, 'cart_item'))
-    }
-
-    request.onupgradeneeded = (e) => {
-      const db = (e.target as IDBOpenDBRequest).result
-      if (db && !db.objectStoreNames.contains('cart_item')) {
-        db.createObjectStore('cart_item', { keyPath: 'id' })
-      }
-      setDb(db)
-      setCart(idb.findMany(request.result, 'cart_item'))
-    }
-  }, [])
-
-  useEffect(() => {
-    if (db) {
-      idb.insert(db, 'cart_item', cartItem)
-      setCart(idb.findMany(db, 'cart_item'))
+    if (Object.keys(cartItem).length) {
+      addItem()
     }
   }, [cartItem])
 
@@ -57,7 +48,7 @@ const CategoryProductList = ({
         storeLogo=""
         storeName="Cachaca"
         menuItems={categories}
-        cartItems={cart}
+        cartItems={useLiveQuery(() => idb.cart.toArray()) || []}
       />
 
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
@@ -79,6 +70,8 @@ const CategoryProductList = ({
                     url: `/products/${item.slug}`,
                     price: item.basePrice,
                     quantity: 1,
+                    slug: item.slug,
+                    currency: storeSettings.currency.symbol,
                   })
                 }}
               />

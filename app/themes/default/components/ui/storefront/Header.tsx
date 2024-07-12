@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Link } from '@remix-run/react'
+import { useTranslation } from 'react-i18next'
 import { UserRound, ShoppingCart, Menu } from 'lucide-react'
+import { Input } from '~/themes/default/components/ui/input'
 import {
   HoverCard,
   HoverCardContent,
@@ -28,6 +30,14 @@ const Header = ({
   cartItems?: { [key: string]: string | number }[]
   logoOnly?: boolean
 }) => {
+  const { t } = useTranslation()
+  const subtotal =
+    cartItems && cartItems.length
+      ? cartItems.reduce(
+          (accu, item) => accu + Number(item.price) * Number(item.quantity),
+          0,
+        )
+      : 0
   return (
     <nav className="left-0 bg-white w-full z-50 border-b border-slate-100 shadow-inner h-16 fixed p-0">
       <div className="items-center max-w-screen-xl mx-auto flex justify-between">
@@ -93,24 +103,47 @@ const Header = ({
                   ) : null}
                 </Link>
               </HoverCardTrigger>
-              <HoverCardContent>
+              <HoverCardContent className="w-[400px]">
                 {cartItems && cartItems.length
                   ? cartItems.map((item) => {
                       return (
                         <div
                           key={item.id}
-                          className="flex justify-between mt-2"
+                          className="grid grid-cols-6 gap-2 py-1"
                         >
-                          <img
-                            src={item.coverImage as string}
-                            className="h-10"
-                            alt={item.name as string}
-                          />
-                          <Link to={item.url as string}>{item.name}</Link>
+                          <div>
+                            <img
+                              src={item.coverImage as string}
+                              className="h-16"
+                              alt={item.name as string}
+                            />
+                          </div>
+                          <div className="col-span-3">
+                            <Link to={item.url as string} className="">
+                              {item.name}
+                            </Link>
+                          </div>
+                          <div>
+                            <Input
+                              type="number"
+                              value={item.quantity}
+                              className="px-2 py-1 h-auto w-14"
+                              onChange={() => {}}
+                            />
+                          </div>
+                          <div>{`${item.currency}${
+                            Number(item.quantity) * Number(item.price)
+                          }`}</div>
                         </div>
                       )
                     })
                   : null}
+                {cartItems && cartItems.length ? (
+                  <div className="flex justify-between mt-3">
+                    <div className="font-bold">{t('system.subtotal')}</div>
+                    <div>{`${cartItems[0].currency}${subtotal}`}</div>
+                  </div>
+                ) : null}
               </HoverCardContent>
             </HoverCard>
           </div>
