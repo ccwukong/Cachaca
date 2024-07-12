@@ -12,17 +12,20 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '~/themes/default/components/ui/accordion'
+import { Badge } from '~/themes/default/components/ui/badge'
 import { CategoryItem } from '~/types'
 
 const Header = ({
   storeLogo,
   storeName,
   menuItems,
+  cartItems,
   logoOnly = false,
 }: {
   storeLogo: string
   storeName: string
   menuItems?: CategoryItem[]
+  cartItems?: { [key: string]: string | number }[]
   logoOnly?: boolean
 }) => {
   return (
@@ -83,11 +86,32 @@ const Header = ({
             </Link>
             <HoverCard>
               <HoverCardTrigger>
-                <Link to="/cart">
+                <Link to="/cart" className="flex">
                   <ShoppingCart className="mt-5 md:mt-0" />
+                  {cartItems && cartItems.length ? (
+                    <Badge variant="destructive">{cartItems.length}</Badge>
+                  ) : null}
                 </Link>
               </HoverCardTrigger>
-              <HoverCardContent>Items</HoverCardContent>
+              <HoverCardContent>
+                {cartItems && cartItems.length
+                  ? cartItems.map((item) => {
+                      return (
+                        <div
+                          key={item.id}
+                          className="flex justify-between mt-2"
+                        >
+                          <img
+                            src={item.coverImage as string}
+                            className="h-10"
+                            alt={item.name as string}
+                          />
+                          <Link to={item.url as string}>{item.name}</Link>
+                        </div>
+                      )
+                    })
+                  : null}
+              </HoverCardContent>
             </HoverCard>
           </div>
         )}
@@ -136,14 +160,13 @@ const Header = ({
               <Link to="/account">
                 <UserRound className="cursor-pointer" />
               </Link>
-              <HoverCard>
-                <HoverCardTrigger>
-                  <Link to="/cart">
-                    <ShoppingCart className="mt-5 md:mt-0" />
-                  </Link>
-                </HoverCardTrigger>
-                <HoverCardContent>Items</HoverCardContent>
-              </HoverCard>
+
+              <Link to="/cart" className="flex items-center">
+                <ShoppingCart className="mt-5 md:mt-0" />
+                {cartItems && cartItems.length ? (
+                  <Badge variant="destructive">{cartItems.length}</Badge>
+                ) : null}
+              </Link>
             </div>
           )}
         </div>

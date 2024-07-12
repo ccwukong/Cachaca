@@ -15,7 +15,9 @@ The project is developed on top of:
 
 **Note**: This project is still at its very early stage. I'm currently working on the frontend development with all the mock data. No backend services is ready at the moment.
 
-[https://main--roaring-gnome-50b6e1.netlify.app/](https://main--roaring-gnome-50b6e1.netlify.app/)
+[Storefront](https://main--roaring-gnome-50b6e1.netlify.app/)
+
+[Store admin dashboard](https://main--roaring-gnome-50b6e1.netlify.app/admin)
 
 ## Development
 

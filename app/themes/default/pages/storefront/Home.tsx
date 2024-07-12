@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLiveQuery } from 'dexie-react-hooks'
 import Autoplay from 'embla-carousel-autoplay'
 import {
   Carousel,
@@ -14,6 +16,8 @@ import {
   StoreSettings,
   CategoryItem,
 } from '~/types'
+import type { LocalCartItem } from '~/utils/indexedDB'
+import { idb } from '~/utils/indexedDB'
 
 const Home = ({
   categories,
@@ -27,9 +31,38 @@ const Home = ({
   products: ProductPublicInfo[]
 }) => {
   const { t } = useTranslation()
+  const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
+    {},
+  )
+
+  useEffect(() => {
+    const addItem = async () => {
+      const { id, name, coverImage, slug, url, price, quantity } =
+        cartItem as LocalCartItem
+
+      await idb.cart.add({
+        id,
+        name,
+        coverImage,
+        slug,
+        url,
+        price,
+        quantity,
+      })
+    }
+    if (Object.keys(cartItem).length) {
+      addItem()
+    }
+  }, [cartItem])
+
   return (
     <div className="mx-6 overflow-hidden lg:mx-0">
-      <Header storeLogo="" storeName="Cachaca" menuItems={categories} />
+      <Header
+        storeLogo=""
+        storeName="Cachaca"
+        menuItems={categories}
+        cartItems={useLiveQuery(() => idb.cart.toArray()) || []}
+      />
 
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
         <Carousel
@@ -67,6 +100,16 @@ const Home = ({
                 title={item.name}
                 link={`/products/${item.slug}`}
                 price={`${storeSettings.currency.symbol}${item.basePrice}`}
+                onClick={() => {
+                  setCartItem({
+                    id: item.id,
+                    coverImage: item.coverImage,
+                    name: item.name,
+                    url: `/products/${item.slug}`,
+                    price: item.basePrice,
+                    quantity: 1,
+                  })
+                }}
               />
             )
           })}

@@ -12,11 +12,13 @@ const ProductCard = ({
   title,
   link,
   price,
+  onClick,
 }: {
   coverImage: string
   title: string
   link: string
   price: string
+  onClick?: () => void
 }) => {
   const { t } = useTranslation()
   return (
@@ -34,7 +36,7 @@ const ProductCard = ({
           <p className="mt-3 text-lg">{price}</p>
         </CardFooter>
       </Link>
-      <Button variant="secondary" className="w-full">
+      <Button variant="secondary" className="w-full" onClick={onClick}>
         {t('system.add_cart')}
       </Button>
     </Card>

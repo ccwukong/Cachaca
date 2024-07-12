@@ -29,8 +29,9 @@ export type UserPublicInfo = {
   updatedOn?: number
 }
 
-export type CartItemInfo = {
-  title: string
+export type CartItem = {
+  id: string
+  name: string
   slug: string
   coverImage: string
   price: string
