@@ -2,7 +2,7 @@
 
 [![Demo deployment](https://github.com/ccwukong/Cachaca/actions/workflows/demo.yml/badge.svg)](https://github.com/ccwukong/Cachaca/actions/workflows/demo.yml)
 
-An AI-powered open source e-commerce solution.
+A GenAI-embedded open source e-commerce solution.
 
 The project is developed on top of:
 

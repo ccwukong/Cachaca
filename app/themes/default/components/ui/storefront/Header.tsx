@@ -22,12 +22,14 @@ const Header = ({
   storeName,
   menuItems,
   cartItems,
+  updateCartItemHandler,
   logoOnly = false,
 }: {
   storeLogo: string
   storeName: string
   menuItems?: CategoryItem[]
   cartItems?: { [key: string]: string | number }[]
+  updateCartItemHandler?: (id: string, quantity: number) => void
   logoOnly?: boolean
 }) => {
   const { t } = useTranslation()
@@ -123,17 +125,22 @@ const Header = ({
                             {item.name}
                           </Link>
                         </div>
+                        <div>{`${item.currency}${
+                          Number(item.quantity) * Number(item.price)
+                        }`}</div>
                         <div>
                           <Input
                             type="number"
                             value={item.quantity}
                             className="px-2 py-1 h-auto w-14"
-                            onChange={() => {}}
+                            onChange={(e) => {
+                              updateCartItemHandler!(
+                                item.id as string,
+                                Number(e.target.value),
+                              )
+                            }}
                           />
                         </div>
-                        <div>{`${item.currency}${
-                          Number(item.quantity) * Number(item.price)
-                        }`}</div>
                       </div>
                     )
                   })

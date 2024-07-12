@@ -61,6 +61,13 @@ const Home = ({
     }
   }, [cartItem])
 
+  const updateCartItemHandler = async (id: string, quantity: number) => {
+    if (quantity > 0) {
+      await idb.cart.update(id, { quantity })
+    } else {
+      await idb.cart.delete(id)
+    }
+  }
   return (
     <div className="mx-6 overflow-hidden lg:mx-0">
       <Header
@@ -68,6 +75,7 @@ const Home = ({
         storeName="Cachaca"
         menuItems={categories}
         cartItems={useLiveQuery(() => idb.cart.toArray()) || []}
+        updateCartItemHandler={updateCartItemHandler}
       />
 
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
