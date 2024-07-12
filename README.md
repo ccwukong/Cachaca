@@ -11,6 +11,22 @@ The project is developed on top of:
 - [Shadcn](https://ui.shadcn.com/)
 - [Drizzle](https://orm.drizzle.team/)
 
+## Table of Contents
+
+- [Demo](#demo)
+- [Development](#development)
+  - [Development environment](#development-environment)
+  - [Database](#database)
+  - [Multimedia file hosting](#multimedia-file-hosting)
+  - [i18n localization](#i18n-localization)
+  - [Customization](#customization)
+    - [Creating a new theme](#creating-a-new-theme)
+- [Deployment](#deployment)
+  - [Web hosting](#web-hosting)
+  - [Database hosting](#database-hosting)
+- [License](#license)
+- [Attribution](#attribution)
+
 ## Demo
 
 **Note**: This project is still at its very early stage. I'm currently working on the frontend development with all the mock data. No backend services is ready at the moment.
@@ -118,13 +134,13 @@ yarn start
 
 You are recommended to use our auto deployment feature (WIP), and you can easily deploy your store within a minutes.
 
-Some recommended painless serverless options:
+Some recommended painless **Serverless** options:
 
 ### Web hosting
 
 - [Netlify](https://www.netlify.com/) - Our demo app is currenlty hosted by Netlify free-tier
 
-### Database
+### Database hosting
 
 - [TiDB serverless](https://www.pingcap.com/tidb-serverless/) - A MySQL compatible serverless database service provider, our demo database is currently hosted by TiDB free-tier
 
