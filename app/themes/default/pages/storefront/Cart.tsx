@@ -1,20 +1,18 @@
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLiveQuery } from 'dexie-react-hooks'
 import Header from '~/themes/default/components/ui/storefront/Header'
 import Footer from '~/themes/default/components/ui/storefront/Footer'
 import CartItem from '~/themes/default/components/ui/storefront/CartItem'
 import ProductCard from '~/themes/default/components/ui/storefront/ProductCard'
 import { Button } from '~/themes/default/components/ui/button'
-import {
-  ProductPublicInfo,
-  StoreSettings,
-  CartItem as CartItemInfo,
-  CategoryItem,
-} from '~/types'
+import { ProductPublicInfo, StoreSettings, CategoryItem } from '~/types'
+import type { LocalCartItem } from '~/utils/indexedDB'
+import { idb } from '~/utils/indexedDB'
 
 const Cart = ({
   categories,
   storeSettings,
-  items,
   suggestedProducts,
   shippingFee,
   allowVoucher,
@@ -22,34 +20,81 @@ const Cart = ({
 }: {
   categories: CategoryItem[]
   storeSettings: StoreSettings
-  items: CartItemInfo[]
   suggestedProducts?: ProductPublicInfo[]
   shippingFee: string
   allowVoucher: boolean
   allowGuestCheckout: boolean
 }) => {
   const { t } = useTranslation()
-  const subtotal = items.reduce(
+  const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
+    {},
+  )
+
+  useEffect(() => {
+    const addItem = async () => {
+      const { id, name, coverImage, slug, url, price, currency, quantity } =
+        cartItem as LocalCartItem
+
+      const item = await idb.cart.get(id)
+      if (item) {
+        await idb.cart.update(id, { quantity: item.quantity + 1 })
+      } else {
+        await idb.cart.add({
+          id,
+          name,
+          coverImage,
+          slug,
+          url,
+          price,
+          currency,
+          quantity,
+        })
+      }
+    }
+    if (Object.keys(cartItem).length) {
+      addItem()
+    }
+  }, [cartItem])
+
+  const cart = useLiveQuery(() => idb.cart.toArray()) || []
+
+  const subtotal = cart.reduce(
     (accu, item) => accu + Number(item.price) * item.quantity,
     0,
   )
+  const updateCartItemHandler = async (id: string, quantity: number) => {
+    if (quantity > 0) {
+      await idb.cart.update(id, { quantity })
+    } else {
+      await idb.cart.delete(id)
+    }
+  }
+
   return (
     <div className="mx-6 overflow-hidden lg:mx-0">
-      <Header storeLogo="" storeName="Cachaca" menuItems={categories} />
+      <Header
+        storeLogo=""
+        storeName="Cachaca"
+        menuItems={categories}
+        cartItems={cart}
+        updateCartItemHandler={updateCartItemHandler}
+      />
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
         <p className="text-2xl font-light">
-          {t('system.my_cart_ph', { no_of_items: items.length })}
+          {t('system.my_cart_ph', { no_of_items: cart.length })}
         </p>
         <div className="mt-6 grid grid-cols-1 md:grid-cols-5 gap-8">
           <div className="md:col-span-3">
-            {items.map((item, index) => (
+            {cart.map((item, index) => (
               <CartItem
                 key={index}
+                id={item.id}
                 coverImage={item.coverImage}
                 title={item.name}
                 currency={storeSettings.currency.symbol}
                 price={item.price}
                 quantity={item.quantity}
+                updateCartItemHandler={updateCartItemHandler}
               />
             ))}
             <div className="border-t border-gray-200 pt-4">
@@ -202,6 +247,18 @@ const Cart = ({
                     title={item.name}
                     link={`/products/${item.slug}`}
                     price={`${storeSettings.currency.symbol}${item.basePrice}`}
+                    onClick={() => {
+                      setCartItem({
+                        id: item.id,
+                        coverImage: item.coverImage,
+                        name: item.name,
+                        url: `/products/${item.slug}`,
+                        price: item.basePrice,
+                        quantity: 1,
+                        slug: item.slug,
+                        currency: storeSettings.currency.symbol,
+                      })
+                    }}
                   />
                 )
               })}

@@ -2,17 +2,21 @@ import { Trash2 } from 'lucide-react'
 import { Input } from '~/themes/default/components/ui/input'
 
 const CartItem = ({
+  id,
   coverImage,
   title,
   currency,
   price,
   quantity,
+  updateCartItemHandler,
 }: {
+  id: string
   coverImage: string
   title: string
   currency: string
   price: string
   quantity: number
+  updateCartItemHandler: (id: string, quantity: number) => void
 }) => {
   return (
     <div className="w-full grid grid-cols-1 md:grid-cols-3 border border-slate-100 rounded md:py-3 md:px-6 shadow-md mb-6">
@@ -31,15 +35,18 @@ const CartItem = ({
             type="number"
             value={quantity}
             className="px-2 py-1 h-auto w-14"
-            onChange={() => {}}
+            onChange={(e) => updateCartItemHandler(id, Number(e.target.value))}
           />
         </div>
       </div>
       <div className="p-3 md:p-0 flex mt-3 md:mt-0 md:flex-col justify-between items-end">
         <div className="text-xl text-black ">{`${currency} ${
-          Number(price) * quantity
+          Number(price) * Number(quantity)
         }`}</div>
-        <Trash2 className="cursor-pointer" />
+        <Trash2
+          className="cursor-pointer"
+          onClick={(e) => updateCartItemHandler(id, 0)}
+        />
       </div>
     </div>
   )

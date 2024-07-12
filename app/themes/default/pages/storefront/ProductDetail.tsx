@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLiveQuery } from 'dexie-react-hooks'
 import Header from '~/themes/default/components/ui/storefront/Header'
 import Footer from '~/themes/default/components/ui/storefront/Footer'
 import {
@@ -10,6 +12,8 @@ import {
 } from '~/themes/default/components/ui/select'
 import { Button } from '~/themes/default/components/ui/button'
 import { ProductPublicInfo, StoreSettings, CategoryItem } from '~/types'
+import type { LocalCartItem } from '~/utils/indexedDB'
+import { idb } from '~/utils/indexedDB'
 
 const ProductDetail = ({
   categories,
@@ -21,9 +25,53 @@ const ProductDetail = ({
   storeSettings: StoreSettings
 }) => {
   const { t } = useTranslation()
+  const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
+    {},
+  )
+
+  useEffect(() => {
+    const addItem = async () => {
+      const { id, name, coverImage, slug, url, price, currency, quantity } =
+        cartItem as LocalCartItem
+
+      const item = await idb.cart.get(id)
+      if (item) {
+        await idb.cart.update(id, { quantity: item.quantity + 1 })
+      } else {
+        await idb.cart.add({
+          id,
+          name,
+          coverImage,
+          slug,
+          url,
+          price,
+          currency,
+          quantity,
+        })
+      }
+    }
+    if (Object.keys(cartItem).length) {
+      addItem()
+    }
+  }, [cartItem])
+
+  const updateCartItemHandler = async (id: string, quantity: number) => {
+    if (quantity > 0) {
+      await idb.cart.update(id, { quantity })
+    } else {
+      await idb.cart.delete(id)
+    }
+  }
+
   return (
     <div className="mx-6 overflow-hidden lg:mx-0">
-      <Header storeLogo="" storeName="Cachaca" menuItems={categories} />
+      <Header
+        storeLogo=""
+        storeName="Cachaca"
+        menuItems={categories}
+        cartItems={useLiveQuery(() => idb.cart.toArray()) || []}
+        updateCartItemHandler={updateCartItemHandler}
+      />
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
         {product && (
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
@@ -74,7 +122,22 @@ const ProductDetail = ({
                   </SelectContent>
                 </Select>
               </div>
-              <Button variant="secondary" className="w-full mt-10">
+              <Button
+                variant="secondary"
+                className="w-full mt-10"
+                onClick={() => {
+                  setCartItem({
+                    id: product.id,
+                    coverImage: product.coverImage,
+                    name: product.name,
+                    url: `/products/${product.slug}`,
+                    price: product.basePrice,
+                    quantity: 1,
+                    slug: product.slug,
+                    currency: storeSettings.currency.symbol,
+                  })
+                }}
+              >
                 {t('system.add_cart')}
               </Button>
             </div>

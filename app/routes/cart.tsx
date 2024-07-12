@@ -2,15 +2,8 @@ import type { MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import Cart from '~/themes/default/pages/storefront/Cart'
-import {
-  ProductModel,
-} from '~/models'
-import {
-  CartItemInfo,
-  CategoryItem,
-  StoreSettings,
-  ProductPublicInfo,
-} from '~/types'
+import { ProductModel } from '~/models'
+import { CategoryItem, StoreSettings, ProductPublicInfo } from '~/types'
 import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction = () => {
@@ -25,19 +18,17 @@ export const loader = async () => {
   return json({
     categories: await mocks.getCategories(),
     storeSettings: await mocks.getStoreInfo(),
-    items: await mocks.getCart(),
     suggestedProducts: await mocks.getMockProducts(),
     shippingFee: '9.9',
   })
 }
 
 export default function Index() {
-  const { categories, storeSettings, items, suggestedProducts, shippingFee } =
+  const { categories, storeSettings, suggestedProducts, shippingFee } =
     useLoaderData<typeof loader>()
   return (
     <Cart
       categories={categories as CategoryItem[]}
-      items={items as CartItemInfo[]}
       storeSettings={storeSettings as StoreSettings}
       suggestedProducts={suggestedProducts as ProductPublicInfo[]}
       shippingFee={shippingFee}
