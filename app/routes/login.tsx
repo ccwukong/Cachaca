@@ -2,7 +2,7 @@ import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useActionData } from '@remix-run/react'
 import { cookie } from '~/cookie'
-import { CustomerAuthentication } from '~/models'
+import { CustomerAuthentication, Installer } from '~/models'
 import Login from '~/themes/default/pages/account/Login'
 import { Role } from '~/types'
 import { ServerInternalError } from '~/utils/exception'
@@ -14,6 +14,10 @@ export const meta: MetaFunction = () => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   try {
+    if (!(await Installer.isInstalled())) {
+      return redirect('/install')
+    }
+
     const body = await request.formData()
     const result = await CustomerAuthentication.login(
       String(body.get('email')),
@@ -24,29 +28,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw new ServerInternalError('Invalid JWT Token secret string.')
     }
 
-    const accessToken = await encode(
-      '1h',
-      {
-        id: result.id,
-        firstName: result.firstName,
-        lastName: result.lastName,
-        email: result.email,
-        role: Role.Customer,
-      },
-      process.env.JWT_TOKEN_SECRET,
-    )
+    const data = {
+      id: result.id,
+      firstName: result.firstName,
+      lastName: result.lastName,
+      email: result.email,
+      role: Role.Customer,
+    }
 
-    const refreshToken = await encode(
-      '7d',
-      {
-        id: result.id,
-        firstName: result.firstName,
-        lastName: result.lastName,
-        email: result.email,
-        role: Role.Customer,
-      },
-      process.env.JWT_TOKEN_SECRET,
-    )
+    const accessToken = await encode('1h', data, process.env.JWT_TOKEN_SECRET)
+    const refreshToken = await encode('7d', data, process.env.JWT_TOKEN_SECRET)
 
     return redirect('/account', {
       headers: {
@@ -57,7 +48,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     })
   } catch (e) {
-    console.log(e)
     return json({ successful: false })
   }
 }

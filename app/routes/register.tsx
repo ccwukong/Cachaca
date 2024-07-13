@@ -7,7 +7,7 @@ import {
 import { useActionData } from '@remix-run/react'
 import { useTranslation } from 'react-i18next'
 import { cookie } from '~/cookie'
-import { CustomerAuthentication } from '~/models'
+import { CustomerAuthentication, Installer } from '~/models'
 import Register from '~/themes/default/pages/account/Register'
 import { Role } from '~/types'
 import { ServerInternalError } from '~/utils/exception'
@@ -21,6 +21,10 @@ export const meta: MetaFunction = () => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   try {
+    if (!(await Installer.isInstalled())) {
+      return redirect('/install')
+    }
+
     const body = await request.formData()
 
     const result = await CustomerAuthentication.register({

@@ -32,29 +32,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw new ServerInternalError('Invalid JWT Token secret string.')
     }
 
-    const accessToken = await encode(
-      '1h',
-      {
-        id: result.id,
-        firstName: result.firstName,
-        lastName: result.lastName,
-        email: result.email,
-        role: Role.Admin,
-      },
-      process.env.JWT_TOKEN_SECRET,
-    )
+    const data = {
+      id: result.id,
+      firstName: result.firstName,
+      lastName: result.lastName,
+      email: result.email,
+      role: Role.Admin,
+    }
 
-    const refreshToken = await encode(
-      '7d',
-      {
-        id: result.id,
-        firstName: result.firstName,
-        lastName: result.lastName,
-        email: result.email,
-        role: Role.Admin,
-      },
-      process.env.JWT_TOKEN_SECRET,
-    )
+    const accessToken = await encode('1h', data, process.env.JWT_TOKEN_SECRET)
+    const refreshToken = await encode('7d', data, process.env.JWT_TOKEN_SECRET)
 
     return redirect('/admin', {
       headers: {

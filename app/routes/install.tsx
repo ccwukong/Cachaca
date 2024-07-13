@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { cookie } from '~/cookie'
 import { Installer } from '~/models'
 import Install from '~/themes/default/pages/Install'
+import { Role } from '~/types'
 import { ServerInternalError } from '~/utils/exception'
 import { encode } from '~/utils/jwt'
 
@@ -18,6 +19,8 @@ export const loader = async () => {
   if (await Installer.isInstalled()) {
     return redirect('/admin')
   }
+
+  return json({ successful: true })
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -42,29 +45,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw new ServerInternalError('Invalid JWT Token secret string.')
     }
 
-    const accessToken = await encode(
-      '1h',
-      {
-        id: result.id,
-        firstName: result.firstName,
-        lastName: result.lastName,
-        email: result.email,
-        role: result.role,
-      },
-      process.env.JWT_TOKEN_SECRET,
-    )
+    const data = {
+      id: result.id,
+      firstName: result.firstName,
+      lastName: result.lastName,
+      email: result.email,
+      role: Role.Admin,
+    }
 
-    const refreshToken = await encode(
-      '7d',
-      {
-        id: result.id,
-        firstName: result.firstName,
-        lastName: result.lastName,
-        email: result.email,
-        role: result.role,
-      },
-      process.env.JWT_TOKEN_SECRET,
-    )
+    const accessToken = await encode('1h', data, process.env.JWT_TOKEN_SECRET)
+    const refreshToken = await encode('7d', data, process.env.JWT_TOKEN_SECRET)
 
     return redirect('/admin', {
       headers: {

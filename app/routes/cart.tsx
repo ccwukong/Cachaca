@@ -1,7 +1,7 @@
 import type { MetaFunction } from '@remix-run/node'
-import { json } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import { ProductModel } from '~/models'
+import { Installer, ProductModel } from '~/models'
 import Cart from '~/themes/default/pages/storefront/Cart'
 import { CategoryItem, ProductPublicInfo, StoreSettings } from '~/types'
 import * as mocks from '~/utils/mocks'
@@ -14,7 +14,10 @@ export const meta: MetaFunction = () => {
 }
 
 export const loader = async () => {
-  const productModel = new ProductModel()
+  if (!(await Installer.isInstalled())) {
+    return redirect('/install')
+  }
+
   return json({
     categories: await mocks.getCategories(),
     storeSettings: await mocks.getStoreInfo(),
