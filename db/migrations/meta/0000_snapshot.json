@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "ef4ee738-6447-40c0-a7d5-b89c6af94725",
+  "id": "408f356f-a3db-4a8f-8deb-7f49d68664a8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "checkout": {
@@ -372,13 +372,6 @@
         }
       },
       "indexes": {
-        "email_idx": {
-          "name": "email_idx",
-          "columns": [
-            "email"
-          ],
-          "isUnique": false
-        },
         "phone_idx": {
           "name": "phone_idx",
           "columns": [
@@ -396,7 +389,14 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "customer_email_unique": {
+          "name": "customer_email_unique",
+          "columns": [
+            "email"
+          ]
+        }
+      }
     },
     "customer_address": {
       "name": "customer_address",
@@ -1317,15 +1317,15 @@
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "shop_name_unique": {
-          "name": "shop_name_unique",
+      "compositePrimaryKeys": {
+        "shop_name": {
+          "name": "shop_name",
           "columns": [
             "name"
           ]
         }
-      }
+      },
+      "uniqueConstraints": {}
     },
     "user": {
       "name": "user",

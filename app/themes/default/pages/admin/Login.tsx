@@ -27,7 +27,7 @@ import { Spinner } from '~/themes/default/components/ui/spinner'
 
 const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
   const { t } = useTranslation()
-  const [isLoginSubmitted, setIsLoginSubmitted] = useState(false)
+  const [isLoginSubmitted, setIsLoginSubmitted] = useState<boolean>(false)
 
   return (
     <div className="max-w-screen-xl mx-auto h-full pt-24 flex justify-center">

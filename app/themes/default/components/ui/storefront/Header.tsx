@@ -98,7 +98,9 @@ const Header = ({
             </Link>
             <HoverCard openDelay={50} closeDelay={50}>
               <HoverCardTrigger className="flex">
-                <ShoppingCart className="mt-5 md:mt-0" />
+                <Link to="/cart" className="flex justify-end font-bold">
+                  <ShoppingCart className="mt-5 md:mt-0" />
+                </Link>
                 {cartItems && cartItems.length ? (
                   <Badge variant="destructive">{cartItems.length}</Badge>
                 ) : null}

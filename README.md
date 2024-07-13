@@ -138,11 +138,11 @@ Some recommended painless **Serverless** options:
 
 ### Web hosting
 
-- [Netlify](https://www.netlify.com/) - Our demo app is currenlty hosted by Netlify free-tier
+- [Netlify](https://www.netlify.com/) - The demo app is currenlty running on Netlify's free-tier
 
 ### Database hosting
 
-- [TiDB serverless](https://www.pingcap.com/tidb-serverless/) - A MySQL compatible serverless database service provider, our demo database is currently hosted by TiDB free-tier
+- [TiDB serverless](https://www.pingcap.com/tidb-serverless/) - A MySQL compatible serverless database service provider, the demo database is currently running on TiDB's free-tier
 
 ## License
 

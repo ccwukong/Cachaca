@@ -3,7 +3,7 @@ import { redirect, json } from '@remix-run/node'
 import { useActionData } from '@remix-run/react'
 import Login from '~/themes/default/pages/admin/Login'
 import { cookie } from '~/cookie'
-import { Installer, Authtication } from '~/models'
+import { Installer, AdminAuthtication } from '~/models'
 import { encode } from '~/utils/jwt'
 import { ServerInternalError } from '~/utils/exception'
 
@@ -22,7 +22,7 @@ export const loader = async () => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     const body = await request.formData()
-    const result = await Authtication.login(
+    const result = await AdminAuthtication.login(
       String(body.get('email')),
       String(body.get('password')),
     )
@@ -38,6 +38,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         firstName: result.firstName,
         lastName: result.lastName,
         email: result.email,
+        role: result.role,
       },
       process.env.JWT_TOKEN_SECRET,
     )
@@ -49,6 +50,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         firstName: result.firstName,
         lastName: result.lastName,
         email: result.email,
+        role: result.role
       },
       process.env.JWT_TOKEN_SECRET,
     )

@@ -56,7 +56,8 @@ CREATE TABLE `customer` (
 	`created_on` int NOT NULL,
 	`updated_on` int,
 	`status` tinyint NOT NULL,
-	CONSTRAINT `customer_id` PRIMARY KEY(`id`)
+	CONSTRAINT `customer_id` PRIMARY KEY(`id`),
+	CONSTRAINT `customer_email_unique` UNIQUE(`email`)
 );
 --> statement-breakpoint
 CREATE TABLE `customer_address` (
@@ -197,7 +198,7 @@ CREATE TABLE `shop` (
 	`updated_by` varchar(36),
 	`updated_on` int,
 	`status` tinyint NOT NULL,
-	CONSTRAINT `shop_name_unique` UNIQUE(`name`)
+	CONSTRAINT `shop_name` PRIMARY KEY(`name`)
 );
 --> statement-breakpoint
 CREATE TABLE `user` (
@@ -221,7 +222,6 @@ CREATE TABLE `user` (
 CREATE INDEX `customer_id_idx` ON `checkout` (`customer_id`);--> statement-breakpoint
 CREATE INDEX `checkout_id_idx` ON `checkout_item` (`checkout_id`);--> statement-breakpoint
 CREATE INDEX `product_variant_id_idx` ON `checkout_item` (`product_variant_id`);--> statement-breakpoint
-CREATE INDEX `email_idx` ON `customer` (`email`);--> statement-breakpoint
 CREATE INDEX `phone_idx` ON `customer` (`phone`);--> statement-breakpoint
 CREATE INDEX `customer_id_idx` ON `customer_address` (`customer_id`);--> statement-breakpoint
 CREATE INDEX `customer_id_idx` ON `order` (`customer_id`);--> statement-breakpoint

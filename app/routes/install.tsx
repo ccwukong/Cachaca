@@ -1,23 +1,23 @@
 import type { MetaFunction, ActionFunctionArgs } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useActionData } from '@remix-run/react'
+import { useTranslation } from 'react-i18next'
 import Install from '~/themes/default/pages/Install'
 import { cookie } from '~/cookie'
 import { Installer } from '~/models'
 import { encode } from '~/utils/jwt'
 import { ServerInternalError } from '~/utils/exception'
-import { s } from 'node_modules/vite/dist/node/types.d-aGj9QkWt'
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'Installation' }]
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { t } = useTranslation()
+  return [{ title: t('system.installation') }]
 }
 
 export const loader = async () => {
   if (await Installer.isInstalled()) {
     return redirect('/admin')
   }
-
-  return json({ message: 'test' })
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -49,6 +49,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         firstName: result.firstName,
         lastName: result.lastName,
         email: result.email,
+        role: result.role,
       },
       process.env.JWT_TOKEN_SECRET,
     )
@@ -60,6 +61,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         firstName: result.firstName,
         lastName: result.lastName,
         email: result.email,
+        role: result.role,
       },
       process.env.JWT_TOKEN_SECRET,
     )

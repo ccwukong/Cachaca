@@ -19,7 +19,7 @@ import {
 } from '~/themes/default/components/ui/alert'
 import { Spinner } from '~/themes/default/components/ui/spinner'
 
-type SetupFormData = {
+type InstallFormData = {
   firstName: string
   lastName: string
   email: string
@@ -29,7 +29,7 @@ type SetupFormData = {
   description: string
 }
 
-const initFormData: SetupFormData = {
+const initFormData: InstallFormData = {
   firstName: '',
   lastName: '',
   email: '',
@@ -43,8 +43,8 @@ const Install = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
   const { t } = useTranslation()
   const submit = useSubmit()
   const [formCompleted, setFormCompleted] = useState<boolean>(false)
-  const [formData, SetFormData] = useState<SetupFormData>(initFormData)
-  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [formData, SetFormData] = useState<InstallFormData>(initFormData)
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
 
   useEffect(() => {
     const {

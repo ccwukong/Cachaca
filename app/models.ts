@@ -5,10 +5,14 @@
 import { eq, desc } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
 import md5 from 'md5'
-import { user, shop } from '../db/schema'
+import { user, shop, customer } from '../db/schema'
 import db from '../db/connection'
 import { makeStr } from '~/utils/string'
-import { ServerInternalError, AuthException } from '~/utils/exception'
+import {
+  ServerInternalError,
+  AuthException,
+  AccountExistsException,
+} from '~/utils/exception'
 import {
   UserPublicInfo,
   Role,
@@ -105,7 +109,7 @@ export class Installer {
   }
 }
 
-export class Authtication {
+export class AdminAuthtication {
   public static async login(
     email: string,
     password: string,
@@ -131,6 +135,56 @@ export class Authtication {
       avatar: userData.avatar,
       role: userData.role,
       createdOn: userData.createdOn,
+    }
+  }
+}
+
+export class CustomerAuthtication {
+  public static async register({
+    email,
+    password,
+    firstName,
+    lastName,
+  }: {
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+  }): Promise<{
+    id: string
+    email: string
+    firstName: string
+    lastName: string
+  }> {
+    const data = await db
+      .select()
+      .from(customer)
+      .where(eq(customer.email, email))
+
+    if (data.length) {
+      throw new AccountExistsException()
+    }
+
+    const id = uuidv4()
+    const salt = makeStr(8)
+    await db.insert(customer).values({
+      id,
+      email,
+      firstName,
+      lastName,
+      phone: '',
+      avatar: '',
+      salt,
+      password: md5(password + salt),
+      createdOn: Math.floor(Date.now() / 1000),
+      status: 1,
+    })
+
+    return {
+      id,
+      email,
+      firstName,
+      lastName,
     }
   }
 }

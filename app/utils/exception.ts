@@ -12,6 +12,15 @@ export class AuthException extends CustomException {
   }
 }
 
+export class AccountExistsException extends CustomException {
+  constructor(
+    message: string = 'Account already exists.',
+    status: number = 500,
+  ) {
+    super(message, status)
+  }
+}
+
 export class ForbiddenException extends CustomException {
   status = 403
   constructor(message: string = 'Forbidden.', status: number = 403) {

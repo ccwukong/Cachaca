@@ -24,7 +24,7 @@ export type UserPublicInfo = {
   firstName: string
   lastName: string
   avatar: string
-  role: number
+  role?: number
   createdOn: number
   updatedOn?: number
 }

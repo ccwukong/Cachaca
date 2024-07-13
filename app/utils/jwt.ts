@@ -1,4 +1,5 @@
 import jwt, { JwtPayload } from 'jsonwebtoken'
+import { Role } from '~/types'
 
 export const encode = async (
   expiresIn: string,
@@ -7,20 +8,25 @@ export const encode = async (
     firstName: string
     lastName: string
     email: string
+    role?: Role
   },
   secret: string,
 ) => {
-  const { id, firstName, lastName, email } = data
-  return jwt.sign(
-    {
-      id,
-      firstName,
-      lastName,
-      email,
-    },
-    secret,
-    { expiresIn },
-  )
+  const { id, firstName, lastName, email, role } = data
+  const payload: {
+    [key: string]: string | number
+  } = {
+    id,
+    firstName,
+    lastName,
+    email,
+  }
+
+  if (role) {
+    payload.role = role
+  }
+
+  return jwt.sign(payload, secret, { expiresIn })
 }
 
 export const isValid = async (token: string, secret: string) => {

@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '~/themes/default/components/ui/dropdown-menu'
 import { Button } from '~/themes/default/components/ui/button'
-import { PageLink } from '~/models'
+import { PageLink } from '~/types'
 
 const Header = ({
   storeLogo,
@@ -70,7 +70,9 @@ const Header = ({
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Log out</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link to="/logout">Log out</Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

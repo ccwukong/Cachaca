@@ -46,7 +46,7 @@ export const customer = mysqlTable(
   'customer',
   {
     id: varchar('id', { length: 36 }).primaryKey(),
-    email: varchar('email', { length: 120 }).notNull(),
+    email: varchar('email', { length: 120 }).notNull().unique(),
     phone: varchar('phone', { length: 50 }).notNull(),
     password: varchar('password', { length: 32 }).notNull(),
     salt: varchar('salt', { length: 8 }).notNull(),
@@ -59,7 +59,6 @@ export const customer = mysqlTable(
   },
   (table) => {
     return {
-      emailIdx: index('email_idx').on(table.email),
       phoneIdx: index('phone_idx').on(table.phone),
     }
   },

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useLiveQuery } from 'dexie-react-hooks'
 import Header from '~/themes/default/components/ui/storefront/Header'
@@ -26,6 +27,7 @@ const Cart = ({
   allowGuestCheckout: boolean
 }) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
     {},
   )
@@ -136,7 +138,13 @@ const Cart = ({
           </div>
           <div className="md:col-span-2">
             <div className="flex-1">
-              <Button className="w-full mb-4" variant="default">
+              <Button
+                className="w-full mb-4"
+                variant="default"
+                onClick={() => {
+                  navigate('/login')
+                }}
+              >
                 Login to pay
               </Button>
               {allowGuestCheckout && (
