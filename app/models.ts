@@ -2,7 +2,7 @@
  * The models WILL NOT handle the exceptions
  */
 
-import { desc, eq, and } from 'drizzle-orm'
+import { and, desc, eq } from 'drizzle-orm'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 import {
@@ -19,12 +19,12 @@ import {
 } from '~/utils/exception'
 import { makeStr } from '~/utils/string'
 import db from '../db/connection'
-import { customer, shop, user } from '../db/schema'
+import { customer, product, shop, user } from '../db/schema'
 
 interface CRUDMode<T> {
   find(id: string | number): Promise<T | null>
   findMany(page: number, size: number): Promise<T[]>
-  update(id: string | number, data: object): Promise<boolean>
+  update(data: object): Promise<boolean>
   create(data: object): Promise<T>
   delete(id: string | number): Promise<boolean>
 }
@@ -271,7 +271,19 @@ export class UserModel implements CRUDMode<UserPublicInfo> {
     })
   }
 
-  async update(): Promise<boolean> {
+  async update(data: UserPublicInfo): Promise<boolean> {
+    await db
+      .update(user)
+      .set({
+        phone: data.phone,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        avatar: data.avatar,
+        role: data.role,
+        updatedOn: Math.floor(Date.now() / 1000),
+      })
+      .where(eq(user.id, data.id))
+
     return true
   }
 
@@ -321,32 +333,151 @@ export class UserModel implements CRUDMode<UserPublicInfo> {
     } as UserPublicInfo
   }
 
-  async delete(): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
+    await db
+      .update(user)
+      .set({
+        status: 0,
+      })
+      .where(eq(user.id, id))
+
     return true
   }
 }
 
-export class ProductModel implements CRUDMode<ProductPublicInfo> {
-  async find(id: string): Promise<ProductPublicInfo | null> {
+export class CustomerModel implements CRUDMode<UserPublicInfo> {
+  async find(id: string | number): Promise<UserPublicInfo | null> {
     const res = await db
       .select()
-      .from(user)
+      .from(customer)
       .where(eq(user.id, id as string))
 
     if (!res.length) {
       return null
     }
 
-    const data: ProductPublicInfo = {
+    const data: UserPublicInfo = {
       id: id as string,
       email: res[0].email,
       phone: res[0].phone,
       firstName: res[0].firstName,
       lastName: res[0].lastName,
       avatar: res[0].avatar,
-      role: res[0].role,
       createdOn: res[0].createdOn,
       updatedOn: res[0].updatedOn || undefined,
+      status: res[0].status,
+    }
+
+    return data
+  }
+
+  async findMany(page: number, size: number): Promise<UserPublicInfo[]> {
+    const res = await db
+      .select()
+      .from(customer)
+      .orderBy(desc(user.createdOn))
+      .limit(size)
+      .offset(page * size)
+
+    return res.map((item) => {
+      return {
+        id: item.id,
+        email: item.email,
+        phone: item.phone,
+        firstName: item.firstName,
+        lastName: item.lastName,
+        avatar: item.avatar,
+        createdOn: item.createdOn,
+        updatedOn: item.updatedOn || undefined,
+        status: item.status,
+      }
+    })
+  }
+
+  async update(data: UserPublicInfo): Promise<boolean> {
+    await db
+      .update(customer)
+      .set({
+        phone: data.phone,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        avatar: data.avatar,
+        updatedOn: Math.floor(Date.now() / 1000),
+      })
+      .where(eq(user.id, data.id))
+    return true
+  }
+
+  async create(newUser: {
+    id: string
+    email: string
+    phone: string
+    password: string
+    firstName: string
+    lastName: string
+    avatar: string
+  }): Promise<UserPublicInfo> {
+    const salt = makeStr(8)
+    const { id, email, phone, password, firstName, lastName, avatar } = newUser
+
+    const data = {
+      id,
+      email,
+      phone,
+      password: md5(password + salt),
+      salt,
+      firstName,
+      lastName,
+      avatar,
+      createdOn: Math.floor(Date.now() / 1000),
+      status: 1,
+    }
+
+    const result = await db.insert(customer).values(data)
+
+    if (!result[0].affectedRows) {
+      throw new ServerInternalError()
+    }
+
+    return {
+      id,
+      email,
+      phone,
+      firstName,
+      lastName,
+      avatar,
+      createdOn: data.createdOn,
+    } as UserPublicInfo
+  }
+
+  async delete(id: string): Promise<boolean> {
+    await db
+      .update(customer)
+      .set({
+        status: 0,
+      })
+      .where(eq(user.id, id))
+
+    return true
+  }
+}
+
+export class ProductModel implements CRUDMode<ProductPublicInfo> {
+  async find(id: string): Promise<ProductPublicInfo | null> {
+    const res = await db.select().from(product).where(eq(product.id, id))
+
+    if (!res.length) {
+      return null
+    }
+
+    const data: ProductPublicInfo = {
+      id,
+      name: res[0].name,
+      slug: res[0].slug,
+      description: res[0].description,
+      basePrice: res[0].basePrice,
+      coverImage: res[0].coverImage,
+      
     }
 
     return data

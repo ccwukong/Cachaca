@@ -12,9 +12,25 @@ export type ProductPublicInfo = {
   description: string
   basePrice: string
   coverImage: string
-  categoryId: number
-  subCategoryId: number
-  images: string[]
+  category: CategoryItem
+  subCategoryId: CategoryItem
+  variants: ProductVariant[]
+}
+
+export type ProductVariant = {
+  id: string
+  name: string
+  description: string
+  coverImage: string
+  priceVariant: string
+  sku: string
+  quantity: number
+  variantCategory: ProductVariantCategoryItem
+}
+
+export type ProductVariantCategoryItem = {
+  id: number
+  name: string
 }
 
 export type UserPublicInfo = {
@@ -27,6 +43,7 @@ export type UserPublicInfo = {
   role?: number
   createdOn: number
   updatedOn?: number
+  status?: number
 }
 
 export type CartItem = {

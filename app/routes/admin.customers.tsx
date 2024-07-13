@@ -4,8 +4,10 @@ import {
   redirect,
   type MetaFunction,
 } from '@remix-run/node'
+import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { adminCookie } from '~/cookie'
+import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import CustomerList from '~/themes/default/pages/admin/CustomerList'
 import { ServerInternalError } from '~/utils/exception'
 import { isValid } from '~/utils/jwt'
@@ -44,5 +46,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  return <CustomerList />
+  return (
+    <Suspense fallback={<Skeleton />}>
+      <CustomerList />
+    </Suspense>
+  )
 }

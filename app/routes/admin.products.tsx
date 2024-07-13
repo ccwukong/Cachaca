@@ -1,7 +1,9 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import { Suspense } from 'react'
 import { adminCookie } from '~/cookie'
+import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import ProductList from '~/themes/default/pages/admin/ProductList'
 import { ProductPublicInfo, StoreSettings } from '~/types'
 import { ServerInternalError } from '~/utils/exception'
@@ -48,16 +50,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Index() {
   const { storeSettings, suggestedProducts } = useLoaderData<typeof loader>()
   return (
-    <ProductList
-      navLinks={[
-        { title: 'Overview', url: '/admin', order: 1 },
-        { title: 'Customers', url: '/admin/customers', order: 2 },
-        { title: 'Orders', url: '/admin/orders', order: 3 },
-        { title: 'Products', url: '/admin/products', order: 4 },
-        { title: 'Settings', url: '/admin/settings', order: 5 },
-      ]}
-      products={suggestedProducts as ProductPublicInfo[]}
-      storeSettings={storeSettings as StoreSettings}
-    />
+    <Suspense fallback={<Skeleton />}>
+      <ProductList
+        navLinks={[
+          { title: 'Overview', url: '/admin', order: 1 },
+          { title: 'Customers', url: '/admin/customers', order: 2 },
+          { title: 'Orders', url: '/admin/orders', order: 3 },
+          { title: 'Products', url: '/admin/products', order: 4 },
+          { title: 'Settings', url: '/admin/settings', order: 5 },
+        ]}
+        products={suggestedProducts as ProductPublicInfo[]}
+        storeSettings={storeSettings as StoreSettings}
+      />
+    </Suspense>
   )
 }

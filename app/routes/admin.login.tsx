@@ -1,12 +1,14 @@
-import type { MetaFunction, ActionFunctionArgs } from '@remix-run/node'
-import { redirect, json } from '@remix-run/node'
+import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
 import { useActionData } from '@remix-run/react'
-import Login from '~/themes/default/pages/admin/Login'
+import { Suspense } from 'react'
 import { adminCookie } from '~/cookie'
-import { Installer, AdminAuthtication } from '~/models'
-import { encode } from '~/utils/jwt'
-import { ServerInternalError } from '~/utils/exception'
+import { AdminAuthtication, Installer } from '~/models'
+import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
+import Login from '~/themes/default/pages/admin/Login'
 import { Role } from '~/types'
+import { ServerInternalError } from '~/utils/exception'
+import { encode } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Admin Login' }]
@@ -64,5 +66,9 @@ export default function Index() {
   if (result === undefined) {
     result = { successful: true }
   }
-  return <Login isLoginSuccessful={result.successful} />
+  return (
+    <Suspense fallback={<Skeleton />}>
+      <Login isLoginSuccessful={result.successful} />
+    </Suspense>
+  )
 }
