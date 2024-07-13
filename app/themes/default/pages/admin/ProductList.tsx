@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next'
-import { Input } from '~/themes/default/components/ui/input'
+import AdminHeader from '~/themes/default/components/ui/admin/Header'
 import { Button } from '~/themes/default/components/ui/button'
+import { Input } from '~/themes/default/components/ui/input'
+import { Switch } from '~/themes/default/components/ui/switch'
 import {
   Table,
   TableBody,
@@ -9,8 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from '~/themes/default/components/ui/table'
-import { Switch } from '~/themes/default/components/ui/switch'
-import AdminHeader from '~/themes/default/components/ui/admin/Header'
 import { PageLink, ProductPublicInfo, StoreSettings } from '~/types'
 
 const ProductList = ({
@@ -24,7 +24,7 @@ const ProductList = ({
 }) => {
   const { t } = useTranslation()
   return (
-    <div className="mx-6 overflow-hidden lg:mx-0">
+    <div className="mx-6 overflow-hidden">
       <AdminHeader navItems={navLinks} />
 
       <div className="max-w-screen-xl w-full flex-1 space-y-4 p-8 pt-6 mx-auto h-auto mt-16">

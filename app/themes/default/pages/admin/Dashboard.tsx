@@ -86,7 +86,7 @@ const Dashboard = ({ navLinks }: { navLinks: PageLink[] }) => {
   })
 
   return (
-    <div className="mx-6 overflow-hidden lg:mx-0">
+    <div className="mx-6 overflow-hidden">
       <AdminHeader navItems={navLinks} />
       <div className="max-w-screen-xl w-full flex-1 space-y-4 p-8 pt-6 mx-auto h-auto mt-16">
         <div className="flex items-center justify-between space-y-2">

@@ -53,7 +53,7 @@ const Register = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
   }
 
   return (
-    <div className="mx-6 overflow-hidden lg:mx-0">
+    <div className="mx-6 overflow-hidden">
       <div className="max-w-screen-xl mx-auto h-full pt-24 flex justify-center">
         <Card className="mx-auto max-w-sm">
           <CardHeader className="space-y-1">

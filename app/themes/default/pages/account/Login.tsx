@@ -1,6 +1,6 @@
 import { Form, Link } from '@remix-run/react'
 import { AlertCircle } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Alert,
@@ -23,7 +23,7 @@ const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
   const [isLoginSubmitted, setIsLoginSubmitted] = useState<boolean>(false)
 
   return (
-    <div className="mx-6 overflow-hidden lg:mx-0">
+    <div className="mx-6 overflow-hidden">
       <Card className="mx-auto max-w-sm mt-28">
         <CardHeader>
           <CardTitle className="text-2xl">{t('system.login')}</CardTitle>

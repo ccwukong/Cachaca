@@ -14,7 +14,7 @@ import { OrderItem } from '~/types'
 const Account = ({ orders }: { orders: OrderItem[] }) => {
   const { t } = useTranslation()
   return (
-    <div className="mx-6 overflow-hidden lg:mx-0">
+    <div className="mx-6 overflow-hidden">
       <Header storeLogo="" storeName="Cachaca" pageLinks={[]} />
       <div className="flex flex-col">
         <div className="max-w-screen-xl w-full flex-1 md:space-y-4 md:p-8 pt-6 mx-auto h-auto mt-16">

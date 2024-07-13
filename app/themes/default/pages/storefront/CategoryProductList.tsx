@@ -49,7 +49,7 @@ const CategoryProductList = ({
   }, [cartItem])
 
   return (
-    <div className="mx-6 overflow-hidden lg:mx-0">
+    <div className="mx-6 overflow-hidden">
       <Header
         storeLogo=""
         storeName="Cachaca"

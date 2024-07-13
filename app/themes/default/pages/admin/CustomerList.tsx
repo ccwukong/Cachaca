@@ -18,14 +18,14 @@ import {
 
 const CustomerList = () => {
   return (
-    <div className="mx-6 overflow-hidden lg:mx-0">
+    <div className="mx-6 overflow-hidden">
       <AdminHeader
         navItems={[
-          { title: 'Overview', link: '/admin' },
-          { title: 'Customers', link: '/admin/customers' },
-          { title: 'Orders', link: '/admin/orders' },
-          { title: 'Products', link: '/admin/products' },
-          { title: 'Settings', link: '/admin/settings' },
+          { title: 'Overview', url: '/admin', order: 1 },
+          { title: 'Customers', url: '/admin/customers', order: 2 },
+          { title: 'Orders', url: '/admin/orders', order: 3 },
+          { title: 'Products', url: '/admin/products', order: 4 },
+          { title: 'Settings', url: '/admin/settings', order: 5 },
         ]}
       />
 
