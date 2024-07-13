@@ -8,25 +8,23 @@ export const encode = async (
     firstName: string
     lastName: string
     email: string
-    role?: Role
+    role: Role
   },
   secret: string,
 ) => {
   const { id, firstName, lastName, email, role } = data
-  const payload: {
-    [key: string]: string | number
-  } = {
-    id,
-    firstName,
-    lastName,
-    email,
-  }
 
-  if (role) {
-    payload.role = role
-  }
-
-  return jwt.sign(payload, secret, { expiresIn })
+  return jwt.sign(
+    {
+      id,
+      firstName,
+      lastName,
+      email,
+      role,
+    },
+    secret,
+    { expiresIn },
+  )
 }
 
 export const isValid = async (token: string, secret: string) => {

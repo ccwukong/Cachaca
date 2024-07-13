@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import Header from '~/themes/default/components/ui/account/Header'
 import { Badge } from '~/themes/default/components/ui/badge'
 import {
   Table,
@@ -9,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from '~/themes/default/components/ui/table'
-import Header from '~/themes/default/components/ui/account/Header'
 import { OrderItem } from '~/types'
 
 const Account = ({ orders }: { orders: OrderItem[] }) => {

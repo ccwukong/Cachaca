@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
-import Header from '~/themes/default/components/ui/storefront/Header'
+import { useEffect, useState } from 'react'
 import Footer from '~/themes/default/components/ui/storefront/Footer'
+import Header from '~/themes/default/components/ui/storefront/Header'
 import ProductCard from '~/themes/default/components/ui/storefront/ProductCard'
-import { ProductPublicInfo, StoreSettings, CategoryItem } from '~/types'
+import { CategoryItem, ProductPublicInfo, StoreSettings } from '~/types'
 import type { LocalCartItem } from '~/utils/indexedDB'
 import { idb } from '~/utils/indexedDB'
 

@@ -1,8 +1,8 @@
-import type { MetaFunction, LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import CategoryProductList from '~/themes/default/pages/storefront/CategoryProductList'
 import { ProductModel } from '~/models'
+import CategoryProductList from '~/themes/default/pages/storefront/CategoryProductList'
 import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {

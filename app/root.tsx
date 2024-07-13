@@ -1,3 +1,4 @@
+import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node'
 import {
   Links,
   Meta,
@@ -7,11 +8,10 @@ import {
   json,
   useLoaderData,
 } from '@remix-run/react'
-import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node'
-import { useChangeLanguage } from 'remix-i18next/react'
 import { useTranslation } from 'react-i18next'
-import stylesheet from '~/tailwind.css?url'
+import { useChangeLanguage } from 'remix-i18next/react'
 import i18next from '~/i18next.server'
+import stylesheet from '~/tailwind.css?url'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const locale = await i18next.getLocale(request)

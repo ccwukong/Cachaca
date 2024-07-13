@@ -6,6 +6,7 @@ import { cookie } from '~/cookie'
 import { Installer, AdminAuthtication } from '~/models'
 import { encode } from '~/utils/jwt'
 import { ServerInternalError } from '~/utils/exception'
+import { Role } from '~/types'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Admin Login' }]
@@ -38,7 +39,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         firstName: result.firstName,
         lastName: result.lastName,
         email: result.email,
-        role: result.role,
+        role: Role.Admin,
       },
       process.env.JWT_TOKEN_SECRET,
     )
@@ -50,7 +51,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         firstName: result.firstName,
         lastName: result.lastName,
         email: result.email,
-        role: result.role
+        role: Role.Admin,
       },
       process.env.JWT_TOKEN_SECRET,
     )

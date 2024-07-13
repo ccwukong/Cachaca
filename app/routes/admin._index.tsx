@@ -1,11 +1,10 @@
 import type { MetaFunction } from '@remix-run/node'
-import Dashboard from '~/themes/default/pages/admin/Dashboard'
-import { json, redirect, LoaderFunctionArgs } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { json, LoaderFunctionArgs, redirect } from '@remix-run/node'
 import { cookie } from '~/cookie'
-import { isValid, decode, encode } from '~/utils/jwt'
-import { ServerInternalError } from '~/utils/exception'
 import { Installer } from '~/models'
+import Dashboard from '~/themes/default/pages/admin/Dashboard'
+import { ServerInternalError } from '~/utils/exception'
+import { decode, encode, isValid } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Admin Dashboard' }]

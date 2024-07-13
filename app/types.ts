@@ -91,6 +91,7 @@ export type OrderItem = {
 export enum Role {
   Admin = 1,
   User = 2,
+  Customer = 3,
 }
 
 export enum ShippingStatus {

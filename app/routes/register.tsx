@@ -7,7 +7,7 @@ import {
 import { useActionData } from '@remix-run/react'
 import { useTranslation } from 'react-i18next'
 import { cookie } from '~/cookie'
-import { CustomerAuthtication } from '~/models'
+import { CustomerAuthentication } from '~/models'
 import Register from '~/themes/default/pages/account/Register'
 import { ServerInternalError } from '~/utils/exception'
 import { encode } from '~/utils/jwt'
@@ -22,7 +22,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     const body = await request.formData()
 
-    const result = await CustomerAuthtication.register({
+    const result = await CustomerAuthentication.register({
       firstName: String(body.get('firstName')),
       lastName: String(body.get('lastName')),
       email: String(body.get('email')),

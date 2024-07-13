@@ -10,5 +10,5 @@ idb.version(1).stores({
   cart: '++id',
 })
 
-export type { LocalCartItem }
 export { idb }
+export type { LocalCartItem }

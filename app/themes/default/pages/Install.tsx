@@ -1,23 +1,23 @@
-import { useState, useEffect, FormEvent } from 'react'
 import { Form, useSubmit } from '@remix-run/react'
-import { useTranslation } from 'react-i18next'
 import { AlertCircle } from 'lucide-react'
+import { FormEvent, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from '~/themes/default/components/ui/alert'
+import { Button } from '~/themes/default/components/ui/button'
+import { Input } from '~/themes/default/components/ui/input'
+import { Label } from '~/themes/default/components/ui/label'
+import { Spinner } from '~/themes/default/components/ui/spinner'
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
-import { Label } from '~/themes/default/components/ui/label'
-import { Input } from '~/themes/default/components/ui/input'
-import { Button } from '~/themes/default/components/ui/button'
 import { Textarea } from '~/themes/default/components/ui/textarea'
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from '~/themes/default/components/ui/alert'
-import { Spinner } from '~/themes/default/components/ui/spinner'
 
 type InstallFormData = {
   firstName: string

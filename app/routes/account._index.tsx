@@ -1,6 +1,6 @@
 import type { MetaFunction } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
 import { json } from '@remix-run/node'
+import { useLoaderData } from '@remix-run/react'
 import Home from '~/themes/default/pages/account/Home'
 import { OrderItem } from '~/types'
 import * as mocks from '~/utils/mocks'

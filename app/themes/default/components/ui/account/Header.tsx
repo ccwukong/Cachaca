@@ -1,4 +1,5 @@
 import { Link } from '@remix-run/react'
+import { useTranslation } from 'react-i18next'
 import {
   Avatar,
   AvatarFallback,
@@ -18,12 +19,11 @@ import { PageLink } from '~/types'
 const Header = ({
   storeLogo,
   storeName,
-  pageLinks,
 }: {
   storeLogo: string
   storeName: string
-  pageLinks: PageLink[]
 }) => {
+  const { t } = useTranslation()
   return (
     <div className="left-0 bg-white border-b fixed w-full flex justify-center z-50">
       <div className="max-w-screen-xl w-full flex h-16 items-center px-4">
@@ -41,13 +41,13 @@ const Header = ({
             to="/account"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
           >
-            Orders
+            {t('system.orders')}
           </Link>
           <Link
             to="/account/settings"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
           >
-            Settings
+            {t('system.settings')}
           </Link>
         </nav>
         <div className="ml-auto flex items-center space-x-4">

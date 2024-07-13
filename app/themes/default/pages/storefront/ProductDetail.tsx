@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useLiveQuery } from 'dexie-react-hooks'
-import Header from '~/themes/default/components/ui/storefront/Header'
-import Footer from '~/themes/default/components/ui/storefront/Footer'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Button } from '~/themes/default/components/ui/button'
 import {
   Select,
   SelectContent,
@@ -10,8 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/themes/default/components/ui/select'
-import { Button } from '~/themes/default/components/ui/button'
-import { ProductPublicInfo, StoreSettings, CategoryItem } from '~/types'
+import Footer from '~/themes/default/components/ui/storefront/Footer'
+import Header from '~/themes/default/components/ui/storefront/Header'
+import { CategoryItem, ProductPublicInfo, StoreSettings } from '~/types'
 import type { LocalCartItem } from '~/utils/indexedDB'
 import { idb } from '~/utils/indexedDB'
 

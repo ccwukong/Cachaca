@@ -1,19 +1,18 @@
-import { useState } from 'react'
 import { Link } from '@remix-run/react'
 import { useTranslation } from 'react-i18next'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '~/themes/default/components/ui/card'
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from '~/themes/default/components/ui/avatar'
+import { Button } from '~/themes/default/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '~/themes/default/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,7 +21,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/themes/default/components/ui/dropdown-menu'
-import { Button } from '~/themes/default/components/ui/button'
 import { Input } from '~/themes/default/components/ui/input'
 
 const Settings = ({

@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import { Link } from '@remix-run/react'
+import AdminHeader from '~/themes/default/components/ui/admin/Header'
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from '~/themes/default/components/ui/avatar'
-import { Input } from '~/themes/default/components/ui/input'
 import { Button } from '~/themes/default/components/ui/button'
+import { Input } from '~/themes/default/components/ui/input'
+import { Switch } from '~/themes/default/components/ui/switch'
 import {
   Table,
   TableBody,
@@ -15,8 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from '~/themes/default/components/ui/table'
-import { Switch } from '~/themes/default/components/ui/switch'
-import AdminHeader from '~/themes/default/components/ui/admin/Header'
 
 const CustomerList = () => {
   return (

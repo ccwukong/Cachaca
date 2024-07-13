@@ -2,24 +2,24 @@
  * The models WILL NOT handle the exceptions
  */
 
-import { eq, desc } from 'drizzle-orm'
-import { v4 as uuidv4 } from 'uuid'
+import { desc, eq } from 'drizzle-orm'
 import md5 from 'md5'
-import { user, shop, customer } from '../db/schema'
-import db from '../db/connection'
-import { makeStr } from '~/utils/string'
+import { v4 as uuidv4 } from 'uuid'
 import {
-  ServerInternalError,
-  AuthException,
-  AccountExistsException,
-} from '~/utils/exception'
-import {
-  UserPublicInfo,
-  Role,
-  ProductPublicInfo,
   HomeBannerSettings,
+  ProductPublicInfo,
+  Role,
   StoreSettings,
+  UserPublicInfo,
 } from '~/types'
+import {
+  AccountExistsException,
+  AuthException,
+  ServerInternalError,
+} from '~/utils/exception'
+import { makeStr } from '~/utils/string'
+import db from '../db/connection'
+import { customer, shop, user } from '../db/schema'
 
 interface CRUDMode<T> {
   find(id: string | number): Promise<T | null>
@@ -139,7 +139,7 @@ export class AdminAuthtication {
   }
 }
 
-export class CustomerAuthtication {
+export class CustomerAuthentication {
   public static async register({
     email,
     password,
@@ -185,6 +185,36 @@ export class CustomerAuthtication {
       email,
       firstName,
       lastName,
+    }
+  }
+
+  public static async login(
+    email: string,
+    password: string,
+  ): Promise<UserPublicInfo> {
+    const res = await db
+      .select()
+      .from(customer)
+      .where(eq(customer.email, email))
+
+    if (!res.length) {
+      throw new AuthException('Customer account not found.')
+    }
+
+    const userData = res[0]
+
+    if (userData.password !== md5(password + userData.salt)) {
+      throw new AuthException('Password is incorrect.')
+    }
+
+    return {
+      id: userData.id,
+      email: userData.email,
+      phone: userData.phone,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      avatar: userData.avatar,
+      createdOn: userData.createdOn,
     }
   }
 }

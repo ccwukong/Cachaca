@@ -1,12 +1,12 @@
-import type { MetaFunction, ActionFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useActionData } from '@remix-run/react'
 import { useTranslation } from 'react-i18next'
-import Install from '~/themes/default/pages/Install'
 import { cookie } from '~/cookie'
 import { Installer } from '~/models'
-import { encode } from '~/utils/jwt'
+import Install from '~/themes/default/pages/Install'
 import { ServerInternalError } from '~/utils/exception'
+import { encode } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks

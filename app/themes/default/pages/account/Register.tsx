@@ -1,23 +1,23 @@
-import { useState, FormEvent } from 'react'
-import { Link, Form, useSubmit } from '@remix-run/react'
-import { useTranslation } from 'react-i18next'
+import { Form, Link, useSubmit } from '@remix-run/react'
 import { AlertCircle } from 'lucide-react'
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from '~/themes/default/components/ui/card'
-import { Label } from '~/themes/default/components/ui/label'
-import { Input } from '~/themes/default/components/ui/input'
-import { Button } from '~/themes/default/components/ui/button'
-import { Spinner } from '~/themes/default/components/ui/spinner'
+import { FormEvent, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Alert,
   AlertDescription,
   AlertTitle,
 } from '~/themes/default/components/ui/alert'
+import { Button } from '~/themes/default/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '~/themes/default/components/ui/card'
+import { Input } from '~/themes/default/components/ui/input'
+import { Label } from '~/themes/default/components/ui/label'
+import { Spinner } from '~/themes/default/components/ui/spinner'
 
 const Register = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
   const { t } = useTranslation()

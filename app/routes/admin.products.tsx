@@ -1,9 +1,9 @@
 import type { MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import { ProductModel } from '~/models'
 import ProductList from '~/themes/default/pages/admin/ProductList'
 import { ProductPublicInfo, StoreSettings } from '~/types'
-import { ProductModel } from '~/models'
 import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction = () => {

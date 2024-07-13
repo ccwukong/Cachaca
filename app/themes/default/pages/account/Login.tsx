@@ -1,17 +1,24 @@
-import { useEffect, useState } from 'react'
-import { Link, Form } from '@remix-run/react'
+import { Form, Link } from '@remix-run/react'
+import { AlertCircle } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from '~/themes/default/components/ui/alert'
+import { Button } from '~/themes/default/components/ui/button'
+import {
   Card,
+  CardContent,
   CardHeader,
   CardTitle,
-  CardContent,
 } from '~/themes/default/components/ui/card'
-import { Label } from '~/themes/default/components/ui/label'
 import { Input } from '~/themes/default/components/ui/input'
-import { Button } from '~/themes/default/components/ui/button'
+import { Label } from '~/themes/default/components/ui/label'
+import { Spinner } from '~/themes/default/components/ui/spinner'
 
-const Login = () => {
+const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
   const { t } = useTranslation()
   const [isLoginSubmitted, setIsLoginSubmitted] = useState<boolean>(false)
 
@@ -40,8 +47,19 @@ const Login = () => {
               <Input id="password" type="password" required />
             </div>
             <Button type="submit" className="w-full">
-              {t('system.login')}
+              {isLoginSubmitted ? (
+                <Spinner size="small" className="text-white" />
+              ) : (
+                t('system.login')
+              )}
             </Button>
+            {!isLoginSuccessful && isLoginSubmitted ? (
+              <Alert variant="destructive" className="mt-3">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>{t('system.error')}</AlertTitle>
+                <AlertDescription>{t('system.login_failed')}</AlertDescription>
+              </Alert>
+            ) : null}
           </Form>
 
           <div className="mt-4 text-center text-sm">

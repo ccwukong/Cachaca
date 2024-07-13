@@ -1,20 +1,20 @@
-import { useState, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useLiveQuery } from 'dexie-react-hooks'
 import Autoplay from 'embla-carousel-autoplay'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from '~/themes/default/components/ui/carousel'
-import Header from '~/themes/default/components/ui/storefront/Header'
 import Footer from '~/themes/default/components/ui/storefront/Footer'
+import Header from '~/themes/default/components/ui/storefront/Header'
 import ProductCard from '~/themes/default/components/ui/storefront/ProductCard'
 import {
-  ProductPublicInfo,
-  HomeBannerSettings,
-  StoreSettings,
   CategoryItem,
+  HomeBannerSettings,
+  ProductPublicInfo,
+  StoreSettings,
 } from '~/types'
 import type { LocalCartItem } from '~/utils/indexedDB'
 import { idb } from '~/utils/indexedDB'

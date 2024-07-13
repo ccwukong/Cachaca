@@ -1,31 +1,30 @@
-import { useState } from 'react'
-import { Link } from '@remix-run/react'
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
-import { CalendarFold } from 'lucide-react'
 import { addDays, format } from 'date-fns'
+import { CalendarFold } from 'lucide-react'
+import { useState } from 'react'
 import { DateRange } from 'react-day-picker'
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
+import AdminHeader from '~/themes/default/components/ui/admin/Header'
+import { Avatar, AvatarFallback } from '~/themes/default/components/ui/avatar'
+import { Button } from '~/themes/default/components/ui/button'
+import { Calendar } from '~/themes/default/components/ui/calendar'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '~/themes/default/components/ui/card'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '~/themes/default/components/ui/popover'
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from '~/themes/default/components/ui/card'
-import { Avatar, AvatarFallback } from '~/themes/default/components/ui/avatar'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '~/themes/default/components/ui/popover'
-import { Calendar } from '~/themes/default/components/ui/calendar'
-import { Button } from '~/themes/default/components/ui/button'
-import AdminHeader from '~/themes/default/components/ui/admin/Header'
 import { cn } from '~/themes/lib/utils'
 import { PageLink } from '~/types'
 
