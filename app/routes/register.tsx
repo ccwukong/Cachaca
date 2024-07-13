@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { cookie } from '~/cookie'
 import { CustomerAuthentication } from '~/models'
 import Register from '~/themes/default/pages/account/Register'
+import { Role } from '~/types'
 import { ServerInternalError } from '~/utils/exception'
 import { encode } from '~/utils/jwt'
 
@@ -40,6 +41,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         firstName: result.firstName,
         lastName: result.lastName,
         email: result.email,
+        role: Role.Customer,
       },
       process.env.JWT_TOKEN_SECRET,
     )
@@ -51,6 +53,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         firstName: result.firstName,
         lastName: result.lastName,
         email: result.email,
+        role: Role.Customer,
       },
       process.env.JWT_TOKEN_SECRET,
     )

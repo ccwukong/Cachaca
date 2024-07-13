@@ -2,7 +2,7 @@
  * The models WILL NOT handle the exceptions
  */
 
-import { desc, eq } from 'drizzle-orm'
+import { desc, eq, and } from 'drizzle-orm'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 import {
@@ -114,7 +114,10 @@ export class AdminAuthtication {
     email: string,
     password: string,
   ): Promise<UserPublicInfo> {
-    const res = await db.select().from(user).where(eq(user.email, email))
+    const res = await db
+      .select()
+      .from(user)
+      .where(and(eq(user.email, email), eq(user.status, 1)))
 
     if (!res.length) {
       throw new AuthException('User not found.')
@@ -195,14 +198,14 @@ export class CustomerAuthentication {
     const res = await db
       .select()
       .from(customer)
-      .where(eq(customer.email, email))
+      .where(and(eq(customer.email, email), eq(customer.status, 1)))
 
     if (!res.length) {
       throw new AuthException('Customer account not found.')
     }
 
     const userData = res[0]
-
+    console.log(userData.password, md5(password + userData.salt))
     if (userData.password !== md5(password + userData.salt)) {
       throw new AuthException('Password is incorrect.')
     }

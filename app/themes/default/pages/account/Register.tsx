@@ -1,6 +1,6 @@
 import { Form, Link, useSubmit } from '@remix-run/react'
 import { AlertCircle } from 'lucide-react'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Alert,
@@ -28,7 +28,19 @@ const Register = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
     password: string
   }>({ firstName: '', lastName: '', email: '', password: '' })
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
+  const [formCompleted, setFormCompleted] = useState<boolean>(false)
   const submit = useSubmit()
+
+  useEffect(() => {
+    const { firstName, lastName, email, password } = formData
+
+    if (firstName && lastName && email && password) {
+      setFormCompleted(true)
+    } else {
+      setFormCompleted(false)
+    }
+    setIsSubmitted(false)
+  }, [formData])
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -89,6 +101,7 @@ const Register = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
                 <Input
                   id="email"
                   type="email"
+                  name="email"
                   value={formData.email}
                   onChange={(e) => {
                     SetFormData({
@@ -104,6 +117,7 @@ const Register = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
                 <Input
                   id="password"
                   type="password"
+                  name="password"
                   value={formData.password}
                   onChange={(e) => {
                     SetFormData({
@@ -114,7 +128,11 @@ const Register = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
                   required
                 />
               </div>
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={!formCompleted}
+              >
                 {isSubmitted ? (
                   <Spinner size="small" className="text-white" />
                 ) : (

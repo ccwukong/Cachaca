@@ -57,6 +57,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     })
   } catch (e) {
+    console.log(e)
     return json({ successful: false })
   }
 }

@@ -1,6 +1,6 @@
 import { Form, Link } from '@remix-run/react'
 import { AlertCircle } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Alert,
@@ -32,7 +32,15 @@ const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
           <Form method="POST" className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">{t('system.email')}</Label>
-              <Input id="email" type="email" required />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                onChange={() => {
+                  setIsLoginSubmitted(false)
+                }}
+                required
+              />
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
@@ -44,9 +52,23 @@ const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
                   {t('system.forgot_password_hint')}
                 </Link>
               </div>
-              <Input id="password" type="password" required />
+              <Input
+                id="password"
+                type="password"
+                name="password"
+                onChange={() => {
+                  setIsLoginSubmitted(false)
+                }}
+                required
+              />
             </div>
-            <Button type="submit" className="w-full">
+            <Button
+              type="submit"
+              onClick={() => {
+                setIsLoginSubmitted(true)
+              }}
+              className="w-full"
+            >
               {isLoginSubmitted ? (
                 <Spinner size="small" className="text-white" />
               ) : (

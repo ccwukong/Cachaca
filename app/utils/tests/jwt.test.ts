@@ -1,3 +1,4 @@
+import { Role } from '~/types'
 import { encode, isValid, decode } from '~/utils/jwt'
 
 // jest.useFakeTimers()
@@ -11,6 +12,7 @@ describe('Test JWT untility functions', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@example.com',
+        role: Role.Admin,
       },
       'secret',
     )
@@ -20,6 +22,7 @@ describe('Test JWT untility functions', () => {
       firstName: string
       lastName: string
       email: string
+      role: Role
     }
 
     expect(data.id).toBe('123')
@@ -33,6 +36,7 @@ describe('Test JWT untility functions', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@example.com',
+        role: Role.Admin,
       },
       'secret',
     )
