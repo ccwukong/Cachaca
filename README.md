@@ -33,7 +33,13 @@ The project is developed on top of:
 
 [Storefront](https://main--roaring-gnome-50b6e1.netlify.app/)
 
+- Email: customer@test.com
+- Password: 123456
+
 [Store admin dashboard](https://main--roaring-gnome-50b6e1.netlify.app/admin)
+
+- Email: admin@test.com
+- Password: 123456
 
 ## Development
 

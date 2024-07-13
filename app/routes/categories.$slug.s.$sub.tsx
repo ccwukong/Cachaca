@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import { Installer, ProductModel } from '~/models'
+import { Installer } from '~/models'
 import CategoryProductList from '~/themes/default/pages/storefront/CategoryProductList'
 import * as mocks from '~/utils/mocks'
 

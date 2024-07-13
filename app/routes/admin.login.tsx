@@ -2,7 +2,7 @@ import type { MetaFunction, ActionFunctionArgs } from '@remix-run/node'
 import { redirect, json } from '@remix-run/node'
 import { useActionData } from '@remix-run/react'
 import Login from '~/themes/default/pages/admin/Login'
-import { cookie } from '~/cookie'
+import { adminCookie } from '~/cookie'
 import { Installer, AdminAuthtication } from '~/models'
 import { encode } from '~/utils/jwt'
 import { ServerInternalError } from '~/utils/exception'
@@ -45,7 +45,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     return redirect('/admin', {
       headers: {
-        'Set-Cookie': await cookie.serialize({
+        'Set-Cookie': await adminCookie.serialize({
           accessToken: accessToken,
           refreshToken: refreshToken,
         }),

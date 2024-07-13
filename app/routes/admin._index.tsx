@@ -1,13 +1,17 @@
 import type { MetaFunction } from '@remix-run/node'
 import { json, LoaderFunctionArgs, redirect } from '@remix-run/node'
-import { cookie } from '~/cookie'
+import { useTranslation } from 'react-i18next'
+import { adminCookie } from '~/cookie'
 import { Installer } from '~/models'
 import Dashboard from '~/themes/default/pages/admin/Dashboard'
+import { Role } from '~/types'
 import { ServerInternalError } from '~/utils/exception'
 import { decode, encode, isValid } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'Admin Dashboard' }]
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { t } = useTranslation()
+  return [{ title: t('system.admin_dashboard') }]
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -21,7 +25,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       return redirect('/admin/login')
     }
 
-    const { accessToken, refreshToken } = await cookie.parse(cookieStr)
+    const { accessToken, refreshToken } = await adminCookie.parse(cookieStr)
 
     if (!process.env.JWT_TOKEN_SECRET) {
       throw new ServerInternalError('Invalid JWT Token secret string.')
@@ -31,7 +35,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       if (!(await isValid(refreshToken, process.env.JWT_TOKEN_SECRET))) {
         return redirect('/admin/login')
       } else {
-        const data = (await decode(
+        const payload = (await decode(
           refreshToken,
           process.env.JWT_TOKEN_SECRET!,
         )) as {
@@ -39,33 +43,32 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
           firstName: string
           lastName: string
           email: string
+          role: Role.Admin
+        }
+
+        const data = {
+          id: payload.id,
+          firstName: payload.firstName,
+          lastName: payload.lastName,
+          email: payload.email,
+          role: payload.role,
         }
 
         const newAccessToken = await encode(
           '1h',
-          {
-            id: data.id,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: data.email,
-          },
+          data,
           process.env.JWT_TOKEN_SECRET,
         )
 
         const newRefreshToken = await encode(
           '7d',
-          {
-            id: data.id,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: data.email,
-          },
+          data,
           process.env.JWT_TOKEN_SECRET,
         )
 
         return redirect('/admin', {
           headers: {
-            'Set-Cookie': await cookie.serialize({
+            'Set-Cookie': await adminCookie.serialize({
               accessToken: newAccessToken,
               refreshToken: newRefreshToken,
             }),
@@ -73,10 +76,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         })
       }
     } else {
-      return json({})
+      return json({ successful: false })
     }
   } catch (e) {
-    return json({})
+    return json({ successful: false })
   }
 }
 

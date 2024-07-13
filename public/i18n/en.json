@@ -55,5 +55,9 @@
   "system.login_failed": "Incorrect email or password.",
   "system.register_failed": "Registration failed, please try again later.",
   "system.cart_empty": "Your cart is empty.",
-  "system.go_to_cart": "Go to cart"
+  "system.go_to_cart": "Go to cart",
+  "system.account_dashboard": "Account Dashboard",
+  "system.account_dashboard_settings": "Account Dashboard - Settings",
+  "system.admin_dashboard": "Admin Dashboard",
+  "system.admin_dashboard_customers": "Admin Dashboard - Customers"
 }
