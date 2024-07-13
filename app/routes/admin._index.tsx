@@ -1,8 +1,10 @@
 import type { MetaFunction } from '@remix-run/node'
 import { json, LoaderFunctionArgs, redirect } from '@remix-run/node'
+import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { adminCookie } from '~/cookie'
 import { Installer } from '~/models'
+import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Dashboard from '~/themes/default/pages/admin/Dashboard'
 import { Role } from '~/types'
 import { ServerInternalError } from '~/utils/exception'
@@ -90,14 +92,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Index() {
   // const { error } = useLoaderData<typeof loader>()
   return (
-    <Dashboard
-      navLinks={[
-        { title: 'Overview', url: '/admin', order: 1 },
-        { title: 'Customers', url: '/admin/customers', order: 2 },
-        { title: 'Orders', url: '/admin/orders', order: 3 },
-        { title: 'Products', url: '/admin/products', order: 4 },
-        { title: 'Settings', url: '/admin/settings', order: 5 },
-      ]}
-    />
+    <Suspense fallback={<Skeleton />}>
+      <Dashboard
+        navLinks={[
+          { title: 'Overview', url: '/admin', order: 1 },
+          { title: 'Customers', url: '/admin/customers', order: 2 },
+          { title: 'Orders', url: '/admin/orders', order: 3 },
+          { title: 'Products', url: '/admin/products', order: 4 },
+          { title: 'Settings', url: '/admin/settings', order: 5 },
+        ]}
+      />
+    </Suspense>
   )
 }

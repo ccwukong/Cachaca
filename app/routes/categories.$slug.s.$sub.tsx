@@ -1,7 +1,9 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import { Suspense } from 'react'
 import { Installer } from '~/models'
+import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import CategoryProductList from '~/themes/default/pages/storefront/CategoryProductList'
 import * as mocks from '~/utils/mocks'
 
@@ -31,11 +33,13 @@ export default function Index() {
     useLoaderData<typeof loader>()
 
   return (
-    <CategoryProductList
-      categories={categories}
-      products={products}
-      storeSettings={storeSettings}
-      category={categoryName || ''}
-    />
+    <Suspense fallback={<Skeleton />}>
+      <CategoryProductList
+        categories={categories}
+        products={products}
+        storeSettings={storeSettings}
+        category={categoryName || ''}
+      />
+    </Suspense>
   )
 }

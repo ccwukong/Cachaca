@@ -1,9 +1,11 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cookie } from '~/cookie'
 import { Installer } from '~/models'
+import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Home from '~/themes/default/pages/account/Home'
 import { OrderItem, Role } from '~/types'
 import { ServerInternalError } from '~/utils/exception'
@@ -93,5 +95,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function Index() {
   const { orders } = useLoaderData<typeof loader>()
-  return <Home storeLogo="" storeName="Cachaca" orders={orders} />
+  return (
+    <Suspense fallback={<Skeleton />}>
+      <Home storeLogo="" storeName="Cachaca" orders={orders} />
+    </Suspense>
+  )
 }

@@ -1,8 +1,10 @@
 import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useActionData } from '@remix-run/react'
+import { Suspense } from 'react'
 import { cookie } from '~/cookie'
 import { CustomerAuthentication, Installer } from '~/models'
+import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Login from '~/themes/default/pages/account/Login'
 import { Role } from '~/types'
 import { ServerInternalError } from '~/utils/exception'
@@ -60,5 +62,9 @@ export default function Index() {
   if (result === undefined) {
     result = { successful: true }
   }
-  return <Login isLoginSuccessful={result.successful} />
+  return (
+    <Suspense fallback={<Skeleton />}>
+      <Login isLoginSuccessful={result.successful} />
+    </Suspense>
+  )
 }

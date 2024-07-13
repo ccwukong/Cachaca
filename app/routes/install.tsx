@@ -1,9 +1,11 @@
 import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useActionData } from '@remix-run/react'
+import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cookie } from '~/cookie'
 import { Installer } from '~/models'
+import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Install from '~/themes/default/pages/Install'
 import { Role } from '~/types'
 import { ServerInternalError } from '~/utils/exception'
@@ -74,5 +76,9 @@ export default function Index() {
   if (result === undefined) {
     result = { successful: true }
   }
-  return <Install isSubmitSuccessful={result.successful} />
+  return (
+    <Suspense fallback={<Skeleton />}>
+      <Install isSubmitSuccessful={result.successful} />
+    </Suspense>
+  )
 }

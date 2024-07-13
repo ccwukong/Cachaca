@@ -5,9 +5,11 @@ import {
   type MetaFunction,
 } from '@remix-run/node'
 import { useActionData } from '@remix-run/react'
+import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cookie } from '~/cookie'
 import { CustomerAuthentication, Installer } from '~/models'
+import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Register from '~/themes/default/pages/account/Register'
 import { Role } from '~/types'
 import { ServerInternalError } from '~/utils/exception'
@@ -83,5 +85,9 @@ export default function Index() {
   if (result === undefined) {
     result = { successful: true }
   }
-  return <Register isSubmitSuccessful={result.successful} />
+  return (
+    <Suspense fallback={<Skeleton />}>
+      <Register isSubmitSuccessful={result.successful} />
+    </Suspense>
+  )
 }

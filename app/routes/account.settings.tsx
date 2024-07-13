@@ -4,8 +4,10 @@ import {
   redirect,
   type MetaFunction,
 } from '@remix-run/node'
+import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cookie } from '~/cookie'
+import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Settings from '~/themes/default/pages/account/Settings'
 
 export const meta: MetaFunction = () => {
@@ -32,5 +34,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  return <Settings storeLogo="" storeName="Cachaca" />
+  return (
+    <Suspense fallback={<Skeleton />}>
+      <Settings storeLogo="" storeName="Cachaca" />
+    </Suspense>
+  )
 }
