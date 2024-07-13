@@ -7,7 +7,7 @@ import { Installer } from '~/models'
 import Home from '~/themes/default/pages/account/Home'
 import { OrderItem, Role } from '~/types'
 import { ServerInternalError } from '~/utils/exception'
-import { encode, isValid, decode } from '~/utils/jwt'
+import { decode, encode, isValid } from '~/utils/jwt'
 import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction = () => {
@@ -17,69 +17,77 @@ export const meta: MetaFunction = () => {
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  if (!(await Installer.isInstalled())) {
-    return redirect('/install')
-  }
+  try {
+    if (!(await Installer.isInstalled())) {
+      return redirect('/install')
+    }
 
-  const cookieStr = request.headers.get('Cookie') || ''
-  if (!cookieStr) {
-    return redirect('/login')
-  }
-
-  const { accessToken, refreshToken } = await cookie.parse(cookieStr)
-
-  if (!process.env.JWT_TOKEN_SECRET) {
-    throw new ServerInternalError('Invalid JWT Token secret string.')
-  }
-
-  if (!(await isValid(accessToken, process.env.JWT_TOKEN_SECRET))) {
-    if (!(await isValid(refreshToken, process.env.JWT_TOKEN_SECRET))) {
+    const cookieStr = request.headers.get('Cookie') || ''
+    if (!cookieStr) {
       return redirect('/login')
+    }
+
+    const { accessToken, refreshToken } = await cookie.parse(cookieStr)
+
+    if (!process.env.JWT_TOKEN_SECRET) {
+      throw new ServerInternalError('Invalid JWT Token secret string.')
+    }
+
+    if (!(await isValid(accessToken, process.env.JWT_TOKEN_SECRET))) {
+      if (!(await isValid(refreshToken, process.env.JWT_TOKEN_SECRET))) {
+        return redirect('/login')
+      } else {
+        const payload = (await decode(
+          refreshToken,
+          process.env.JWT_TOKEN_SECRET!,
+        )) as {
+          id: string
+          firstName: string
+          lastName: string
+          email: string
+          role: Role.Customer
+        }
+
+        const data = {
+          id: payload.id,
+          firstName: payload.firstName,
+          lastName: payload.lastName,
+          email: payload.email,
+          role: payload.role,
+        }
+
+        const newAccessToken = await encode(
+          '1h',
+          data,
+          process.env.JWT_TOKEN_SECRET,
+        )
+
+        const newRefreshToken = await encode(
+          '7d',
+          data,
+          process.env.JWT_TOKEN_SECRET,
+        )
+
+        return redirect('/account', {
+          headers: {
+            'Set-Cookie': await cookie.serialize({
+              accessToken: newAccessToken,
+              refreshToken: newRefreshToken,
+            }),
+          },
+        })
+      }
     } else {
-      const payload = (await decode(
-        refreshToken,
-        process.env.JWT_TOKEN_SECRET!,
-      )) as {
-        id: string
-        firstName: string
-        lastName: string
-        email: string
-        role: Role.Customer
-      }
-
-      const data = {
-        id: payload.id,
-        firstName: payload.firstName,
-        lastName: payload.lastName,
-        email: payload.email,
-        role: payload.role,
-      }
-
-      const newAccessToken = await encode(
-        '1h',
-        data,
-        process.env.JWT_TOKEN_SECRET,
-      )
-
-      const newRefreshToken = await encode(
-        '7d',
-        data,
-        process.env.JWT_TOKEN_SECRET,
-      )
-
-      return redirect('/account', {
-        headers: {
-          'Set-Cookie': await cookie.serialize({
-            accessToken: newAccessToken,
-            refreshToken: newRefreshToken,
-          }),
-        },
+      return json({
+        orders: (await mocks.getOrders()) as OrderItem[],
       })
     }
-  } else {
-    return json({
-      orders: (await mocks.getOrders()) as OrderItem[],
-    })
+  } catch (e) {
+    if (e instanceof TypeError) {
+      return redirect('/login')
+    } else {
+      return json({ successful: false })
+    }
   }
 }
 

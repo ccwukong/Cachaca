@@ -4,10 +4,10 @@ import {
   redirect,
   type MetaFunction,
 } from '@remix-run/node'
-import { isValid } from '~/utils/jwt'
 import { adminCookie } from '~/cookie'
 import OrderList from '~/themes/default/pages/admin/OrderList'
 import { ServerInternalError } from '~/utils/exception'
+import { isValid } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Admin Dashboard - Orders' }]
@@ -32,7 +32,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       return json({ successful: false })
     }
   } catch (e) {
-    return json({ successful: false })
+    if (e instanceof TypeError) {
+      return redirect('/admin')
+    } else {
+      return json({ successful: false })
+    }
   }
 }
 

@@ -5,6 +5,7 @@ import {
   type MetaFunction,
 } from '@remix-run/node'
 import { useTranslation } from 'react-i18next'
+import { cookie } from '~/cookie'
 import Settings from '~/themes/default/pages/account/Settings'
 
 export const meta: MetaFunction = () => {
@@ -14,12 +15,20 @@ export const meta: MetaFunction = () => {
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const cookieStr = request.headers.get('Cookie') || ''
-  if (!cookieStr) {
-    return redirect('/account')
+  try {
+    const cookieStr = request.headers.get('Cookie') || ''
+    if (!cookieStr) {
+      return redirect('/account')
+    }
+    const { accessToken } = cookie.parse(cookieStr)
+    return json({ successful: true })
+  } catch (e) {
+    if (e instanceof TypeError) {
+      return redirect('/account')
+    } else {
+      return json({ successful: false })
+    }
   }
-
-  return json({ successful: true })
 }
 
 export default function Index() {

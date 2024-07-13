@@ -35,7 +35,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       return json({ successful: false })
     }
   } catch (e) {
-    return json({ successful: false })
+    if (e instanceof TypeError) {
+      return redirect('/admin')
+    } else {
+      return json({ successful: false })
+    }
   }
 }
 
