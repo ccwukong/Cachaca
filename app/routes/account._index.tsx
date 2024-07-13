@@ -1,5 +1,5 @@
-import type { MetaFunction } from '@remix-run/node'
-import { json } from '@remix-run/node'
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import Home from '~/themes/default/pages/account/Home'
 import { OrderItem } from '~/types'
@@ -9,7 +9,12 @@ export const meta: MetaFunction = () => {
   return [{ title: 'My Acccount - Orders' }]
 }
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const cookieStr = request.headers.get('Cookie') || ''
+  if (!cookieStr) {
+    return redirect('/login')
+  }
+
   return json({
     orders: (await mocks.getOrders()) as OrderItem[],
   })
