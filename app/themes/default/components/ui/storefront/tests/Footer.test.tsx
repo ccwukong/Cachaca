@@ -1,22 +1,22 @@
-import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
+import { PageLink, PublicPage, StoreSettings } from '~/types'
 import * as mocks from '~/utils/mocks'
-import { PageLink, StoreSettings } from '~/types'
 import Footer from '../Footer'
 
 describe('Testing storefront Footer component', () => {
   test('Testing storefront Footer with links', async () => {
-    const mockdata: PageLink[] = (
+    const mockdata: PublicPage[] = (
       ((await mocks.getStoreInfo()) as StoreSettings).pageLinks as PageLink[]
     ).map((item) => {
       return {
-        title: item.title,
-        url: item.url,
+        name: item.title,
+        slug: item.url,
         order: item.order,
+        content: '',
       }
     })
-    render(<Footer pageLinks={mockdata} copyright="test copyright" />, {
+    render(<Footer publicPages={mockdata} copyright="test copyright" />, {
       wrapper: MemoryRouter,
     })
 
