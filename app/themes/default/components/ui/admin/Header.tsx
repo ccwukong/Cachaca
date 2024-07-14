@@ -11,7 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/themes/default/components/ui/dropdown-menu'
-import { Input } from '~/themes/default/components/ui/input'
 import { PageLink } from '~/types'
 
 const Header = ({ navItems }: { navItems: PageLink[] }) => {
@@ -33,13 +32,6 @@ const Header = ({ navItems }: { navItems: PageLink[] }) => {
           })}
         </nav>
         <div className="ml-auto flex items-center space-x-4">
-          <div>
-            <Input
-              type="search"
-              placeholder="Search..."
-              className="md:w-[100px] lg:w-[300px]"
-            />
-          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">

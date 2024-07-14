@@ -1,7 +1,18 @@
+import { Form } from '@remix-run/react'
+import { WandSparkles } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import AdminHeader from '~/themes/default/components/ui/admin/Header'
 import { Button } from '~/themes/default/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '~/themes/default/components/ui/dialog'
 import { Input } from '~/themes/default/components/ui/input'
+import { Label } from '~/themes/default/components/ui/label'
 import { Switch } from '~/themes/default/components/ui/switch'
 import {
   Table,
@@ -11,6 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from '~/themes/default/components/ui/table'
+import { Textarea } from '~/themes/default/components/ui/textarea'
 import { PageLink, ProductPublicInfo, StoreSettings } from '~/types'
 
 const ProductList = ({
@@ -32,37 +44,106 @@ const ProductList = ({
           <h2 className="text-3xl font-bold tracking-tight">
             {t('system.products')}
           </h2>
+
           <div className="flex items-center space-x-2">
             <Input placeholder="" />
             <Button>{t('system.search')}</Button>
+            <Dialog>
+              <DialogTrigger>
+                <Button className="bg-green-600 hover:bg-green-600">
+                  {t('system.add')}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-screen-md">
+                <DialogHeader>
+                  <DialogTitle>{t('system.add_product')}</DialogTitle>
+                </DialogHeader>
+                <Form method="POST" className="space-y-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="text-right">{t('system.name')}</div>
+                    <Input
+                      id="name"
+                      name="name"
+                      className="col-span-3"
+                      required
+                      value=""
+                      onChange={(e) => {}}
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="text-right">{t('system.slug')}</div>
+                    <Input
+                      id="slug"
+                      name="slug"
+                      className="col-span-3"
+                      required
+                      value=""
+                      onChange={(e) => {}}
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label className="text-right">
+                      {t('system.description')}
+                    </Label>
+                    <Textarea
+                      id="description"
+                      name="description"
+                      className="col-span-3"
+                      required
+                      value=""
+                      onChange={(e) => {}}
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label className="text-right">{t('system.category')}</Label>
+                    <select name="category" id="category">
+                      <option value="1">Men</option>
+                      <option value="2">Women</option>
+                      <option value="3">Accessories</option>
+                    </select>
+                  </div>
+                </Form>
+                <DialogFooter>
+                  <Button variant="secondary">
+                    <WandSparkles size={16} color="#f5c20a" />{' '}
+                    {t('system.try_ai')}
+                  </Button>
+                  <Button type="submit">{t('system.save')}</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead></TableHead>
-              <TableHead>{t('system.name')}</TableHead>
-              <TableHead>{t('system.base_price')}</TableHead>
-              <TableHead>{t('system.status')}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {products.map((item) => {
-              return (
-                <TableRow key={item.id}>
-                  <TableCell className="w-[72px]">
-                    <img src={item.coverImage} alt={item.name} />
-                  </TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{`${storeSettings.currency.symbol}${item.basePrice}`}</TableCell>
-                  <TableCell>
-                    <Switch />
-                  </TableCell>
-                </TableRow>
-              )
-            })}
-          </TableBody>
-        </Table>
+        {products ? (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead></TableHead>
+                <TableHead>{t('system.name')}</TableHead>
+                <TableHead>{t('system.base_price')}</TableHead>
+                <TableHead>{t('system.status')}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {products.map((item) => {
+                return (
+                  <TableRow key={item.id}>
+                    <TableCell className="w-[72px]">
+                      <img src={item.coverImage} alt={item.name} />
+                    </TableCell>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{`${storeSettings.currency.symbol}${item.basePrice}`}</TableCell>
+                    <TableCell>
+                      <Switch />
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
+        ) : (
+          <div className="text-center">{t('system.no_records_found')}</div>
+        )}
       </div>
     </div>
   )

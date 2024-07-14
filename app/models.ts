@@ -375,7 +375,7 @@ export class CustomerModel implements CRUDMode<UserPublicInfo> {
     const res = await db
       .select()
       .from(customer)
-      .orderBy(desc(user.createdOn))
+      .orderBy(desc(customer.createdOn))
       .limit(size)
       .offset(page * size)
 
@@ -477,7 +477,6 @@ export class ProductModel implements CRUDMode<ProductPublicInfo> {
       description: res[0].description,
       basePrice: res[0].basePrice,
       coverImage: res[0].coverImage,
-      
     }
 
     return data

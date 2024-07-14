@@ -14,6 +14,7 @@
   "system.firstname": "First name",
   "system.lastname": "Last name",
   "system.password": "Password",
+  "system.slug": "Slug",
   "system.forgot_password_hint": "Forgot password?",
   "system.cart_voucher_hint": "Do you have an voucher?",
   "system.do_not_have_account_hint": "Don't have an account?",
@@ -45,6 +46,7 @@
   "system.logo": "Logo",
   "system.admin_account": "Admin account",
   "system.products": "Products",
+  "system.add_product": "Add a new product",
   "system.error": "Error",
   "system.install_failed": "Installation unsuccessful. You may already have registered the store already.",
   "system.search": "Search",
@@ -59,5 +61,12 @@
   "system.account_dashboard": "Account Dashboard",
   "system.account_dashboard_settings": "Account Dashboard - Settings",
   "system.admin_dashboard": "Admin Dashboard",
-  "system.admin_dashboard_customers": "Admin Dashboard - Customers"
+  "system.admin_dashboard_customers": "Admin Dashboard - Customers",
+  "system.customers": "Customers",
+  "system.no_records_found": "No records found.",
+  "system.try_ai": "Try AI",
+  "system.select": "Select",
+  "system.store_settings": "Store settings",
+  "system.account_settings": "Account settings",
+  "system.public_pages": "Public pages"
 }

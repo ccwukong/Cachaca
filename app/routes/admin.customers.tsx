@@ -42,7 +42,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       const page = new URL(request.url).searchParams.get('page') || '1'
       const size = new URL(request.url).searchParams.get('size') || '20'
       const customers = await new CustomerModel().findMany(
-        Number(page) < 1 ? 1 : Number(page),
+        Number(page) < 1 ? 0 : Number(page) - 1,
         Number(size) < 1 ? 1 : Number(size),
       )
       return json({ error: null, data: customers })
@@ -63,7 +63,7 @@ export default function Index() {
 
   return (
     <Suspense fallback={<Skeleton />}>
-      <CustomerList customers={data!} />
+      <CustomerList customers={data || []} />
     </Suspense>
   )
 }
