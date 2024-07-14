@@ -5,6 +5,7 @@ import { Suspense } from 'react'
 import { Installer } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import CategoryProductList from '~/themes/default/pages/storefront/CategoryProductList'
+import { StoreNotInstalledError } from '~/utils/exception'
 import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -15,22 +16,35 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  if (!(await Installer.isInstalled())) {
-    return redirect('/install')
+  try {
+    if (!(await Installer.isInstalled())) {
+      throw new StoreNotInstalledError()
+    }
+
+    return json({
+      error: null,
+      data: {
+        categories: await mocks.getCategories(),
+        storeSettings: await mocks.getStoreInfo(),
+        products: await mocks.getMockProducts(),
+        categoryName: (await mocks.getCategories()).find(
+          (item) => item.slug === (request.url.split('/').at(-1) || ''),
+        )?.name,
+      },
+    })
+  } catch (e) {
+    if (e instanceof StoreNotInstalledError) {
+      return redirect('/install')
+    }
+
+    return json({ error: e, data: null })
   }
-  return json({
-    categories: await mocks.getCategories(),
-    storeSettings: await mocks.getStoreInfo(),
-    products: await mocks.getMockProducts(),
-    categoryName: (await mocks.getCategories()).find(
-      (item) => item.slug === (request.url.split('/').at(-1) || ''),
-    )?.name,
-  })
 }
 
 export default function Index() {
-  const { categoryName, categories, storeSettings, products } =
-    useLoaderData<typeof loader>()
+  const {
+    data: { categoryName, categories, storeSettings, products },
+  } = useLoaderData<typeof loader>()
 
   return (
     <Suspense fallback={<Skeleton />}>

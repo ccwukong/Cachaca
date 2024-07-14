@@ -5,39 +5,46 @@ import { Suspense } from 'react'
 import { Installer } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Cart from '~/themes/default/pages/storefront/Cart'
-import { CategoryItem, ProductPublicInfo, StoreSettings } from '~/types'
+import { StoreNotInstalledError } from '~/utils/exception'
 import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: 'Cart' },
-    { name: 'description', content: 'Test product promotion' },
-  ]
+  return [{ title: 'Cart' }]
 }
 
 export const loader = async () => {
-  if (!(await Installer.isInstalled())) {
-    return redirect('/install')
-  }
+  try {
+    if (!(await Installer.isInstalled())) {
+      throw new StoreNotInstalledError()
+    }
 
-  return json({
-    categories: await mocks.getCategories(),
-    storeSettings: await mocks.getStoreInfo(),
-    suggestedProducts: await mocks.getMockProducts(),
-    shippingFee: '9.9',
-  })
+    return json({
+      error: null,
+      data: {
+        categories: await mocks.getCategories(),
+        storeSettings: await mocks.getStoreInfo(),
+        suggestedProducts: await mocks.getMockProducts(),
+        shippingFee: '9.9',
+      },
+    })
+  } catch (e) {
+    if (e instanceof StoreNotInstalledError) {
+      return redirect('/install')
+    }
+
+    return json({ error: e, data: {} })
+  }
 }
 
 export default function Index() {
-  const { categories, storeSettings, suggestedProducts, shippingFee } =
-    useLoaderData<typeof loader>()
+  const { error, data } = useLoaderData<typeof loader>()
   return (
     <Suspense fallback={<Skeleton />}>
       <Cart
-        categories={categories as CategoryItem[]}
-        storeSettings={storeSettings as StoreSettings}
-        suggestedProducts={suggestedProducts as ProductPublicInfo[]}
-        shippingFee={shippingFee}
+        categories={data.categories}
+        storeSettings={data.storeSettings}
+        suggestedProducts={data.suggestedProducts}
+        shippingFee={data.shippingFee}
         allowVoucher={true}
         allowGuestCheckout={true}
       />

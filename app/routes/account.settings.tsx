@@ -9,6 +9,11 @@ import { useTranslation } from 'react-i18next'
 import { cookie } from '~/cookie'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Settings from '~/themes/default/pages/account/Settings'
+import {
+  JWTTokenSecretNotFoundException,
+  UnAuthenticatedException,
+} from '~/utils/exception'
+import { isValid } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -18,18 +23,28 @@ export const meta: MetaFunction = () => {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {
+    if (!process.env.JWT_TOKEN_SECRET) {
+      throw new JWTTokenSecretNotFoundException()
+    }
+
     const cookieStr = request.headers.get('Cookie') || ''
     if (!cookieStr) {
-      return redirect('/account')
+      throw new UnAuthenticatedException()
     }
-    const { accessToken } = cookie.parse(cookieStr)
-    return json({ successful: true })
-  } catch (e) {
-    if (e instanceof TypeError) {
-      return redirect('/account')
+    const { accessToken } = await cookie.parse(cookieStr)
+    if (!(await isValid(accessToken, process.env.JWT_TOKEN_SECRET))) {
+      throw new UnAuthenticatedException()
     } else {
-      return json({ successful: false })
+      return json({ error: null, data: {} })
     }
+  } catch (e) {
+    if (e instanceof TypeError || e instanceof UnAuthenticatedException) {
+      return redirect('/account')
+    } else if (e instanceof JWTTokenSecretNotFoundException) {
+      //TODO: handle this seperately
+    }
+
+    return json({ error: e, data: null })
   }
 }
 

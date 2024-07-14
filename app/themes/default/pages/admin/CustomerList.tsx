@@ -1,9 +1,5 @@
 import AdminHeader from '~/themes/default/components/ui/admin/Header'
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '~/themes/default/components/ui/avatar'
+import { Avatar, AvatarImage } from '~/themes/default/components/ui/avatar'
 import { Button } from '~/themes/default/components/ui/button'
 import { Input } from '~/themes/default/components/ui/input'
 import { Switch } from '~/themes/default/components/ui/switch'
@@ -15,8 +11,9 @@ import {
   TableHeader,
   TableRow,
 } from '~/themes/default/components/ui/table'
+import { UserPublicInfo } from '~/types'
 
-const CustomerList = () => {
+const CustomerList = ({ customers }: { customers: UserPublicInfo[] }) => {
   return (
     <div className="mx-6 overflow-hidden">
       <AdminHeader
@@ -47,22 +44,25 @@ const CustomerList = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell className="w-[72px]">
-                <Avatar>
-                  <AvatarImage
-                    src="https://github.com/shadcn.png"
-                    alt="@shadcn"
-                  />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </TableCell>
-              <TableCell>John Doe</TableCell>
-              <TableCell>test@test.com</TableCell>
-              <TableCell>
-                <Switch />
-              </TableCell>
-            </TableRow>
+            {customers.map((item) => {
+              return (
+                <TableRow key={item.id}>
+                  <TableCell className="w-[72px]">
+                    <Avatar>
+                      <AvatarImage
+                        src={item.avatar || ''}
+                        alt={`${item.firstName} ${item.lastName}`}
+                      />
+                    </Avatar>
+                  </TableCell>
+                  <TableCell>{`${item.firstName} ${item.lastName}`}</TableCell>
+                  <TableCell>{item.email}</TableCell>
+                  <TableCell>
+                    <Switch />
+                  </TableCell>
+                </TableRow>
+              )
+            })}
           </TableBody>
         </Table>
       </div>

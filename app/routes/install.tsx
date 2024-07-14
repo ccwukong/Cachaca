@@ -8,7 +8,7 @@ import { Installer } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Install from '~/themes/default/pages/Install'
 import { Role } from '~/types'
-import { ServerInternalError } from '~/utils/exception'
+import { JWTTokenSecretNotFoundException } from '~/utils/exception'
 import { encode } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
@@ -18,11 +18,24 @@ export const meta: MetaFunction = () => {
 }
 
 export const loader = async () => {
-  if (await Installer.isInstalled()) {
-    return redirect('/admin')
-  }
+  try {
+    if (!process.env.JWT_TOKEN_SECRET) {
+      throw new JWTTokenSecretNotFoundException()
+    }
 
-  return json({ successful: true })
+    //If the store is already installed, redirect to admin dashboard
+    if (await Installer.isInstalled()) {
+      return redirect('/admin')
+    }
+
+    return json({ error: null, data: {} })
+  } catch (e) {
+    if (e instanceof JWTTokenSecretNotFoundException) {
+      // TODO: handle this separately
+    }
+
+    return json({ error: e, data: null })
+  }
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -43,10 +56,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     })
 
-    if (!process.env.JWT_TOKEN_SECRET) {
-      throw new ServerInternalError('Invalid JWT Token secret string.')
-    }
-
     const data = {
       id: result.id,
       firstName: result.firstName,
@@ -55,8 +64,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       role: Role.Admin,
     }
 
-    const accessToken = await encode('1h', data, process.env.JWT_TOKEN_SECRET)
-    const refreshToken = await encode('7d', data, process.env.JWT_TOKEN_SECRET)
+    const accessToken = await encode('1h', data, process.env.JWT_TOKEN_SECRET!)
+    const refreshToken = await encode('7d', data, process.env.JWT_TOKEN_SECRET!)
 
     return redirect('/admin', {
       headers: {
@@ -67,18 +76,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     })
   } catch (e) {
-    return json({ successful: false })
+    return json({ error: e, data: {} })
   }
 }
 
 export default function Index() {
-  let result = useActionData<typeof action>()
-  if (result === undefined) {
-    result = { successful: true }
-  }
+  const actionData = useActionData<typeof action>()
+
   return (
     <Suspense fallback={<Skeleton />}>
-      <Install isSubmitSuccessful={result.successful} />
+      <Install isSubmitSuccessful={actionData === undefined} />
     </Suspense>
   )
 }

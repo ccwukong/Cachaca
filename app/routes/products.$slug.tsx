@@ -5,6 +5,7 @@ import { Suspense } from 'react'
 import { Installer } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import ProductDetail from '~/themes/default/pages/storefront/ProductDetail'
+import { StoreNotInstalledError } from '~/utils/exception'
 import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -35,16 +36,30 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  if (!(await Installer.isInstalled())) {
-    return redirect('/install')
+  try {
+    if (!(await Installer.isInstalled())) {
+      throw new StoreNotInstalledError()
+    }
+    return json({
+      error: null,
+      data: {
+        categories: await mocks.getCategories(),
+        storeSettings: await mocks.getStoreInfo(),
+        product: await mocks.getMockProductById(
+          request.url.split('/').at(-1) as string,
+        ),
+      },
+    })
+  } catch (e) {
+    if (e instanceof StoreNotInstalledError) {
+      return redirect('/install')
+    }
+
+    return json({
+      error: e,
+      data: null,
+    })
   }
-  return json({
-    categories: await mocks.getCategories(),
-    storeSettings: await mocks.getStoreInfo(),
-    product: await mocks.getMockProductById(
-      request.url.split('/').at(-1) as string,
-    ),
-  })
 }
 
 export default function Index() {

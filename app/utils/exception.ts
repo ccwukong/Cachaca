@@ -6,7 +6,7 @@ export class CustomException extends Error {
   }
 }
 
-export class AuthException extends CustomException {
+export class UnAuthenticatedException extends CustomException {
   constructor(message: string = 'Unauthorized.', status: number = 401) {
     super(message, status)
   }
@@ -38,6 +38,24 @@ export class ServerInternalError extends CustomException {
   constructor(
     message: string = 'Server internal error.',
     status: number = 500,
+  ) {
+    super(message, status)
+  }
+}
+
+export class JWTTokenSecretNotFoundException extends CustomException {
+  constructor(
+    message: string = 'No JWT token secret string found.',
+    status: number = 501,
+  ) {
+    super(message, status)
+  }
+}
+
+export class StoreNotInstalledError extends CustomException {
+  constructor(
+    message: string = 'Store has not been installed.',
+    status: number = 503,
   ) {
     super(message, status)
   }

@@ -8,7 +8,11 @@ import { Installer } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Home from '~/themes/default/pages/account/Home'
 import { OrderItem, Role } from '~/types'
-import { ServerInternalError } from '~/utils/exception'
+import {
+  JWTTokenSecretNotFoundException,
+  StoreNotInstalledError,
+  UnAuthenticatedException,
+} from '~/utils/exception'
 import { decode, encode, isValid } from '~/utils/jwt'
 import * as mocks from '~/utils/mocks'
 
@@ -21,23 +25,23 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {
     if (!(await Installer.isInstalled())) {
-      return redirect('/install')
+      throw new StoreNotInstalledError()
+    }
+
+    if (!process.env.JWT_TOKEN_SECRET) {
+      throw new JWTTokenSecretNotFoundException()
     }
 
     const cookieStr = request.headers.get('Cookie') || ''
     if (!cookieStr) {
-      return redirect('/login')
+      throw new UnAuthenticatedException()
     }
 
     const { accessToken, refreshToken } = await cookie.parse(cookieStr)
 
-    if (!process.env.JWT_TOKEN_SECRET) {
-      throw new ServerInternalError('Invalid JWT Token secret string.')
-    }
-
     if (!(await isValid(accessToken, process.env.JWT_TOKEN_SECRET))) {
       if (!(await isValid(refreshToken, process.env.JWT_TOKEN_SECRET))) {
-        return redirect('/login')
+        throw new UnAuthenticatedException()
       } else {
         const payload = (await decode(
           refreshToken,
@@ -81,23 +85,31 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       }
     } else {
       return json({
-        orders: (await mocks.getOrders()) as OrderItem[],
+        error: null,
+        data: (await mocks.getOrders()) as OrderItem[],
       })
     }
   } catch (e) {
-    if (e instanceof TypeError) {
+    if (e instanceof StoreNotInstalledError) {
+      return redirect('/install')
+    } else if (
+      e instanceof UnAuthenticatedException ||
+      e instanceof TypeError
+    ) {
       return redirect('/login')
-    } else {
-      return json({ successful: false })
+    } else if (e instanceof JWTTokenSecretNotFoundException) {
+      // TODO: need to handle this seprately
     }
+
+    return json({ error: e, data: null })
   }
 }
 
 export default function Index() {
-  const { orders } = useLoaderData<typeof loader>()
+  const { data } = useLoaderData<typeof loader>()
   return (
     <Suspense fallback={<Skeleton />}>
-      <Home storeLogo="" storeName="Cachaca" orders={orders} />
+      <Home storeLogo="" storeName="Cachaca" orders={data!} />
     </Suspense>
   )
 }

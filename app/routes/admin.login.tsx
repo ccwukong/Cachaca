@@ -1,25 +1,56 @@
-import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { useActionData } from '@remix-run/react'
+import { useActionData, useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { adminCookie } from '~/cookie'
 import { AdminAuthtication, Installer } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Login from '~/themes/default/pages/admin/Login'
 import { Role } from '~/types'
-import { ServerInternalError } from '~/utils/exception'
-import { encode } from '~/utils/jwt'
+import {
+  JWTTokenSecretNotFoundException,
+  StoreNotInstalledError,
+} from '~/utils/exception'
+import { encode, isValid } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Admin Login' }]
 }
 
-export const loader = async () => {
-  if (!(await Installer.isInstalled())) {
-    return redirect('/install')
-  }
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  try {
+    if (!(await Installer.isInstalled())) {
+      throw new StoreNotInstalledError()
+    }
 
-  return json({ message: 'test' })
+    if (!process.env.JWT_TOKEN_SECRET) {
+      throw new JWTTokenSecretNotFoundException()
+    }
+
+    // Redirect to admin dashboard if JWT token is valid
+    const cookieStr = request.headers.get('Cookie') || ''
+    if (cookieStr) {
+      const { accessToken } = await adminCookie.parse(cookieStr)
+
+      if (await isValid(accessToken, process.env.JWT_TOKEN_SECRET)) {
+        return redirect('/admin')
+      }
+    }
+
+    return json({ error: null, data: {} })
+  } catch (e) {
+    if (e instanceof StoreNotInstalledError) {
+      return redirect('/install')
+    } else if (e instanceof JWTTokenSecretNotFoundException) {
+      //TODO: handle this seperately
+    }
+
+    return json({ error: e, data: null })
+  }
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -30,10 +61,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       String(body.get('password')),
     )
 
-    if (!process.env.JWT_TOKEN_SECRET) {
-      throw new ServerInternalError('Invalid JWT Token secret string.')
-    }
-
     const data = {
       id: result.id,
       firstName: result.firstName,
@@ -42,33 +69,29 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       role: Role.Admin,
     }
 
-    const accessToken = await encode('1h', data, process.env.JWT_TOKEN_SECRET)
-    const refreshToken = await encode('7d', data, process.env.JWT_TOKEN_SECRET)
+    const accessToken = await encode('1h', data, process.env.JWT_TOKEN_SECRET!)
+    const refreshToken = await encode('7d', data, process.env.JWT_TOKEN_SECRET!)
 
     return redirect('/admin', {
       headers: {
         'Set-Cookie': await adminCookie.serialize({
-          accessToken: accessToken,
-          refreshToken: refreshToken,
+          accessToken,
+          refreshToken,
         }),
       },
     })
   } catch (e) {
-    return json({ successful: false })
+    return json({ error: e, data: null })
   }
 }
 
 export default function Index() {
-  let result = useActionData<typeof action>()
-  // when form submission is successful, result will be undefined becuase of the redirect
-  // It will cause the error message shown up unexpectedly
-  // Add this defensive code here for now
-  if (result === undefined) {
-    result = { successful: true }
-  }
+  const actionData = useActionData<typeof action>()
+  const loaderData = useLoaderData<typeof loader>()
+
   return (
     <Suspense fallback={<Skeleton />}>
-      <Login isLoginSuccessful={result.successful} />
+      <Login isLoginSuccessful={actionData === undefined} />
     </Suspense>
   )
 }

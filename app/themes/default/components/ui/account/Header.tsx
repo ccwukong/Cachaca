@@ -1,10 +1,7 @@
 import { Link } from '@remix-run/react'
 import { useTranslation } from 'react-i18next'
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '~/themes/default/components/ui/avatar'
+import { Avatar, AvatarFallback } from '~/themes/default/components/ui/avatar'
+import { Button } from '~/themes/default/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,8 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/themes/default/components/ui/dropdown-menu'
-import { Button } from '~/themes/default/components/ui/button'
-import { PageLink } from '~/types'
 
 const Header = ({
   storeLogo,

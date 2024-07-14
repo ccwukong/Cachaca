@@ -1,6 +1,7 @@
 import { Link } from '@remix-run/react'
 import { useTranslation } from 'react-i18next'
 import { Avatar, AvatarFallback } from '~/themes/default/components/ui/avatar'
+import { Button } from '~/themes/default/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,14 +11,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/themes/default/components/ui/dropdown-menu'
-import { Button } from '~/themes/default/components/ui/button'
 import { Input } from '~/themes/default/components/ui/input'
 import { PageLink } from '~/types'
 
 const Header = ({ navItems }: { navItems: PageLink[] }) => {
   const { t } = useTranslation()
   return (
-    <div className="border-b fixed w-full flex justify-center bg-white z-50">
+    <div className="left-0 bg-white border-b fixed w-full flex justify-center z-50">
       <div className="max-w-screen-xl w-full flex h-16 items-center px-4">
         <nav className="flex items-center mx-6 space-x-4 lg:space-x-6">
           {navItems.map(({ title, url }) => {
@@ -59,12 +59,12 @@ const Header = ({ navItems }: { navItems: PageLink[] }) => {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Billing</DropdownMenuItem>
                 <DropdownMenuItem>{t('system.settings')}</DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>{t('system.logout')}</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link to="/logout">{t('system.logout')}</Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

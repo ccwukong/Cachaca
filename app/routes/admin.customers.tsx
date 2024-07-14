@@ -4,12 +4,17 @@ import {
   redirect,
   type MetaFunction,
 } from '@remix-run/node'
+import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { adminCookie } from '~/cookie'
+import { CustomerModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import CustomerList from '~/themes/default/pages/admin/CustomerList'
-import { ServerInternalError } from '~/utils/exception'
+import {
+  JWTTokenSecretNotFoundException,
+  UnAuthenticatedException,
+} from '~/utils/exception'
 import { isValid } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
@@ -20,35 +25,45 @@ export const meta: MetaFunction = () => {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {
+    if (!process.env.JWT_TOKEN_SECRET) {
+      throw new JWTTokenSecretNotFoundException()
+    }
+
     const cookieStr = request.headers.get('Cookie') || ''
     if (!cookieStr) {
-      return redirect('/admin/login')
+      throw new UnAuthenticatedException()
     }
 
     const { accessToken } = await adminCookie.parse(cookieStr)
 
-    if (!process.env.JWT_TOKEN_SECRET) {
-      throw new ServerInternalError('Invalid JWT Token secret string.')
-    }
-
     if (!(await isValid(accessToken, process.env.JWT_TOKEN_SECRET))) {
-      return redirect('/admin')
+      throw new UnAuthenticatedException()
     } else {
-      return json({ successful: false })
+      const page = new URL(request.url).searchParams.get('page') || '1'
+      const size = new URL(request.url).searchParams.get('size') || '20'
+      const customers = await new CustomerModel().findMany(
+        Number(page) < 1 ? 1 : Number(page),
+        Number(size) < 1 ? 1 : Number(size),
+      )
+      return json({ error: null, data: customers })
     }
   } catch (e) {
-    if (e instanceof TypeError) {
+    if (e instanceof JWTTokenSecretNotFoundException) {
+      //TODO: handle this seperately
+    } else if (e instanceof UnAuthenticatedException) {
       return redirect('/admin')
-    } else {
-      return json({ successful: false })
     }
+
+    return json({ error: e, data: null })
   }
 }
 
 export default function Index() {
+  const { data } = useLoaderData<typeof loader>()
+
   return (
     <Suspense fallback={<Skeleton />}>
-      <CustomerList />
+      <CustomerList customers={data!} />
     </Suspense>
   )
 }

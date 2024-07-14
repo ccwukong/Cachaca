@@ -12,7 +12,10 @@ import { CustomerAuthentication, Installer } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Register from '~/themes/default/pages/account/Register'
 import { Role } from '~/types'
-import { ServerInternalError } from '~/utils/exception'
+import {
+  JWTTokenSecretNotFoundException,
+  StoreNotInstalledError,
+} from '~/utils/exception'
 import { encode } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
@@ -24,7 +27,11 @@ export const meta: MetaFunction = () => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     if (!(await Installer.isInstalled())) {
-      return redirect('/install')
+      throw new StoreNotInstalledError()
+    }
+
+    if (!process.env.JWT_TOKEN_SECRET) {
+      throw new JWTTokenSecretNotFoundException()
     }
 
     const body = await request.formData()
@@ -35,10 +42,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       email: String(body.get('email')),
       password: String(body.get('password')),
     })
-
-    if (!process.env.JWT_TOKEN_SECRET) {
-      throw new ServerInternalError('Invalid JWT Token secret string.')
-    }
 
     const accessToken = await encode(
       '1h',
@@ -73,21 +76,22 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     })
   } catch (e) {
-    return json({ successful: false })
+    if (e instanceof StoreNotInstalledError) {
+      return redirect('/install')
+    } else if (e instanceof JWTTokenSecretNotFoundException) {
+      //TODO: handle this seperately
+    }
+
+    return json({ error: e, data: {} })
   }
 }
 
 export default function Index() {
-  let result = useActionData<typeof action>()
-  // when form submission is successful, result will be undefined becuase of the redirect
-  // It will cause the error message shown up unexpectedly
-  // Add this defensive code here for now
-  if (result === undefined) {
-    result = { successful: true }
-  }
+  const actionData = useActionData<typeof action>()
+
   return (
     <Suspense fallback={<Skeleton />}>
-      <Register isSubmitSuccessful={result.successful} />
+      <Register isSubmitSuccessful={actionData === undefined} />
     </Suspense>
   )
 }
