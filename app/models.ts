@@ -2,12 +2,13 @@
  * The models WILL NOT handle the exceptions
  */
 
-import { and, desc, eq } from 'drizzle-orm'
+import { and, asc, desc, eq } from 'drizzle-orm'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 import {
   HomeBannerSettings,
   ProductPublicInfo,
+  PublicPage,
   Role,
   StoreSettings,
   UserPublicInfo,
@@ -15,11 +16,12 @@ import {
 import {
   AccountExistsException,
   AuthException,
+  NotFoundException,
   ServerInternalError,
 } from '~/utils/exception'
 import { makeStr } from '~/utils/string'
 import db from '../db/connection'
-import { customer, product, shop, user } from '../db/schema'
+import { customer, page, product, shop, user } from '../db/schema'
 
 interface CRUDMode<T> {
   find(id: string | number): Promise<T | null>
@@ -577,6 +579,37 @@ export class PublicInfo {
       currency: settings.currency,
       pageLinks: settings.pageLinks,
       copyright: settings.copyright,
+    }
+  }
+
+  public static async getPublicPages(): Promise<PublicPage[]> {
+    const res = await db.select().from(page).orderBy(asc(page.order))
+
+    return res.map((item) => {
+      return {
+        name: item.name,
+        slug: item.slug,
+        content: item.content,
+        order: item.order,
+      }
+    })
+  }
+
+  public static async getPublicPageByName(name: string): Promise<PublicPage> {
+    const res = await db
+      .select()
+      .from(page)
+      .where(and(eq(page.name, name), eq(page.status, 1)))
+
+    if (res.length) {
+      return {
+        name: res[0].name,
+        slug: res[0].slug,
+        content: res[0].content,
+        order: res[0].order,
+      }
+    } else {
+      throw new NotFoundException()
     }
   }
 }

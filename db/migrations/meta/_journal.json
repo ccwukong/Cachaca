@@ -8,6 +8,13 @@
       "when": 1720790153035,
       "tag": "0000_daily_jocasta",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1720952130612,
+      "tag": "0001_soft_punisher",
+      "breakpoints": true
     }
   ]
 }

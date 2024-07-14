@@ -2,7 +2,7 @@ import type { MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
-import { Installer } from '~/models'
+import { Installer, PublicInfo } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Home from '~/themes/default/pages/storefront/Home'
 import { StoreNotInstalledError } from '~/utils/exception'
@@ -10,8 +10,8 @@ import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
-    { title: data?.storeSettings.name },
-    { name: 'description', content: data?.storeSettings.description },
+    { title: data?.data?.storeSettings.name },
+    { name: 'description', content: data?.data?.storeSettings.description },
   ]
 }
 
@@ -22,12 +22,17 @@ export const loader = async () => {
     }
 
     return json({
-      categories: await mocks.getCategories(),
-      storeSettings: await mocks.getStoreInfo(),
-      products: await mocks.getMockProducts(),
-      banners: await mocks.getHomeBanners(),
+      error: null,
+      data: {
+        categories: await mocks.getCategories(),
+        storeSettings: await mocks.getStoreInfo(),
+        products: await mocks.getMockProducts(),
+        banners: await mocks.getHomeBanners(),
+        publicPages: await PublicInfo.getPublicPages(),
+      },
     })
   } catch (e) {
+    console.log(123456, e)
     if (e instanceof StoreNotInstalledError) {
       return redirect('/install')
     }
@@ -37,8 +42,9 @@ export const loader = async () => {
 }
 
 export default function Index() {
-  const { categories, storeSettings, products, banners } =
-    useLoaderData<typeof loader>()
+  const {
+    data: { categories, storeSettings, products, banners, publicPages },
+  } = useLoaderData<typeof loader>()
 
   return (
     <Suspense fallback={<Skeleton />}>
@@ -47,6 +53,7 @@ export default function Index() {
         products={products}
         banners={banners}
         storeSettings={storeSettings}
+        publicPages={publicPages || []}
       />
     </Suspense>
   )

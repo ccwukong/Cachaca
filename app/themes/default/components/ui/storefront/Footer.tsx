@@ -1,43 +1,43 @@
 import { Link } from '@remix-run/react'
-import { PageLink } from '~/types'
+import { PublicPage } from '~/types'
 
 const Footer = ({
-  pageLinks,
+  publicPages,
   copyright,
 }: {
-  pageLinks: PageLink[]
+  publicPages: PublicPage[]
   copyright: string
 }) => {
   return (
-    <footer className="pt-8 pb-4 mt-10">
-      <div className="max-w-screen-xl mx-auto grid grid-cols-4">
-        <div>
-          {pageLinks
-            .sort((a, b) => a.order - b.order)
-            .slice(0, 3)
-            .map((item) => {
-              return (
-                <div key={item.title} className="h-10">
-                  <Link to={item.url}>{item.title}</Link>
-                </div>
-              )
-            })}
+    publicPages && (
+      <footer className="pt-8 pb-4 mt-10">
+        <div className="max-w-screen-xl mx-auto grid grid-cols-4">
+          <div>
+            {publicPages
+              .slice(0, Math.ceil(publicPages.length / 2))
+              .map((item) => {
+                return (
+                  <div key={item.name} className="h-10">
+                    <Link to={`/p/${item.slug}`}>{item.name}</Link>
+                  </div>
+                )
+              })}
+          </div>
+          <div>
+            {publicPages
+              .slice(Math.ceil(publicPages.length / 2))
+              .map((item) => {
+                return (
+                  <div key={item.name} className="h-10">
+                    <Link to={`/p/${item.slug}`}>{item.name}</Link>
+                  </div>
+                )
+              })}
+          </div>
+          <div className="col-span-2 flex justify-end">{copyright}</div>
         </div>
-        <div>
-          {pageLinks
-            .sort((a, b) => a.order - b.order)
-            .slice(3)
-            .map((item) => {
-              return (
-                <div key={item.title} className="h-10">
-                  <Link to={item.url}>{item.title}</Link>
-                </div>
-              )
-            })}
-        </div>
-        <div className="col-span-2 flex justify-end">{copyright}</div>
-      </div>
-    </footer>
+      </footer>
+    )
   )
 }
 

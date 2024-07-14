@@ -105,6 +105,13 @@ export type OrderItem = {
   status: OrderStatus
 }
 
+export type PublicPage = {
+  name: string
+  slug: string
+  content: string
+  order: number
+}
+
 export enum Role {
   Admin = 1,
   User = 2,

@@ -1,22 +1,12 @@
 import {
+  index,
   int,
   mysqlTable,
+  primaryKey,
+  text,
   tinyint,
   varchar,
-  index,
-  text,
-  primaryKey,
 } from 'drizzle-orm/mysql-core'
-
-export const page = mysqlTable('page', {
-  name: varchar('name', { length: 60 }).notNull().primaryKey(),
-  slug: varchar('slug', { length: 60 }).notNull().unique(),
-  content: text('content').notNull(),
-  order: tinyint('order').notNull(),
-  createdOn: int('created_on').notNull(),
-  updatedOn: int('updated_on'),
-  status: tinyint('status').notNull(),
-})
 
 export const user = mysqlTable(
   'user',
@@ -309,3 +299,11 @@ export const order = mysqlTable(
     }
   },
 )
+
+export const page = mysqlTable('page', {
+  name: varchar('name', { length: 50 }).primaryKey(),
+  slug: varchar('slug', { length: 100 }).notNull(),
+  content: text('content').notNull(),
+  order: tinyint('order').notNull(),
+  status: tinyint('status').notNull(),
+})

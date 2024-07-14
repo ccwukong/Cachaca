@@ -14,6 +14,7 @@ import {
   CategoryItem,
   HomeBannerSettings,
   ProductPublicInfo,
+  PublicPage,
   StoreSettings,
 } from '~/types'
 import type { LocalCartItem } from '~/utils/indexedDB'
@@ -24,11 +25,13 @@ const Home = ({
   storeSettings,
   banners,
   products,
+  publicPages,
 }: {
   categories: CategoryItem[]
   storeSettings: StoreSettings
   banners: HomeBannerSettings
   products: ProductPublicInfo[]
+  publicPages: PublicPage[]
 }) => {
   const { t } = useTranslation()
   const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
@@ -131,10 +134,7 @@ const Home = ({
           })}
         </div>
       </div>
-      <Footer
-        pageLinks={storeSettings.pageLinks}
-        copyright={storeSettings.copyright}
-      />
+      <Footer publicPages={publicPages} copyright={storeSettings.copyright} />
     </div>
   )
 }
