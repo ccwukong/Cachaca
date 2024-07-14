@@ -68,5 +68,17 @@
   "system.select": "Select",
   "system.store_settings": "Store settings",
   "system.account_settings": "Account settings",
-  "system.public_pages": "Public pages"
+  "system.public_pages": "Public pages",
+  "system.title": "Title",
+  "system.url": "URL",
+  "system.order": "Order",
+  "system.thrid-party-services": "Third party services",
+  "system.openai": "OpenAI",
+  "system.openai_hint": "For the AI features.",
+  "system.openai_api_key": "OpenAI API key",
+  "system.cloudflare": "Cloudflare",
+  "system.cloudflare_hint": "For image hosting.",
+  "system.cloudflare_r2_token": "Cloudflare R2 token",
+  "system.cloudflare_access_key_id": "Cloudflare access key ID",
+  "system.cloudflare_secret_access_key": "Cloudflare secret access key"
 }

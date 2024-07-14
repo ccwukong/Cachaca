@@ -4,8 +4,10 @@ import {
   redirect,
   type MetaFunction,
 } from '@remix-run/node'
+import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { adminCookie } from '~/cookie'
+import { PublicInfo } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Settings from '~/themes/default/pages/admin/Settings'
 import {
@@ -34,7 +36,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     if (!(await isValid(accessToken, process.env.JWT_TOKEN_SECRET))) {
       throw new UnAuthenticatedException()
     } else {
-      return json({ erro: null, data: {} })
+      return json({
+        error: null,
+        data: { publicPages: await PublicInfo.getPublicPages() },
+      })
     }
   } catch (e) {
     if (e instanceof JWTTokenSecretNotFoundException) {
@@ -48,9 +53,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
+  const {
+    data: { publicPages },
+  } = useLoaderData<typeof loader>()
+
   return (
     <Suspense fallback={<Skeleton />}>
-      <Settings />
+      <Settings publicPages={publicPages || []} />
     </Suspense>
   )
 }
