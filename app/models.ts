@@ -15,9 +15,9 @@ import {
 } from '~/types'
 import {
   AccountExistsException,
-  AuthException,
   NotFoundException,
   ServerInternalError,
+  UnAuthenticatedException,
 } from '~/utils/exception'
 import { makeStr } from '~/utils/string'
 import db from '../db/connection'
@@ -122,13 +122,13 @@ export class AdminAuthtication {
       .where(and(eq(user.email, email), eq(user.status, 1)))
 
     if (!res.length) {
-      throw new AuthException('User not found.')
+      throw new UnAuthenticatedException('User not found.')
     }
 
     const userData = res[0]
 
     if (userData.password !== md5(password + userData.salt)) {
-      throw new AuthException('Password is incorrect.')
+      throw new UnAuthenticatedException('Password is incorrect.')
     }
 
     return {
@@ -203,13 +203,13 @@ export class CustomerAuthentication {
       .where(and(eq(customer.email, email), eq(customer.status, 1)))
 
     if (!res.length) {
-      throw new AuthException('Customer account not found.')
+      throw new UnAuthenticatedException('Customer account not found.')
     }
 
     const userData = res[0]
-    console.log(userData.password, md5(password + userData.salt))
+
     if (userData.password !== md5(password + userData.salt)) {
-      throw new AuthException('Password is incorrect.')
+      throw new UnAuthenticatedException('Password is incorrect.')
     }
 
     return {
