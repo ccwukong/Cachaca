@@ -17,10 +17,12 @@
   - [ ] Product category and sub-category management
   - [ ] Product variant management
   - [ ] Product collection management, such as editor's pick etc.
+  - [ ] Product discount
 - [ ] Product review management
 - [ ] Order management
   - [ ] Shipping module integration (need more research)
   - [ ] Refund and partial refund management
+  - [ ] Voucher management
 - [ ] Store management
   - [ ] Store banners
   - [ ] Public pages

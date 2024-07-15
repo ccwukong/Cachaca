@@ -24,8 +24,7 @@ export type ProductVariant = {
   coverImage: string
   priceVariant: string
   sku: string
-  quantity: number
-  variantCategory: ProductVariantCategoryItem
+  quantity?: number
 }
 
 export type ProductVariantCategoryItem = {
@@ -90,16 +89,45 @@ export type StoreSettings = {
   copyright: string
 }
 
+export type CheckoutInfo = {
+  id: string
+  customer: UserPublicInfo
+  currency: Currency
+  items: CheckoutItem[]
+}
+
+export type CheckoutItem = {
+  id: string
+  product: ProductPublicInfo
+  productVariant: ProductVariant
+  productVariantCategory: ProductVariantCategoryItem
+  unitPrice: string
+  quantity: number
+}
+
 export type OrderItem = {
   id: string
-  cartId: string
+  checkout: CheckoutInfo
+  customer: UserPublicInfo
   currency: Currency
   amount: string
-  voucher?: string
+  discount: string
+  tax: string
+  taxRate: string
+  voucher: string
+  shippingAddress: string
   shippingMethod: ShippingMethod
   shippingStatus: ShippingStatus
+  shippingFee: string
+  shippingReference: string
+  shippingTracking: string
   paymentMethod: PaymentMethod
+  paymentScheme: PaymentScheme
+  paymentInstrument: string
+  paymentReference: string
   paymentStatus: PaymentStatus
+  billingAddress: string
+  note: string
   createdBy?: string
   createdOn: number
   status: OrderStatus
@@ -136,11 +164,13 @@ export enum PaymentStatus {
 }
 
 export enum OrderStatus {
-  Processing = 1,
-  Refunded = 2,
-  PartialRefunded = 3,
-  Completed = 4,
-  Canceled = 5,
+  Deleted = 0,
+  Pending = 1,
+  Processing = 2,
+  Refunded = 3,
+  PartialRefunded = 4,
+  Completed = 5,
+  Canceled = 6,
 }
 
 export enum PaymentMethod {
@@ -155,4 +185,15 @@ export enum PaymentMethod {
 export enum ShippingMethod {
   PickUp = 1,
   Delivery = 2,
+}
+
+export enum PaymentScheme {
+  Visa = 1,
+  Master = 2,
+  AmericanExpress = 3,
+  Discover = 4,
+  JCB = 5,
+  DinersClub = 6,
+  UnionPay = 7,
+  Other = 8,
 }

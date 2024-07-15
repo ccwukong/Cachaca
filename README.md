@@ -14,6 +14,7 @@ The project is developed on top of:
 ## Table of Contents
 
 - [Demo](#demo)
+  - [Demo accounts](#demo-accounts)
 - [Development](#development)
   - [Development environment](#development-environment)
   - [Database](#database)
@@ -31,7 +32,9 @@ The project is developed on top of:
 
 **Note**: This project is still at its very early stage. I'm currently working on the frontend development with all the mock data. No backend services is ready at the moment.
 
-🎯🎯🎯 **[Pending tasks for RC1](docs/tasks.md)**
+🎯🎯🎯 **[Pending tasks for RC1](docs/tasks.md)** 🎯🎯🎯
+
+### Demo accounts
 
 [Storefront](https://main--roaring-gnome-50b6e1.netlify.app/)
 

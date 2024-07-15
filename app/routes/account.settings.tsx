@@ -4,6 +4,7 @@ import {
   redirect,
   type MetaFunction,
 } from '@remix-run/node'
+import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cookie } from '~/cookie'
@@ -13,7 +14,7 @@ import {
   JWTTokenSecretNotFoundException,
   UnAuthenticatedException,
 } from '~/utils/exception'
-import { isValid } from '~/utils/jwt'
+import { decode, isValid } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -35,7 +36,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     if (!(await isValid(accessToken, process.env.JWT_TOKEN_SECRET))) {
       throw new UnAuthenticatedException()
     } else {
-      return json({ error: null, data: {} })
+      return json({
+        error: null,
+        data: { account: decode(accessToken, process.env.JWT_TOKEN_SECRET) },
+      })
     }
   } catch (e) {
     if (e instanceof TypeError || e instanceof UnAuthenticatedException) {
@@ -49,6 +53,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
+  const { data } = useLoaderData<typeof loader>()
   return (
     <Suspense fallback={<Skeleton />}>
       <Settings storeLogo="" storeName="Cachaca" />

@@ -7,9 +7,16 @@ import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 import {
   HomeBannerSettings,
+  OrderItem,
+  OrderStatus,
+  PaymentMethod,
+  PaymentScheme,
+  PaymentStatus,
   ProductPublicInfo,
   PublicPage,
   Role,
+  ShippingMethod,
+  ShippingStatus,
   StoreSettings,
   UserPublicInfo,
 } from '~/types'
@@ -21,13 +28,24 @@ import {
 } from '~/utils/exception'
 import { makeStr } from '~/utils/string'
 import db from '../db/connection'
-import { customer, page, product, shop, user } from '../db/schema'
+import {
+  checkoutItem,
+  currency,
+  customer,
+  order,
+  page,
+  product,
+  productVariant,
+  productVariantCategory,
+  shop,
+  user,
+} from '../db/schema'
 
 interface CRUDMode<T> {
-  find(id: string | number): Promise<T | null>
+  create(data: object): Promise<string | number>
+  find(id: string | number): Promise<T>
   findMany(page: number, size: number): Promise<T[]>
   update(data: object): Promise<boolean>
-  create(data: object): Promise<T>
   delete(id: string | number): Promise<boolean>
 }
 
@@ -225,14 +243,49 @@ export class CustomerAuthentication {
 }
 
 export class UserModel implements CRUDMode<UserPublicInfo> {
-  async find(id: string | number): Promise<UserPublicInfo | null> {
+  async create(data: {
+    id: string
+    email: string
+    phone: string
+    password: string
+    firstName: string
+    lastName: string
+    role: Role
+    avatar: string
+  }): Promise<string> {
+    const salt = makeStr(8)
+    const { id, email, phone, password, firstName, lastName, role, avatar } =
+      data
+
+    const result = await db.insert(user).values({
+      id,
+      email,
+      phone,
+      password: md5(password + salt),
+      salt,
+      firstName,
+      lastName,
+      avatar,
+      role,
+      createdOn: Math.floor(Date.now() / 1000),
+      status: 1,
+    })
+
+    if (!result[0].affectedRows) {
+      throw new ServerInternalError()
+    }
+
+    return id
+  }
+
+  async find(id: string | number): Promise<UserPublicInfo> {
     const res = await db
       .select()
       .from(user)
       .where(eq(user.id, id as string))
 
     if (!res.length) {
-      return null
+      throw new NotFoundException()
     }
 
     const data: UserPublicInfo = {
@@ -289,52 +342,6 @@ export class UserModel implements CRUDMode<UserPublicInfo> {
     return true
   }
 
-  async create(newUser: {
-    id: string
-    email: string
-    phone: string
-    password: string
-    firstName: string
-    lastName: string
-    role: Role
-    avatar: string
-  }): Promise<UserPublicInfo> {
-    const salt = makeStr(8)
-    const { id, email, phone, password, firstName, lastName, role, avatar } =
-      newUser
-
-    const data = {
-      id,
-      email,
-      phone,
-      password: md5(password + salt),
-      salt,
-      firstName,
-      lastName,
-      avatar,
-      role,
-      createdOn: Math.floor(Date.now() / 1000),
-      status: 1,
-    }
-
-    const result = await db.insert(user).values(data)
-
-    if (!result[0].affectedRows) {
-      throw new ServerInternalError()
-    }
-
-    return {
-      id,
-      email,
-      phone,
-      firstName,
-      lastName,
-      avatar,
-      role,
-      createdOn: data.createdOn,
-    } as UserPublicInfo
-  }
-
   async delete(id: string): Promise<boolean> {
     await db
       .update(user)
@@ -348,14 +355,46 @@ export class UserModel implements CRUDMode<UserPublicInfo> {
 }
 
 export class CustomerModel implements CRUDMode<UserPublicInfo> {
-  async find(id: string | number): Promise<UserPublicInfo | null> {
+  async create(data: {
+    id: string
+    email: string
+    phone: string
+    password: string
+    firstName: string
+    lastName: string
+    avatar: string
+  }): Promise<string> {
+    const salt = makeStr(8)
+    const { id, email, phone, password, firstName, lastName, avatar } = data
+
+    const result = await db.insert(customer).values({
+      id,
+      email,
+      phone,
+      password: md5(password + salt),
+      salt,
+      firstName,
+      lastName,
+      avatar,
+      createdOn: Math.floor(Date.now() / 1000),
+      status: 1,
+    })
+
+    if (!result[0].affectedRows) {
+      throw new ServerInternalError()
+    }
+
+    return id
+  }
+
+  async find(id: string | number): Promise<UserPublicInfo> {
     const res = await db
       .select()
       .from(customer)
       .where(eq(user.id, id as string))
 
     if (!res.length) {
-      return null
+      throw new NotFoundException()
     }
 
     const data: UserPublicInfo = {
@@ -408,48 +447,6 @@ export class CustomerModel implements CRUDMode<UserPublicInfo> {
       })
       .where(eq(user.id, data.id))
     return true
-  }
-
-  async create(newUser: {
-    id: string
-    email: string
-    phone: string
-    password: string
-    firstName: string
-    lastName: string
-    avatar: string
-  }): Promise<UserPublicInfo> {
-    const salt = makeStr(8)
-    const { id, email, phone, password, firstName, lastName, avatar } = newUser
-
-    const data = {
-      id,
-      email,
-      phone,
-      password: md5(password + salt),
-      salt,
-      firstName,
-      lastName,
-      avatar,
-      createdOn: Math.floor(Date.now() / 1000),
-      status: 1,
-    }
-
-    const result = await db.insert(customer).values(data)
-
-    if (!result[0].affectedRows) {
-      throw new ServerInternalError()
-    }
-
-    return {
-      id,
-      email,
-      phone,
-      firstName,
-      lastName,
-      avatar,
-      createdOn: data.createdOn,
-    } as UserPublicInfo
   }
 
   async delete(id: string): Promise<boolean> {
@@ -611,5 +608,189 @@ export class PublicInfo {
     } else {
       throw new NotFoundException()
     }
+  }
+}
+
+export class OrderModel implements CRUDMode<OrderItem> {
+  async create(data: {
+    id: string
+    checkoutId: string
+    currencyId: number
+    amount: string
+    customerId: string
+    discount?: string
+    tax: string
+    taxRate: string
+    voucher?: string
+    shippingAddress: string
+    shippingMethod: ShippingMethod
+    shippingStatus: ShippingStatus
+    shippingFee: string
+    shippingReference: string
+    shippingTracking: string
+    paymentMethod: PaymentMethod
+    paymentScheme: PaymentScheme
+    paymentInstrument: string
+    paymentReference: string
+    paymentStatus: PaymentStatus
+    billingAddress: string
+    note?: string
+  }): Promise<string> {
+    const result = await db.insert(order).values({
+      ...data,
+      discount: data.discount ?? '',
+      voucher: data.voucher ?? '',
+      note: data.note ?? '',
+      createdBy: data.customerId,
+      createdOn: Math.floor(Date.now() / 1000),
+      status: OrderStatus.Pending,
+    })
+
+    if (!result[0].affectedRows) {
+      throw new ServerInternalError()
+    }
+
+    return data.id
+  }
+
+  async find(id: string): Promise<OrderItem> {
+    const res = await db
+      .select({
+        id: order.id,
+        amount: order.amount,
+        discount: order.discount,
+        tax: order.tax,
+        taxRate: order.taxRate,
+        voucher: order.voucher,
+        checkoutId: order.checkoutId,
+        currency: {
+          id: currency.id,
+          name: currency.name,
+          code: currency.code,
+          symbol: currency.symbol,
+        },
+        customer: {
+          id: customer.id,
+          email: customer.email,
+          phone: customer.phone,
+          firstName: customer.firstName,
+          lastName: customer.lastName,
+          avatar: customer.avatar,
+        },
+        shippingAddress: order.shippingAddress,
+        shippingMethod: order.shippingMethod,
+        shippingStatus: order.shippingStatus,
+        shippingFee: order.shippingFee,
+        shippingReference: order.shippingReference,
+        shippingTracking: order.shippingTracking,
+        paymentMethod: order.paymentMethod,
+        paymentScheme: order.paymentScheme,
+        paymentInstrument: order.paymentInstrument,
+        paymentReference: order.paymentReference,
+        paymentStatus: order.paymentStatus,
+        billingAddress: order.billingAddress,
+        note: order.note,
+        createOn: order.createdOn,
+        status: order.status,
+      })
+      .from(order)
+      .leftJoin(currency, eq(order.currencyId, currency.id))
+      .leftJoin(customer, eq(order.customerId, customer.id))
+      .where(eq(order.id, id))
+
+    if (!res.length) {
+      throw new NotFoundException()
+    }
+
+    const cartItems = await db
+      .select({
+        id: checkoutItem.id,
+        product: {
+          id: product.id,
+          name: product.name,
+          slug: product.slug,
+          description: product.description,
+          basePrice: product.basePrice,
+          coverImage: product.coverImage,
+        },
+        productVariant: {
+          id: productVariant.id,
+          name: productVariant.name,
+          coverImage: productVariant.coverImage,
+          description: productVariant.description,
+          sku: productVariant.sku,
+          priceVariant: productVariant.priceVariant,
+        },
+        variantCategory: {
+          id: productVariantCategory.id,
+          name: productVariantCategory.name,
+        },
+        unitPrice: checkoutItem.unitPrice,
+        quantity: checkoutItem.quantity,
+      })
+      .from(checkoutItem)
+      .leftJoin(
+        productVariant,
+        eq(checkoutItem.productVariantId, productVariant.id),
+      )
+      .leftJoin(product, eq(productVariant.productId, product.id))
+      .leftJoin(
+        productVariantCategory,
+        eq(productVariant.variantCategoryId, productVariantCategory.id),
+      )
+      .where(eq(checkoutItem.checkoutId, res[0].checkoutId))
+
+    return {
+      id: res[0].id,
+      amount: res[0].amount,
+      discount: res[0].discount,
+      tax: res[0].tax,
+      taxRate: res[0].taxRate,
+      voucher: res[0].voucher,
+      checkout: {
+        id: res[0].checkoutId,
+        currency: res[0].currency!,
+        customer: res[0].customer as UserPublicInfo,
+        items: cartItems.map((item) => {
+          return {
+            id: item.id,
+            product: item.product as ProductPublicInfo,
+            productVariant: item.productVariant!,
+            productVariantCategory: item.variantCategory!,
+            unitPrice: item.unitPrice,
+            quantity: item.quantity,
+          }
+        }),
+      },
+      currency: res[0].currency!,
+      customer: res[0].customer as UserPublicInfo,
+      shippingAddress: res[0].shippingAddress,
+      shippingMethod: res[0].shippingMethod,
+      shippingStatus: res[0].shippingStatus,
+      shippingFee: res[0].shippingFee,
+      shippingReference: res[0].shippingReference,
+      shippingTracking: res[0].shippingTracking,
+      paymentMethod: res[0].paymentMethod,
+      paymentScheme: res[0].paymentScheme,
+      paymentInstrument: res[0].paymentInstrument,
+      paymentReference: res[0].paymentReference,
+      paymentStatus: res[0].paymentStatus,
+      billingAddress: res[0].billingAddress,
+      note: res[0].note,
+      createdOn: res[0].createOn,
+      status: res[0].status,
+    }
+  }
+
+  async findMany(page: number, size: number): Promise<OrderItem[]> {
+    return []
+  }
+
+  async update(): Promise<boolean> {
+    return true
+  }
+
+  async delete(): Promise<boolean> {
+    return true
   }
 }

@@ -10,13 +10,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/themes/default/components/ui/dropdown-menu'
+import { PageLink } from '~/types'
 
 const Header = ({
-  storeLogo,
   storeName,
+  storeLogo,
+  pageLinks,
 }: {
-  storeLogo: string
   storeName: string
+  storeLogo?: string
+  pageLinks?: PageLink[]
 }) => {
   const { t } = useTranslation()
   return (

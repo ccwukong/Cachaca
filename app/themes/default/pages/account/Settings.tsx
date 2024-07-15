@@ -9,18 +9,25 @@ import {
   CardTitle,
 } from '~/themes/default/components/ui/card'
 import { Input } from '~/themes/default/components/ui/input'
+import { PageLink } from '~/types'
 
 const Settings = ({
   storeLogo,
   storeName,
+  pageLinks,
 }: {
   storeLogo: string
   storeName: string
+  pageLinks: PageLink[]
 }) => {
   const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden">
-      <Header storeLogo="" storeName="Cachaca" pageLinks={[]} />
+      <Header
+        storeLogo={storeLogo}
+        storeName={storeName}
+        pageLinks={pageLinks}
+      />
       <div className="flex flex-col">
         <div className="max-w-screen-xl md:max-w-screen-md w-full flex-1 space-y-4 md:p-8 mx-auto h-auto mt-24">
           <Card>
