@@ -11,11 +11,27 @@ import {
 } from '~/themes/default/components/ui/table'
 import { OrderItem } from '~/types'
 
-const Account = ({ orders }: { orders: OrderItem[] }) => {
+const Account = ({
+  orders,
+  account,
+}: {
+  orders: OrderItem[]
+  account: {
+    id: string
+    email: string
+    firstName: string
+    lastName: string
+  }
+}) => {
   const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden">
-      <Header storeLogo="" storeName="Cachaca" pageLinks={[]} />
+      <Header
+        storeLogo=""
+        storeName="Cachaca"
+        pageLinks={[]}
+        account={account}
+      />
       <div className="flex flex-col">
         <div className="max-w-screen-xl w-full flex-1 md:space-y-4 md:p-8 pt-6 mx-auto h-auto mt-16">
           <p className="text-2xl font-light">{t('system.orders')}</p>

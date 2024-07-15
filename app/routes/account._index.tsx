@@ -86,7 +86,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     } else {
       return json({
         error: null,
-        data: (await mocks.getOrders()) as OrderItem[],
+        data: {
+          orders: (await mocks.getOrders()) as OrderItem[],
+          account: await decode(accessToken, process.env.JWT_TOKEN_SECRET),
+        },
       })
     }
   } catch (e) {
@@ -106,10 +109,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const { data } = useLoaderData<typeof loader>()
+  const {
+    data: { orders, account },
+  } = useLoaderData<typeof loader>()
+
   return (
     <Suspense fallback={<Skeleton />}>
-      <Home storeLogo="" storeName="Cachaca" orders={data!} />
+      <Home
+        storeLogo=""
+        storeName="Cachaca"
+        orders={orders}
+        account={account}
+      />
     </Suspense>
   )
 }

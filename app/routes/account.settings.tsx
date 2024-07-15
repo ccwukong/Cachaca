@@ -38,7 +38,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     } else {
       return json({
         error: null,
-        data: { account: decode(accessToken, process.env.JWT_TOKEN_SECRET) },
+        data: {
+          account: await decode(accessToken, process.env.JWT_TOKEN_SECRET),
+        },
       })
     }
   } catch (e) {
@@ -53,10 +55,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const { data } = useLoaderData<typeof loader>()
+  const {
+    data: { account },
+  } = useLoaderData<typeof loader>()
   return (
     <Suspense fallback={<Skeleton />}>
-      <Settings storeLogo="" storeName="Cachaca" />
+      <Settings storeLogo="" storeName="Cachaca" account={account} />
     </Suspense>
   )
 }
