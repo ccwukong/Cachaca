@@ -15,6 +15,13 @@
       "when": 1720952130612,
       "tag": "0001_soft_punisher",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1721036218213,
+      "tag": "0002_silent_drax",
+      "breakpoints": true
     }
   ]
 }
