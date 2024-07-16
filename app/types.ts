@@ -140,6 +140,11 @@ export type PublicPage = {
   order: number
 }
 
+export type APIConfig = {
+  id: ExternalAPIType
+  config: string
+}
+
 export enum Role {
   Admin = 1,
   User = 2,
@@ -196,4 +201,10 @@ export enum PaymentScheme {
   DinersClub = 6,
   UnionPay = 7,
   Other = 8,
+}
+
+export enum ExternalAPIType {
+  GenAI = 1,
+  File = 2,
+  Email = 3,
 }

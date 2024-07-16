@@ -2,7 +2,7 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
-import { Installer, PublicInfo } from '~/models'
+import { Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Page from '~/themes/default/pages/storefront/Page'
 import { NotFoundException, StoreNotInstalledError } from '~/utils/exception'
@@ -40,7 +40,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     if (!(await Installer.isInstalled())) {
       throw new StoreNotInstalledError()
     }
-    const publicPages = await PublicInfo.getPublicPages()
+    const publicPages = await StoreConfig.getPublicPages()
     const page = publicPages.filter(
       (item) => item.name.toLowerCase() === (params.slug || '').toLowerCase(),
     )

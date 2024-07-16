@@ -7,7 +7,7 @@ import {
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { adminCookie } from '~/cookie'
-import { PublicInfo } from '~/models'
+import { StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Settings from '~/themes/default/pages/admin/Settings'
 import {
@@ -38,7 +38,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     } else {
       return json({
         error: null,
-        data: { publicPages: await PublicInfo.getPublicPages() },
+        data: { publicPages: await StoreConfig.getPublicPages() },
       })
     }
   } catch (e) {

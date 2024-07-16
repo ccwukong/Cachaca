@@ -22,6 +22,20 @@
       "when": 1721036218213,
       "tag": "0002_silent_drax",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1721116710098,
+      "tag": "0003_small_gladiator",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1721117508918,
+      "tag": "0004_omniscient_iceman",
+      "breakpoints": true
     }
   ]
 }

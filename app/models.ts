@@ -6,6 +6,7 @@ import { and, asc, desc, eq } from 'drizzle-orm'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 import {
+  APIConfig,
   CategoryItem,
   HomeBannerSettings,
   OrderItem,
@@ -30,6 +31,7 @@ import {
 import { makeStr } from '~/utils/string'
 import db from '../db/connection'
 import {
+  api,
   checkoutItem,
   currency,
   customer,
@@ -574,7 +576,7 @@ export class ProductModel implements CRUDMode<ProductPublicInfo> {
   }
 }
 
-export class PublicInfo {
+export class StoreConfig {
   public static async getHomeBanners(): Promise<HomeBannerSettings> {
     return {
       autoplay: banners.autoplay,
@@ -613,16 +615,42 @@ export class PublicInfo {
       .from(page)
       .where(and(eq(page.name, name), eq(page.status, 1)))
 
-    if (res.length) {
-      return {
-        name: res[0].name,
-        slug: res[0].slug,
-        content: res[0].content,
-        order: res[0].order,
-      }
-    } else {
+    if (!res.length) {
       throw new NotFoundException()
     }
+
+    return {
+      name: res[0].name,
+      slug: res[0].slug,
+      content: res[0].content,
+      order: res[0].order,
+    }
+  }
+
+  public static async getAllAPIConfigs(): Promise<APIConfig[]> {
+    const res = await db.select().from(api)
+
+    if (!res.length) {
+      throw new NotFoundException()
+    }
+
+    return res.map((item) => {
+      return {
+        id: item.id,
+        config: item.config,
+      }
+    })
+  }
+
+  public static async updateAPIConfig(data: APIConfig): Promise<boolean> {
+    await db
+      .update(api)
+      .set({
+        config: data.config,
+      })
+      .where(eq(api.id, data.id))
+
+    return true
   }
 }
 
