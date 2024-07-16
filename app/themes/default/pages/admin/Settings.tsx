@@ -13,6 +13,13 @@ import {
 import { Input } from '~/themes/default/components/ui/input'
 import { Label } from '~/themes/default/components/ui/label'
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/themes/default/components/ui/select'
+import {
   Tabs,
   TabsContent,
   TabsList,
@@ -162,49 +169,90 @@ const CustomerList = ({ publicPages }: { publicPages: PublicPage[] }) => {
           </TabsContent>
           <TabsContent value="third-party">
             <Form method="POST" className="space-y-4 w-[480px]">
-              <p className="text-xl pt-6">{t('system.openai')}</p>
+              <p className="text-xl pt-6">{t('system.generative_ai')}</p>
               <p className="text-sm text-muted-foreground">
-                {t('system.openai_hint')}
+                {t('system.generative_ai_hint')}
               </p>
               <div className="space-y-2">
-                <Label htmlFor="openai-api-key">
-                  {t('system.openai_api_key')}
-                </Label>
-                <Input type="text" id="openai-api-key" name="openai-api-key" />
+                <Label>{t('system.provider')}</Label>
+                <Select>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder={t('system.select')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="openai">OpenAI</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              <p className="text-xl pt-6">{t('system.cloudflare')}</p>
+              <div className="space-y-2">
+                <Label htmlFor="ai-model">{t('system.model')}</Label>
+                <Input type="text" id="ai-model" name="ai-model" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="ai-api-key">{t('system.api_key')}</Label>
+                <Input type="text" id="ai-api-key" name="ai-api-key" />
+              </div>
+              <p className="text-xl pt-6">{t('system.file_hosting')}</p>
               <p className="text-sm text-muted-foreground">
-                {t('system.cloudflare_hint')}
+                {t('system.file_hosting_hint')}
               </p>
               <div className="space-y-2">
-                <Label htmlFor="cloudflare-r2-token">
-                  {t('system.cloudflare_r2_token')}
+                <Label>{t('system.provider')}</Label>
+                <Select>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder={t('system.select')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="cloudflare-r2">Cloudflare R2</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="file-token">
+                  {t('system.api_token_or_key')} ({t('system.if_any')})
+                </Label>
+                <Input type="text" id="file-token" name="file-token" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="file-access-key-id">
+                  {t('system.access_key_id')}
                 </Label>
                 <Input
                   type="text"
-                  id="cloudflare-r2-token"
-                  name="cloudflare-r2-token"
+                  id="file-access-key-id"
+                  name="file-access-key-id"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="cloudflare-access-key-id">
-                  {t('system.cloudflare_access_key_id')}
+                <Label htmlFor="file-secret-access-key">
+                  {t('system.secret_access_key')}
                 </Label>
                 <Input
                   type="text"
-                  id="cloudflare-r2-access-key-id"
-                  name="cloudflare-r2-access-key-id"
+                  id="file-secret-access-key"
+                  name="file-secret-access-key"
                 />
               </div>
+              <p className="text-xl pt-6">{t('system.email_service')}</p>
+              <p className="text-sm text-muted-foreground">
+                {t('system.email_service_provider_hint')}
+              </p>
               <div className="space-y-2">
-                <Label htmlFor="cloudflare-secret-access-key">
-                  {t('system.cloudflare_secret_access_key')}
+                <Label>{t('system.provider')}</Label>
+                <Select>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder={t('system.select')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="mailtrap">Mailtrap</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email-service-provider-token">
+                  {t('system.api_token_or_key')} ({t('system.if_any')})
                 </Label>
-                <Input
-                  type="text"
-                  id="cloudflare-secret-access-key"
-                  name="cloudflare-secret-access-key"
-                />
+                <Input type="text" id="email-token" name="email-token" />
               </div>
               <Button>{t('system.save')}</Button>
             </Form>
