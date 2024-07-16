@@ -63,7 +63,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const { categories, storeSettings, product } = useLoaderData<typeof loader>()
+  const {
+    data: { categories, storeSettings, product },
+  } = useLoaderData<typeof loader>()
 
   return (
     <Suspense fallback={<Skeleton />}>

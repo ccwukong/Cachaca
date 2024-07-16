@@ -191,6 +191,7 @@ export const productImage = mysqlTable(
 export const productCategory = mysqlTable('product_category', {
   id: varchar('id', { length: 36 }).primaryKey(),
   name: varchar('name', { length: 60 }).notNull(),
+  slug: varchar('slug', { length: 100 }).notNull().unique(),
   status: tinyint('status').notNull(),
 })
 
@@ -199,6 +200,7 @@ export const productSubCategory = mysqlTable(
   {
     id: varchar('id', { length: 36 }).primaryKey(),
     name: varchar('name', { length: 60 }).notNull(),
+    slug: varchar('slug', { length: 100 }).notNull().unique(),
     categoryId: varchar('category_id', { length: 36 }),
     status: tinyint('status').notNull(),
   },

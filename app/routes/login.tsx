@@ -58,14 +58,19 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const accessToken = await encode('1h', data, process.env.JWT_TOKEN_SECRET!)
     const refreshToken = await encode('7d', data, process.env.JWT_TOKEN_SECRET!)
 
-    return redirect('/account', {
-      headers: {
-        'Set-Cookie': await cookie.serialize({
-          accessToken,
-          refreshToken,
-        }),
+    return redirect(
+      new URL(request.url).searchParams.get('ref') === 'cart'
+        ? '/cart'
+        : '/account',
+      {
+        headers: {
+          'Set-Cookie': await cookie.serialize({
+            accessToken,
+            refreshToken,
+          }),
+        },
       },
-    })
+    )
   } catch (e) {
     return json({ error: e, data: {} })
   }

@@ -6,6 +6,7 @@ import { and, asc, desc, eq } from 'drizzle-orm'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 import {
+  CategoryItem,
   HomeBannerSettings,
   OrderItem,
   OrderStatus,
@@ -35,6 +36,7 @@ import {
   order,
   page,
   product,
+  productCategory,
   productVariant,
   productVariantCategory,
   shop,
@@ -462,23 +464,82 @@ export class CustomerModel implements CRUDMode<UserPublicInfo> {
 }
 
 export class ProductModel implements CRUDMode<ProductPublicInfo> {
-  async find(id: string): Promise<ProductPublicInfo | null> {
-    const res = await db.select().from(product).where(eq(product.id, id))
+  async create(data: {
+    id: string
+    slug: string
+    name: string
+    description: string
+    coverImage: string
+    basePrice: string
+    categoryId: string
+    subCategoryId: string
+    createdBy: string
+  }): Promise<string> {
+    const {
+      id,
+      slug,
+      name,
+      description,
+      coverImage,
+      basePrice,
+      categoryId,
+      subCategoryId,
+      createdBy,
+    } = data
 
-    if (!res.length) {
-      return null
+    const result = await db.insert(product).values({
+      id,
+      slug,
+      name,
+      description,
+      coverImage,
+      basePrice,
+      categoryId,
+      subCategoryId,
+      createdBy,
+      createdOn: Math.floor(Date.now() / 1000),
+      status: 1,
+    })
+
+    if (!result[0].affectedRows) {
+      throw new ServerInternalError()
     }
 
-    const data: ProductPublicInfo = {
+    return id
+  }
+
+  async find(id: string): Promise<ProductPublicInfo> {
+    const res = await db
+      .select({
+        id: product.id,
+        name: product.name,
+        slug: product.slug,
+        description: product.description,
+        basePrice: product.basePrice,
+        coverImage: product.coverImage,
+        category: {
+          id: productCategory.id,
+          name: productCategory.name,
+          slug: productCategory.slug,
+        },
+      })
+      .from(product)
+      .leftJoin(productCategory, eq(product.categoryId, productCategory.id))
+      .where(eq(product.id, id))
+
+    if (!res.length) {
+      throw new NotFoundException()
+    }
+
+    return {
       id,
       name: res[0].name,
       slug: res[0].slug,
       description: res[0].description,
       basePrice: res[0].basePrice,
       coverImage: res[0].coverImage,
+      category: res[0].category as CategoryItem,
     }
-
-    return data
   }
 
   async findMany(page: number, size: number): Promise<ProductPublicInfo[]> {
@@ -506,52 +567,6 @@ export class ProductModel implements CRUDMode<ProductPublicInfo> {
 
   async update(): Promise<boolean> {
     return true
-  }
-
-  async create(newUser: {
-    id: string
-    email: string
-    phone: string
-    password: string
-    firstName: string
-    lastName: string
-    role: number
-    avatar: string
-  }): Promise<UserPublicInfo> {
-    const salt = makeStr(8)
-    const { id, email, phone, password, firstName, lastName, role, avatar } =
-      newUser
-
-    const data = {
-      id,
-      email,
-      phone,
-      password: md5(password + salt),
-      salt,
-      firstName,
-      lastName,
-      avatar,
-      role,
-      createdOn: Math.floor(Date.now() / 1000),
-      status: 1,
-    }
-
-    const result = await db.insert(user).values(data)
-
-    if (!result[0].affectedRows) {
-      throw new ServerInternalError()
-    }
-
-    return {
-      id,
-      email,
-      phone,
-      firstName,
-      lastName,
-      avatar,
-      role,
-      createdOn: data.createdOn,
-    } as UserPublicInfo
   }
 
   async delete(): Promise<boolean> {
