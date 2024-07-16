@@ -2,7 +2,7 @@ import type { MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
-import { Installer, PublicInfo } from '~/models'
+import { Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Home from '~/themes/default/pages/storefront/Home'
 import { StoreNotInstalledError } from '~/utils/exception'
@@ -28,7 +28,7 @@ export const loader = async () => {
         storeSettings: await mocks.getStoreInfo(),
         products: await mocks.getMockProducts(),
         banners: await mocks.getHomeBanners(),
-        publicPages: await PublicInfo.getPublicPages(),
+        publicPages: await StoreConfig.getPublicPages(),
       },
     })
   } catch (e) {
