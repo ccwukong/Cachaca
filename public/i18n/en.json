@@ -25,9 +25,15 @@
   "system.add": "Add",
   "system.date": "Date",
   "system.shipping": "Shipping",
+  "system.city": "City",
+  "system.state": "State",
+  "system.country": "Country",
+  "system.address_line_1": "Address line 1",
+  "system.address_line_2": "Address line 2",
   "system.shipping_address": "Shipping address",
   "system.shipping_status": "Shipping status",
-  "system.billing_address_same_shipping_address": "Billing address is same as shipping",
+  "system.billing_address": "Billing address",
+  "system.billing_address_same_shipping_address": "Billing address is same as shipping address",
   "system.total_due": "Total due",
   "system.orders": "Orders",
   "system.settings": "Settings",
@@ -80,5 +86,9 @@
   "system.cloudflare_hint": "For image hosting.",
   "system.cloudflare_r2_token": "Cloudflare R2 token",
   "system.cloudflare_access_key_id": "Cloudflare access key ID",
-  "system.cloudflare_secret_access_key": "Cloudflare secret access key"
+  "system.cloudflare_secret_access_key": "Cloudflare secret access key",
+  "system.my_addresses": "My addresses",
+  "system.change_password": "Change password",
+  "system.old_password": "Old password",
+  "system.new_password": "New password"
 }

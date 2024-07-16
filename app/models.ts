@@ -393,7 +393,7 @@ export class CustomerModel implements CRUDMode<UserPublicInfo> {
     const res = await db
       .select()
       .from(customer)
-      .where(eq(user.id, id as string))
+      .where(eq(customer.id, id as string))
 
     if (!res.length) {
       throw new NotFoundException()

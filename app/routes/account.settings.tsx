@@ -8,6 +8,7 @@ import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cookie } from '~/cookie'
+import { CustomerModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Settings from '~/themes/default/pages/account/Settings'
 import {
@@ -36,10 +37,21 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     if (!(await isValid(accessToken, process.env.JWT_TOKEN_SECRET))) {
       throw new UnAuthenticatedException()
     } else {
+      const payload = (await decode(
+        accessToken,
+        process.env.JWT_TOKEN_SECRET,
+      )) as {
+        id: string
+        firstName: string
+        lastName: string
+        email: string
+      }
+
+      const account = await new CustomerModel().find(payload.id)
       return json({
         error: null,
         data: {
-          account: await decode(accessToken, process.env.JWT_TOKEN_SECRET),
+          account,
         },
       })
     }

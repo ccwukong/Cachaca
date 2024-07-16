@@ -11,33 +11,21 @@ import {
   TabsList,
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
-import { PageLink } from '~/types'
+import { UserPublicInfo } from '~/types'
 
 const Settings = ({
   storeLogo,
   storeName,
-  pageLinks,
   account,
 }: {
   storeLogo: string
   storeName: string
-  pageLinks: PageLink[]
-  account: {
-    id: string
-    firstName: string
-    lastName: string
-    email: string
-  }
+  account: UserPublicInfo
 }) => {
   const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden">
-      <Header
-        storeLogo={storeLogo}
-        storeName={storeName}
-        pageLinks={pageLinks}
-        account={account}
-      />
+      <Header storeLogo={storeLogo} storeName={storeName} account={account} />
       <div className="max-w-screen-xl w-full flex-1 space-y-4 p-8 pt-6 mx-auto h-auto mt-16">
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">
@@ -60,19 +48,39 @@ const Settings = ({
             <Form method="POST" className="space-y-4 w-[480px]">
               <div className="space-y-2">
                 <Label htmlFor="first-name">{t('system.firstname')}</Label>
-                <Input type="text" id="first-name" name="first-name" />
+                <Input
+                  type="text"
+                  id="first-name"
+                  name="first-name"
+                  value={account.firstName}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="store-email">{t('system.lastname')}</Label>
-                <Input type="text" id="last-name" name="last-name" />
+                <Input
+                  type="text"
+                  id="last-name"
+                  name="last-name"
+                  value={account.lastName}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">{t('system.email')}</Label>
-                <Input type="text" id="email" name="email" />
+                <Input
+                  type="text"
+                  id="email"
+                  name="email"
+                  value={account.email}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone">{t('system.phone')}</Label>
-                <Input type="text" id="phone" name="phone" />
+                <Input
+                  type="text"
+                  id="phone"
+                  name="phone"
+                  value={account.phone}
+                />
               </div>
               <Button>{t('system.save')}</Button>
             </Form>
@@ -137,7 +145,7 @@ const Settings = ({
               <div>
                 <Checkbox />{' '}
                 <span className="text-sm text-muted-foreground">
-                  {t('system.same_as_shipping_address')}
+                  {t('system.billing_address_same_shipping_address')}
                 </span>
               </div>
               <div className="space-y-2">

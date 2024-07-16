@@ -10,23 +10,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/themes/default/components/ui/dropdown-menu'
-import { PageLink } from '~/types'
+import { UserPublicInfo } from '~/types'
 
 const Header = ({
   storeName,
   storeLogo,
-  pageLinks,
   account,
 }: {
   storeName: string
   storeLogo?: string
-  pageLinks?: PageLink[]
-  account: {
-    id: string
-    email: string
-    firstName: string
-    lastName: string
-  }
+  account: UserPublicInfo
 }) => {
   const { t } = useTranslation()
   return (

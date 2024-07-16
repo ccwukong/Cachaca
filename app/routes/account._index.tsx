@@ -4,7 +4,7 @@ import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cookie } from '~/cookie'
-import { Installer } from '~/models'
+import { CustomerModel, Installer } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Home from '~/themes/default/pages/account/Home'
 import { OrderItem, Role } from '~/types'
@@ -84,11 +84,23 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         })
       }
     } else {
+      const payload = (await decode(
+        accessToken,
+        process.env.JWT_TOKEN_SECRET,
+      )) as {
+        id: string
+        firstName: string
+        lastName: string
+        email: string
+      }
+
+      const account = await new CustomerModel().find(payload.id)
+
       return json({
         error: null,
         data: {
           orders: (await mocks.getOrders()) as OrderItem[],
-          account: await decode(accessToken, process.env.JWT_TOKEN_SECRET),
+          account,
         },
       })
     }

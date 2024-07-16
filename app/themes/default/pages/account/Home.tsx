@@ -9,29 +9,19 @@ import {
   TableHeader,
   TableRow,
 } from '~/themes/default/components/ui/table'
-import { OrderItem } from '~/types'
+import { OrderItem, UserPublicInfo } from '~/types'
 
 const Account = ({
   orders,
   account,
 }: {
   orders: OrderItem[]
-  account: {
-    id: string
-    email: string
-    firstName: string
-    lastName: string
-  }
+  account: UserPublicInfo
 }) => {
   const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden">
-      <Header
-        storeLogo=""
-        storeName="Cachaca"
-        pageLinks={[]}
-        account={account}
-      />
+      <Header storeLogo="" storeName="Cachaca" account={account} />
       <div className="flex flex-col">
         <div className="max-w-screen-xl w-full flex-1 md:space-y-4 md:p-8 pt-6 mx-auto h-auto mt-16">
           <p className="text-2xl font-light">{t('system.orders')}</p>
