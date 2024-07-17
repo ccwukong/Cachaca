@@ -1,13 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Link } from '@remix-run/react'
+import { Menu, ShoppingCart, UserRound } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { UserRound, ShoppingCart, Menu } from 'lucide-react'
-import { Input } from '~/themes/default/components/ui/input'
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '~/themes/default/components/ui/hover-card'
 import {
   Accordion,
   AccordionContent,
@@ -15,6 +9,12 @@ import {
   AccordionTrigger,
 } from '~/themes/default/components/ui/accordion'
 import { Badge } from '~/themes/default/components/ui/badge'
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '~/themes/default/components/ui/hover-card'
+import { Input } from '~/themes/default/components/ui/input'
 import { CategoryItem } from '~/types'
 
 const Header = ({

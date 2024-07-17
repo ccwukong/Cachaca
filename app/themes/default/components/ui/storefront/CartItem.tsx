@@ -1,8 +1,9 @@
-import { Trash2 } from 'lucide-react'
+import { Link, Trash2 } from 'lucide-react'
 import { Input } from '~/themes/default/components/ui/input'
 
 const CartItem = ({
   id,
+  slug,
   coverImage,
   title,
   currency,
@@ -11,6 +12,7 @@ const CartItem = ({
   updateCartItemHandler,
 }: {
   id: string
+  slug: string
   coverImage: string
   title: string
   currency: string
@@ -28,7 +30,9 @@ const CartItem = ({
         />
       </div>
       <div className="p-3 md:p-0 md:cols-span-2">
-        <div className="text-xl font-light font-weight-300">{title}</div>
+        <div className="text-xl font-light font-weight-300">
+          <Link to={`/products/${slug}`}>{title}</Link>
+        </div>
         <div className="flex items-center space-x-3 mt-3">
           <div>Quantity:</div>
           <Input

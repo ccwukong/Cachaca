@@ -29,8 +29,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     let account = null
     const cookieStr = request.headers.get('Cookie') || ''
+
     if (cookieStr) {
-      const { accessToken } = await cookie.parse(cookieStr)
+      const { accessToken } = (await cookie.parse(cookieStr)) || {}
 
       if (await isValid(accessToken, process.env.JWT_TOKEN_SECRET)) {
         account = await decode(accessToken, process.env.JWT_TOKEN_SECRET)
@@ -48,6 +49,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       },
     })
   } catch (e) {
+    console.log(e)
     if (e instanceof StoreNotInstalledError) {
       return redirect('/install')
     } else if (e instanceof JWTTokenSecretNotFoundException) {

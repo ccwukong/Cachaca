@@ -35,13 +35,13 @@ const Cart = ({
 }) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
-    {},
-  )
+  const [cartItem, setCartItem] = useState<{
+    [key: string]: string | number
+  }>({})
 
   useEffect(() => {
     const addItem = async () => {
-      const { id, name, coverImage, slug, url, price, currency, quantity } =
+      const { id, name, coverImage, slug, url, price, quantity } =
         cartItem as LocalCartItem
 
       const item = await idb.cart.get(id)
@@ -55,7 +55,6 @@ const Cart = ({
           slug,
           url,
           price,
-          currency,
           quantity,
         })
       }
@@ -98,6 +97,7 @@ const Cart = ({
               <CartItem
                 key={index}
                 id={item.id}
+                slug={item.slug}
                 coverImage={item.coverImage}
                 title={item.name}
                 currency={storeSettings.currency.symbol}
@@ -189,12 +189,12 @@ const Cart = ({
                         className="block w-full p-2 mb-2 border border-gray-300 rounded-md"
                         placeholder="Name"
                       />
-                      <select
+                      <input
+                        type="text"
                         id="country"
                         className="block w-full p-2 mb-2 border border-gray-300 rounded-md"
-                      >
-                        <option>United States</option>
-                      </select>
+                        placeholder="Country"
+                      />
                       <input
                         type="text"
                         id="address"
