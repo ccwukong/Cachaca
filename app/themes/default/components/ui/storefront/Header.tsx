@@ -153,7 +153,7 @@ const Header = ({
                   <>
                     <div className="flex justify-between mt-3">
                       <div className="font-bold">{t('system.subtotal')}</div>
-                      <div>{`${cartItems[0].currency}${subtotal}`}</div>
+                      <div>{`${currency}${subtotal}`}</div>
                     </div>
                     <div className="mt-5">
                       <Link to="/cart" className="flex justify-end font-bold">
