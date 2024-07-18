@@ -7,7 +7,7 @@ import { cookie } from '~/cookie'
 import { Installer } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Install from '~/themes/default/pages/Install'
-import { Role } from '~/types'
+import { FatalErrorTypes, Role } from '~/types'
 import { JWTTokenSecretNotFoundException } from '~/utils/exception'
 import { encode } from '~/utils/jwt'
 
@@ -30,8 +30,11 @@ export const loader = async () => {
 
     return json({ error: null, data: {} })
   } catch (e) {
+    console.error(e) // TODO: replace this with a proper logger
     if (e instanceof JWTTokenSecretNotFoundException) {
       // TODO: handle this separately
+    } else if (e?.code === FatalErrorTypes.DatabaseConnection) {
+      return redirect('/error')
     }
 
     return json({ error: e, data: null })

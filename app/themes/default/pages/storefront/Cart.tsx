@@ -7,7 +7,12 @@ import CartItem from '~/themes/default/components/ui/storefront/CartItem'
 import Footer from '~/themes/default/components/ui/storefront/Footer'
 import Header from '~/themes/default/components/ui/storefront/Header'
 import ProductCard from '~/themes/default/components/ui/storefront/ProductCard'
-import { CategoryItem, ProductPublicInfo, StoreSettings } from '~/types'
+import {
+  CategoryItem,
+  ProductPublicInfo,
+  PublicPage,
+  StoreSettings,
+} from '~/types'
 import type { LocalCartItem } from '~/utils/indexedDB'
 import { idb } from '~/utils/indexedDB'
 
@@ -15,6 +20,7 @@ const Cart = ({
   categories,
   storeSettings,
   suggestedProducts,
+  publicPages,
   shippingFee,
   allowVoucher,
   allowGuestCheckout,
@@ -23,6 +29,7 @@ const Cart = ({
   categories: CategoryItem[]
   storeSettings: StoreSettings
   suggestedProducts?: ProductPublicInfo[]
+  publicPages: PublicPage[]
   shippingFee: string
   allowVoucher: boolean
   allowGuestCheckout: boolean
@@ -285,10 +292,7 @@ const Cart = ({
           </>
         )}
       </div>
-      <Footer
-        pageLinks={storeSettings.pageLinks}
-        copyright={storeSettings.copyright}
-      />
+      <Footer publicPages={publicPages} copyright={storeSettings.copyright} />
     </div>
   )
 }

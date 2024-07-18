@@ -40,7 +40,7 @@ const Home = ({
 
   useEffect(() => {
     const addItem = async () => {
-      const { id, name, coverImage, slug, url, price, currency, quantity } =
+      const { id, name, coverImage, slug, url, price, quantity } =
         cartItem as LocalCartItem
 
       const item = await idb.cart.get(id)
@@ -54,7 +54,6 @@ const Home = ({
           slug,
           url,
           price,
-          currency,
           quantity,
         })
       }

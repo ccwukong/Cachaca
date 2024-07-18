@@ -5,6 +5,7 @@ import { Suspense } from 'react'
 import { Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Page from '~/themes/default/pages/storefront/Page'
+import { FatalErrorTypes } from '~/types'
 import { NotFoundException, StoreNotInstalledError } from '~/utils/exception'
 import * as mocks from '~/utils/mocks'
 
@@ -58,6 +59,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
       },
     })
   } catch (e) {
+    console.error(e) // TODO: replace this with a proper logger
     if (e instanceof StoreNotInstalledError) {
       return redirect('/install')
     } else if (e instanceof NotFoundException) {
@@ -65,11 +67,11 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
         status: 404,
         statusText: 'Not Found',
       })
+    } else if (e?.code === FatalErrorTypes.DatabaseConnection) {
+      return redirect('/error')
     }
-    return json({
-      error: e,
-      data: null,
-    })
+
+    return json({ error: e, data: null })
   }
 }
 

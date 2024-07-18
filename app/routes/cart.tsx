@@ -3,9 +3,10 @@ import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { cookie } from '~/cookie'
-import { Installer } from '~/models'
+import { Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Cart from '~/themes/default/pages/storefront/Cart'
+import { FatalErrorTypes } from '~/types'
 import {
   JWTTokenSecretNotFoundException,
   StoreNotInstalledError,
@@ -44,16 +45,19 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         categories: await mocks.getCategories(),
         storeSettings: await mocks.getStoreInfo(),
         suggestedProducts: await mocks.getMockProducts(),
+        publicPages: await StoreConfig.getPublicPages(),
         shippingFee: '9.9',
         account,
       },
     })
   } catch (e) {
-    console.log(e)
+    console.error(e) // TODO: replace this with a proper logger
     if (e instanceof StoreNotInstalledError) {
       return redirect('/install')
     } else if (e instanceof JWTTokenSecretNotFoundException) {
       //TODO: handle this seperately
+    } else if (e?.code === FatalErrorTypes.DatabaseConnection) {
+      return redirect('/error')
     }
 
     return json({ error: e, data: {} })
@@ -61,26 +65,19 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const {
-    data: {
-      categories,
-      storeSettings,
-      suggestedProducts,
-      shippingFee,
-      account,
-    },
-  } = useLoaderData<typeof loader>()
+  const { error, data } = useLoaderData<typeof loader>()
 
   return (
     <Suspense fallback={<Skeleton />}>
       <Cart
-        categories={categories}
-        storeSettings={storeSettings}
-        suggestedProducts={suggestedProducts}
-        shippingFee={shippingFee}
+        categories={data?.categories}
+        storeSettings={data?.storeSettings}
+        suggestedProducts={data?.suggestedProducts}
+        publicPages={data?.publicPages}
+        shippingFee={data?.shippingFee}
         allowVoucher={true}
         allowGuestCheckout={true}
-        account={account}
+        account={data?.account}
       />
     </Suspense>
   )

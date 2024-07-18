@@ -5,7 +5,7 @@ import { Suspense } from 'react'
 import { adminCookie } from '~/cookie'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import ProductList from '~/themes/default/pages/admin/ProductList'
-import { ProductPublicInfo, StoreSettings } from '~/types'
+import { FatalErrorTypes, ProductPublicInfo, StoreSettings } from '~/types'
 import {
   JWTTokenSecretNotFoundException,
   UnAuthenticatedException,
@@ -45,10 +45,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       })
     }
   } catch (e) {
+    console.error(e) // TODO: replace this with a proper logger
     if (e instanceof JWTTokenSecretNotFoundException) {
       //TODO: handle this seperately
     } else if (e instanceof UnAuthenticatedException) {
       return redirect('/admin')
+    } else if (e?.code === FatalErrorTypes.DatabaseConnection) {
+      return redirect('/error')
     }
 
     return json({ error: e, data: null })

@@ -7,7 +7,7 @@ import { cookie } from '~/cookie'
 import { CustomerModel, Installer } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Home from '~/themes/default/pages/account/Home'
-import { OrderItem, Role } from '~/types'
+import { FatalErrorTypes, OrderItem, Role } from '~/types'
 import {
   JWTTokenSecretNotFoundException,
   StoreNotInstalledError,
@@ -105,6 +105,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       })
     }
   } catch (e) {
+    console.error(e) // TODO: replace this with a proper logger
     if (e instanceof StoreNotInstalledError) {
       return redirect('/install')
     } else if (
@@ -114,6 +115,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       return redirect('/login')
     } else if (e instanceof JWTTokenSecretNotFoundException) {
       // TODO: need to handle this seprately
+    } else if (e?.code === FatalErrorTypes.DatabaseConnection) {
+      return redirect('/error')
     }
 
     return json({ error: e, data: null })

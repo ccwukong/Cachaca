@@ -10,7 +10,7 @@ import { adminCookie } from '~/cookie'
 import { AdminAuthtication, Installer } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Login from '~/themes/default/pages/admin/Login'
-import { Role } from '~/types'
+import { FatalErrorTypes, Role } from '~/types'
 import {
   JWTTokenSecretNotFoundException,
   StoreNotInstalledError,
@@ -81,6 +81,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     })
   } catch (e) {
+    console.error(e) // TODO: replace this with a proper logger
+
+    if (e?.code === FatalErrorTypes.DatabaseConnection) {
+      return redirect('/error')
+    }
     return json({ error: e, data: null })
   }
 }

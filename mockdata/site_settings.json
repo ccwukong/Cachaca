@@ -11,33 +11,33 @@
   },
   "pageLinks": [
     {
-      "title": "About",
-      "url": "/about",
+      "name": "About",
+      "slug": "/about",
       "order": 1
     },
     {
-      "title": "Contact",
-      "url": "/contact",
+      "name": "Contact",
+      "slug": "/contact",
       "order": 2
     },
     {
-      "title": "Terms",
-      "url": "/terms",
+      "name": "Terms",
+      "slug": "/terms",
       "order": 3
     },
     {
-      "title": "Shipping",
-      "url": "/shipping",
+      "name": "Shipping",
+      "slug": "/shipping",
       "order": 4
     },
     {
-      "title": "Refund",
-      "url": "/refund",
+      "name": "Refund",
+      "slug": "/refund",
       "order": 5
     },
     {
-      "title": "Media",
-      "url": "/media",
+      "name": "Media",
+      "slug": "/media",
       "order": 6
     }
   ],

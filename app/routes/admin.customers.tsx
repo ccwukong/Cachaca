@@ -11,6 +11,7 @@ import { adminCookie } from '~/cookie'
 import { CustomerModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import CustomerList from '~/themes/default/pages/admin/CustomerList'
+import { FatalErrorTypes } from '~/types'
 import {
   JWTTokenSecretNotFoundException,
   UnAuthenticatedException,
@@ -48,10 +49,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       return json({ error: null, data: customers })
     }
   } catch (e) {
+    console.error(e) // TODO: replace this with a proper logger
     if (e instanceof JWTTokenSecretNotFoundException) {
       //TODO: handle this seperately
     } else if (e instanceof UnAuthenticatedException) {
       return redirect('/admin')
+    } else if (e?.code === FatalErrorTypes.DatabaseConnection) {
+      return redirect('/error')
     }
 
     return json({ error: e, data: null })

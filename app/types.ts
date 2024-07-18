@@ -85,7 +85,7 @@ export type StoreSettings = {
   logo: string
   description: string
   currency: Currency
-  pageLinks: PageLink[]
+  pageLinks: PublicPage[]
   copyright: string
 }
 
@@ -207,4 +207,8 @@ export enum ExternalAPIType {
   GenAI = 1,
   File = 2,
   Email = 3,
+}
+
+export enum FatalErrorTypes {
+  DatabaseConnection = 'ECONNREFUSED',
 }

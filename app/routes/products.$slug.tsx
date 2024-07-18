@@ -2,9 +2,10 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
-import { Installer } from '~/models'
+import { Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import ProductDetail from '~/themes/default/pages/storefront/ProductDetail'
+import { FatalErrorTypes } from '~/types'
 import { StoreNotInstalledError } from '~/utils/exception'
 import * as mocks from '~/utils/mocks'
 
@@ -45,14 +46,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       data: {
         categories: await mocks.getCategories(),
         storeSettings: await mocks.getStoreInfo(),
+        publicPages: await StoreConfig.getPublicPages(),
         product: await mocks.getMockProductById(
           request.url.split('/').at(-1) as string,
         ),
       },
     })
   } catch (e) {
+    console.error(e) // TODO: replace this with a proper logger
     if (e instanceof StoreNotInstalledError) {
       return redirect('/install')
+    } else if (e?.code === FatalErrorTypes.DatabaseConnection) {
+      return redirect('/error')
     }
 
     return json({
@@ -63,16 +68,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const {
-    data: { categories, storeSettings, product },
-  } = useLoaderData<typeof loader>()
+  const { error, data } = useLoaderData<typeof loader>()
 
   return (
     <Suspense fallback={<Skeleton />}>
       <ProductDetail
-        product={product}
-        storeSettings={storeSettings}
-        categories={categories}
+        product={data?.product}
+        storeSettings={data?.storeSettings}
+        categories={data?.categories}
+        publicPages={data?.publicPages}
       />
     </Suspense>
   )
