@@ -25,3 +25,4 @@ jobs:
           DB_NAME=${{ vars.DB_NAME }} 
           DB_SSL_CA=/etc/ssl/certs/ca-certificates.crt
           yarn db:push
+      - run: yarn db:seed

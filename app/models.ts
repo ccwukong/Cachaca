@@ -8,7 +8,6 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   APIConfig,
   CategoryItem,
-  HomeBannerSettings,
   OrderItem,
   OrderStatus,
   PaymentMethod,
@@ -577,22 +576,18 @@ export class ProductModel implements CRUDMode<ProductPublicInfo> {
 }
 
 export class StoreConfig {
-  public static async getHomeBanners(): Promise<HomeBannerSettings> {
-    return {
-      autoplay: banners.autoplay,
-      speed: banners.speed,
-      bannerItems: banners.items,
-    }
-  }
-
   public static async getStoreInfo(): Promise<StoreSettings> {
+    const res = await db.select().from(shop)
+
+    if (!res.length) {
+      throw new NotFoundException()
+    }
+
     return {
-      name: settings.name,
-      logo: settings.logo,
-      description: settings.description,
-      currency: settings.currency,
-      pageLinks: settings.pageLinks,
-      copyright: settings.copyright,
+      name: res[0].name,
+      logo: res[0].logo,
+      description: res[0].description || '',
+      
     }
   }
 

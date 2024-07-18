@@ -96,26 +96,5 @@
       "symbol": "Rp",
       "name": "Indonesian Rupiah"
     }
-  ],
-  "shopCategories": [
-    "Fashion",
-    "Electronics",
-    "Home",
-    "Beauty",
-    "Grocery",
-    "Sports",
-    "Baby",
-    "Books",
-    "Toys",
-    "Health",
-    "Digital Goods",
-    "Entertainment"
-  ],
-  "superAdmin": {
-    "email": "test@test.com",
-    "phone": "1234567890",
-    "password": "123456",
-    "firstName": "Super",
-    "lastName": "Admin"
-  }
+  ]
 }
