@@ -153,6 +153,22 @@ export type APIConfig = {
   config: string
 }
 
+export type AddressItem = {
+  id: string
+  address: string
+  city: string
+  state: string
+  country: string
+  zipcode: string
+  type: AddressType
+}
+
+export enum AddressType {
+  Shipping = 1,
+  Billing = 2,
+  Other = 3,
+}
+
 export enum Role {
   Admin = 1,
   User = 2,

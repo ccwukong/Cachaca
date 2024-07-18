@@ -7,13 +7,19 @@ import CartItem from '~/themes/default/components/ui/storefront/CartItem'
 import Footer from '~/themes/default/components/ui/storefront/Footer'
 import Header from '~/themes/default/components/ui/storefront/Header'
 import ProductCard from '~/themes/default/components/ui/storefront/ProductCard'
-import { CategoryItem, ProductPublicInfo, StoreSettings } from '~/types'
+import {
+  AddressItem,
+  CategoryItem,
+  ProductPublicInfo,
+  StoreSettings,
+} from '~/types'
 import type { LocalCartItem } from '~/utils/indexedDB'
 import { idb } from '~/utils/indexedDB'
 
 const Cart = ({
   categories,
   storeSettings,
+  addresses,
   suggestedProducts,
   shippingFee,
   allowVoucher,
@@ -22,6 +28,7 @@ const Cart = ({
 }: {
   categories: CategoryItem[]
   storeSettings: StoreSettings
+  addresses: AddressItem[]
   suggestedProducts?: ProductPublicInfo[]
   shippingFee: string
   allowVoucher: boolean
@@ -145,9 +152,7 @@ const Cart = ({
             )}
           </div>
           <div className="md:col-span-2">
-            {account ? (
-              <div>Something</div>
-            ) : (
+            {!account ? (
               <div className="flex-1">
                 <Button
                   className="w-full mb-4"
@@ -252,7 +257,10 @@ const Cart = ({
                   </>
                 )}
               </div>
-            )}
+            ) : null}
+            {addresses
+              ? addresses.map((item) => <div>{item.address}</div>)
+              : null}
           </div>
         </div>
         {suggestedProducts && (

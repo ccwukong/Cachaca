@@ -6,6 +6,8 @@ import { and, asc, desc, eq } from 'drizzle-orm'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 import {
+  AddressItem,
+  AddressType,
   APIConfig,
   CategoryItem,
   OrderItem,
@@ -34,6 +36,7 @@ import {
   checkoutItem,
   currency,
   customer,
+  customerAddress,
   order,
   page,
   product,
@@ -842,6 +845,112 @@ export class OrderModel implements CRUDMode<OrderItem> {
   }
 
   async delete(): Promise<boolean> {
+    return true
+  }
+}
+
+export class AddressModel implements CRUDMode<AddressItem> {
+  async create(data: {
+    id: string
+    customerId: string
+    address: string
+    city: string
+    state: string
+    country: string
+    zipcode: string
+    type: AddressType
+  }): Promise<string> {
+    const { id, customerId, address, city, state, country, zipcode, type } =
+      data
+
+    const result = await db.insert(customerAddress).values({
+      id,
+      customerId,
+      address,
+      city,
+      state,
+      country,
+      zipcode,
+      type,
+      createdOn: Math.floor(Date.now() / 1000),
+      status: 1,
+    })
+
+    if (!result[0].affectedRows) {
+      throw new ServerInternalError()
+    }
+
+    return id
+  }
+
+  async find(id: string | number): Promise<AddressItem[]> {
+    return []
+  }
+
+  async findByCustomerId(id: string): Promise<AddressItem[]> {
+    const res = await db
+      .select()
+      .from(customerAddress)
+      .where(eq(customerAddress.customerId, id))
+
+    return res.map((item) => {
+      return {
+        id: item.id,
+        address: item.address || '',
+        city: item.city || '',
+        state: item.state || '',
+        country: item.country || '',
+        zipcode: item.zipcode || '',
+        type: item.type,
+      }
+    })
+  }
+
+  async findMany(page: number, size: number): Promise<UserPublicInfo[]> {
+    const res = await db
+      .select()
+      .from(customer)
+      .orderBy(desc(customer.createdOn))
+      .limit(size)
+      .offset(page * size)
+
+    return res.map((item) => {
+      return {
+        id: item.id,
+        email: item.email,
+        phone: item.phone,
+        firstName: item.firstName,
+        lastName: item.lastName,
+        avatar: item.avatar,
+        createdOn: item.createdOn,
+        updatedOn: item.updatedOn || undefined,
+        status: item.status,
+      }
+    })
+  }
+
+  async update(data: UserPublicInfo): Promise<boolean> {
+    await db
+      .update(customer)
+      .set({
+        phone: data.phone,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        avatar: data.avatar,
+        updatedOn: Math.floor(Date.now() / 1000),
+      })
+      .where(eq(user.id, data.id))
+    return true
+  }
+
+  async delete(id: string): Promise<boolean> {
+    await db
+      .update(customer)
+      .set({
+        status: 0,
+      })
+      .where(eq(user.id, id))
+
     return true
   }
 }

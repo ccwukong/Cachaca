@@ -3,7 +3,7 @@ import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { cookie } from '~/cookie'
-import { Installer, StoreConfig } from '~/models'
+import { AddressModel, Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Cart from '~/themes/default/pages/storefront/Cart'
 import { FatalErrorTypes } from '~/types'
@@ -29,6 +29,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }
 
     let account = null
+    let addresses = []
     const cookieStr = request.headers.get('Cookie') || ''
 
     if (cookieStr) {
@@ -36,6 +37,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
       if (await isValid(accessToken, process.env.JWT_TOKEN_SECRET)) {
         account = await decode(accessToken, process.env.JWT_TOKEN_SECRET)
+        addresses = await new AddressModel().findByCustomerId(
+          account.id as string,
+        )
       }
     }
 
@@ -45,6 +49,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         categories: await mocks.getCategories(),
         storeSettings: await StoreConfig.getStoreInfo(),
         suggestedProducts: await mocks.getMockProducts(),
+        addresses,
         shippingFee: '9.9',
         account,
       },
@@ -65,7 +70,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function Index() {
   const { data } = useLoaderData<typeof loader>()
-
+  console.log(data.addresses)
   return (
     <Suspense fallback={<Skeleton />}>
       <Cart
@@ -73,6 +78,7 @@ export default function Index() {
         storeSettings={data?.storeSettings}
         suggestedProducts={data?.suggestedProducts}
         shippingFee={data?.shippingFee}
+        addresses={data?.addresses}
         allowVoucher={true}
         allowGuestCheckout={true}
         account={data?.account}

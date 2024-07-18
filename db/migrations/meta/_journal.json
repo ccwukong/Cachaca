@@ -50,6 +50,13 @@
       "when": 1721276061412,
       "tag": "0006_wandering_namor",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1721300568103,
+      "tag": "0007_strange_exiles",
+      "breakpoints": true
     }
   ]
 }
