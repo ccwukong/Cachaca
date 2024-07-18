@@ -73,32 +73,35 @@ const Home = ({
       />
 
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
-        <Carousel
-          plugins={
-            storeSettings.banners.autoplay
-              ? [
-                  Autoplay({
-                    delay: storeSettings.banners.speed,
-                  }),
-                ]
-              : []
-          }
-        >
-          <CarouselContent>
-            {storeSettings.banners.items.map((item, idx) => {
-              return (
-                <CarouselItem key={idx}>
-                  <img
-                    src={item.imageUrl}
-                    alt={item.caption}
-                    className="object-cover w-full h-96"
-                  />
-                </CarouselItem>
-              )
-            })}
-          </CarouselContent>
-        </Carousel>
-        <h2 className="mt-16 mb-6 text-xl">{t('system.products')}</h2>
+        {storeSettings.banners && (
+          <Carousel
+            className="mb-10"
+            plugins={
+              storeSettings.banners.autoplay
+                ? [
+                    Autoplay({
+                      delay: storeSettings.banners.speed,
+                    }),
+                  ]
+                : []
+            }
+          >
+            <CarouselContent>
+              {storeSettings.banners.items.map((item, idx) => {
+                return (
+                  <CarouselItem key={idx}>
+                    <img
+                      src={item.imageUrl}
+                      alt={item.caption}
+                      className="object-cover w-full h-96"
+                    />
+                  </CarouselItem>
+                )
+              })}
+            </CarouselContent>
+          </Carousel>
+        )}
+        <h2 className="mt-6 mb-6 text-xl">{t('system.products')}</h2>
         <div className="grid grid-cols-1 lg:grid-cols-4 lg:gap-8">
           {products.map((item) => {
             return (
