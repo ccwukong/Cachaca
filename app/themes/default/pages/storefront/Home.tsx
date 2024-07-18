@@ -10,28 +10,18 @@ import {
 import Footer from '~/themes/default/components/ui/storefront/Footer'
 import Header from '~/themes/default/components/ui/storefront/Header'
 import ProductCard from '~/themes/default/components/ui/storefront/ProductCard'
-import {
-  CategoryItem,
-  HomeBannerSettings,
-  ProductPublicInfo,
-  PublicPage,
-  StoreSettings,
-} from '~/types'
+import { CategoryItem, ProductPublicInfo, StoreSettings } from '~/types'
 import type { LocalCartItem } from '~/utils/indexedDB'
 import { idb } from '~/utils/indexedDB'
 
 const Home = ({
   categories,
   storeSettings,
-  banners,
   products,
-  publicPages,
 }: {
   categories: CategoryItem[]
   storeSettings: StoreSettings
-  banners: HomeBannerSettings
   products: ProductPublicInfo[]
-  publicPages: PublicPage[]
 }) => {
   const { t } = useTranslation()
   const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
@@ -70,6 +60,7 @@ const Home = ({
       await idb.cart.delete(id)
     }
   }
+
   return (
     <div className="mx-6 overflow-hidden">
       <Header
@@ -84,17 +75,17 @@ const Home = ({
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
         <Carousel
           plugins={
-            banners.autoplay
+            storeSettings.banners.autoplay
               ? [
                   Autoplay({
-                    delay: banners.speed,
+                    delay: storeSettings.banners.speed,
                   }),
                 ]
               : []
           }
         >
           <CarouselContent>
-            {banners.bannerItems.map((item, idx) => {
+            {storeSettings.banners.items.map((item, idx) => {
               return (
                 <CarouselItem key={idx}>
                   <img
@@ -134,7 +125,10 @@ const Home = ({
           })}
         </div>
       </div>
-      <Footer publicPages={publicPages} copyright={storeSettings.copyright} />
+      <Footer
+        publicPages={storeSettings.publicPages}
+        copyright={storeSettings.copyright}
+      />
     </div>
   )
 }

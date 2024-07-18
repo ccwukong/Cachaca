@@ -577,33 +577,46 @@ export class ProductModel implements CRUDMode<ProductPublicInfo> {
 
 export class StoreConfig {
   public static async getStoreInfo(): Promise<StoreSettings> {
-    const res = await db.select().from(shop)
+    const sdata = await db
+      .select()
+      .from(shop)
+      .leftJoin(currency, eq(shop.baseCurrencyId, currency.id))
 
-    if (!res.length) {
+    if (!sdata.length) {
       throw new NotFoundException()
     }
 
+    const pdata = await db.select().from(page).orderBy(asc(page.order))
+
     return {
-      name: res[0].name,
-      logo: res[0].logo,
-      description: res[0].description || '',
-      
+      name: sdata[0].shop.name,
+      logo: sdata[0].shop.logo,
+      email: sdata[0].shop.email || '',
+      phone: sdata[0].shop.phone || '',
+      address: sdata[0].shop.address || '',
+      city: sdata[0].shop.city || '',
+      state: sdata[0].shop.state || '',
+      country: sdata[0].shop.country || '',
+      zipcode: sdata[0].shop.zipcode || '',
+      description: sdata[0].shop.description || '',
+      currency: {
+        id: sdata[0]?.currency?.id as number,
+        name: sdata[0]?.currency?.name || '',
+        code: sdata[0]?.currency?.code || '',
+        symbol: sdata[0]?.currency?.symbol || '',
+      },
+      publicPages: pdata.map((item) => {
+        return {
+          name: item.name,
+          slug: item.slug,
+          content: item.content,
+          order: item.order,
+        }
+      }),
+      copyright: sdata[0].shop.copyright || '',
+      banners: sdata[0].shop.banners ? JSON.parse(sdata[0].shop.banners) : null,
     }
   }
-
-  public static async getPublicPages(): Promise<PublicPage[]> {
-    const res = await db.select().from(page).orderBy(asc(page.order))
-
-    return res.map((item) => {
-      return {
-        name: item.name,
-        slug: item.slug,
-        content: item.content,
-        order: item.order,
-      }
-    })
-  }
-
   public static async getPublicPageByName(name: string): Promise<PublicPage> {
     const res = await db
       .select()

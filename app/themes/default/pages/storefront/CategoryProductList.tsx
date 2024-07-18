@@ -3,12 +3,7 @@ import { useEffect, useState } from 'react'
 import Footer from '~/themes/default/components/ui/storefront/Footer'
 import Header from '~/themes/default/components/ui/storefront/Header'
 import ProductCard from '~/themes/default/components/ui/storefront/ProductCard'
-import {
-  CategoryItem,
-  ProductPublicInfo,
-  PublicPage,
-  StoreSettings,
-} from '~/types'
+import { CategoryItem, ProductPublicInfo, StoreSettings } from '~/types'
 import type { LocalCartItem } from '~/utils/indexedDB'
 import { idb } from '~/utils/indexedDB'
 
@@ -17,13 +12,11 @@ const CategoryProductList = ({
   storeSettings,
   products,
   category,
-  publicPages,
 }: {
   categories: CategoryItem[]
   products: ProductPublicInfo[]
   storeSettings: StoreSettings
   category: string
-  publicPages: PublicPage[]
 }) => {
   const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
     {},
@@ -92,7 +85,10 @@ const CategoryProductList = ({
           })}
         </div>
       </div>
-      <Footer publicPages={publicPages} copyright={storeSettings.copyright} />
+      <Footer
+        publicPages={storeSettings.publicPages}
+        copyright={storeSettings.copyright}
+      />
     </div>
   )
 }

@@ -59,7 +59,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const { storeSettings, suggestedProducts } = useLoaderData<typeof loader>()
+  const { data } = useLoaderData<typeof loader>()
   return (
     <Suspense fallback={<Skeleton />}>
       <ProductList
@@ -70,8 +70,8 @@ export default function Index() {
           { title: 'Products', url: '/admin/products', order: 4 },
           { title: 'Settings', url: '/admin/settings', order: 5 },
         ]}
-        products={suggestedProducts as ProductPublicInfo[]}
-        storeSettings={storeSettings as StoreSettings}
+        products={data?.suggestedProducts as ProductPublicInfo[]}
+        storeSettings={data?.storeSettings as StoreSettings}
       />
     </Suspense>
   )

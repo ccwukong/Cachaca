@@ -71,12 +71,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const {
-    data: { account },
-  } = useLoaderData<typeof loader>()
+  const { data } = useLoaderData<typeof loader>()
   return (
     <Suspense fallback={<Skeleton />}>
-      <Settings storeLogo="" storeName="Cachaca" account={account} />
+      <Settings storeLogo="" storeName="Cachaca" account={data?.account} />
     </Suspense>
   )
 }

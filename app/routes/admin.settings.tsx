@@ -39,7 +39,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     } else {
       return json({
         error: null,
-        data: { publicPages: await StoreConfig.getPublicPages() },
+        data: { storeInfo: await StoreConfig.getStoreInfo() },
       })
     }
   } catch (e) {
@@ -57,13 +57,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const {
-    data: { publicPages },
-  } = useLoaderData<typeof loader>()
+  const { data } = useLoaderData<typeof loader>()
 
   return (
     <Suspense fallback={<Skeleton />}>
-      <Settings publicPages={publicPages || []} />
+      <Settings storeInfo={data?.storeInfo} />
     </Suspense>
   )
 }

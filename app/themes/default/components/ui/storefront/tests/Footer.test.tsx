@@ -8,7 +8,7 @@ describe('Testing storefront Footer component', () => {
   test('Testing storefront Footer with links', async () => {
     const mockdata: PublicPage[] = (
       (await mocks.getStoreInfo()) as StoreSettings
-    ).pageLinks.map((item) => {
+    ).publicPages.map((item) => {
       return {
         name: item.name,
         slug: item.slug,

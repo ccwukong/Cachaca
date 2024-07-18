@@ -65,7 +65,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const { error, data } = useLoaderData<typeof loader>()
+  const { data } = useLoaderData<typeof loader>()
 
   return (
     <Suspense fallback={<Skeleton />}>

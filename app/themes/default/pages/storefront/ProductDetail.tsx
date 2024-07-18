@@ -11,12 +11,7 @@ import {
 } from '~/themes/default/components/ui/select'
 import Footer from '~/themes/default/components/ui/storefront/Footer'
 import Header from '~/themes/default/components/ui/storefront/Header'
-import {
-  CategoryItem,
-  ProductPublicInfo,
-  PublicPage,
-  StoreSettings,
-} from '~/types'
+import { CategoryItem, ProductPublicInfo, StoreSettings } from '~/types'
 import type { LocalCartItem } from '~/utils/indexedDB'
 import { idb } from '~/utils/indexedDB'
 
@@ -24,12 +19,10 @@ const ProductDetail = ({
   categories,
   storeSettings,
   product,
-  publicPages,
 }: {
   categories: CategoryItem[]
   product: ProductPublicInfo | null
   storeSettings: StoreSettings
-  publicPages: PublicPage[]
 }) => {
   const { t } = useTranslation()
   const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
@@ -151,7 +144,10 @@ const ProductDetail = ({
           </div>
         )}
       </div>
-      <Footer publicPages={publicPages} copyright={storeSettings.copyright} />
+      <Footer
+        publicPages={storeSettings.publicPages}
+        copyright={storeSettings.copyright}
+      />
     </div>
   )
 }

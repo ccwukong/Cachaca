@@ -1,0 +1,1 @@
+ALTER TABLE `shop` ADD `copyright` varchar(50);

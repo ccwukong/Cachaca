@@ -9,12 +9,10 @@ const Page = ({
   categories,
   storeSettings,
   content,
-  publicPages,
 }: {
   categories: CategoryItem[]
   storeSettings: StoreSettings
   content: PublicPage
-  publicPages: PublicPage[]
 }) => {
   const { t } = useTranslation()
   return (
@@ -31,7 +29,10 @@ const Page = ({
         <h2 className="mt-16 mb-6 text-2xl">{content.name}</h2>
         <div dangerouslySetInnerHTML={{ __html: content.content }} />
       </div>
-      <Footer publicPages={publicPages} copyright={storeSettings.copyright} />
+      <Footer
+        publicPages={storeSettings.publicPages}
+        copyright={storeSettings.copyright}
+      />
     </div>
   )
 }

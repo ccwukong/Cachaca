@@ -26,10 +26,8 @@ export const loader = async () => {
       error: null,
       data: {
         categories: await mocks.getCategories(),
-        storeSettings: await mocks.getStoreInfo(),
+        storeSettings: await StoreConfig.getStoreInfo(),
         products: await mocks.getMockProducts(),
-        banners: await mocks.getHomeBanners(),
-        publicPages: await StoreConfig.getPublicPages(),
       },
     })
   } catch (e) {
@@ -52,9 +50,7 @@ export default function Index() {
       <Home
         categories={data?.categories}
         products={data?.products}
-        banners={data?.banners}
         storeSettings={data?.storeSettings || {}}
-        publicPages={data?.publicPages || []}
       />
     </Suspense>
   )

@@ -43,6 +43,13 @@
       "when": 1721274597935,
       "tag": "0005_overrated_star_brand",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1721276061412,
+      "tag": "0006_wandering_namor",
+      "breakpoints": true
     }
   ]
 }

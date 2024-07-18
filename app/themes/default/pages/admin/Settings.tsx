@@ -26,7 +26,7 @@ import {
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
 import { Textarea } from '~/themes/default/components/ui/textarea'
-import { PublicPage } from '~/types'
+import { StoreSettings } from '~/types'
 import {
   Table,
   TableBody,
@@ -36,7 +36,7 @@ import {
   TableRow,
 } from '../../components/ui/table'
 
-const CustomerList = ({ publicPages }: { publicPages: PublicPage[] }) => {
+const CustomerList = ({ storeInfo }: { storeInfo: StoreSettings }) => {
   const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden">
@@ -73,34 +73,114 @@ const CustomerList = ({ publicPages }: { publicPages: PublicPage[] }) => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="store-settings">
-            <Form method="POST" className="space-y-4 w-[480px]">
-              <div className="space-y-2">
-                <Label htmlFor="store-name">{t('system.name')}</Label>
-                <Input type="text" id="store-name" name="store-name" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="store-logo">{t('system.logo')}</Label>
-                <Input type="file" id="store-logo" name="store-logo" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="store-description">
-                  {t('system.description')}
-                </Label>
-                <Textarea id="store-description" name="store-description" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="store-email">{t('system.email')}</Label>
-                <Input type="text" id="store-email" name="store-email" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="store-phone">{t('system.phone')}</Label>
-                <Input type="text" id="store-phone" name="store-phone" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="store-currency">
-                  {t('system.base_currency')}
-                </Label>
-                <Input type="text" id="store-currency" name="store-currency" />
+            <Form method="POST" className="space-y-4">
+              <div className="w-full grid grid-cols-3 gap-6">
+                <div className="space-y-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="store-name">{t('system.name')}</Label>
+                    <Input
+                      type="text"
+                      id="store-name"
+                      name="store-name"
+                      value={storeInfo.name}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="store-logo">{t('system.logo')}</Label>
+                    <Input type="file" id="store-logo" name="store-logo" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="store-description">
+                      {t('system.description')}
+                    </Label>
+                    <Textarea
+                      id="store-description"
+                      name="store-description"
+                      value={storeInfo.description}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="store-email">{t('system.email')}</Label>
+                    <Input
+                      type="text"
+                      id="store-email"
+                      name="store-email"
+                      value={storeInfo.email}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="store-phone">{t('system.phone')}</Label>
+                    <Input
+                      type="text"
+                      id="store-phone"
+                      name="store-phone"
+                      value={storeInfo.phone}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="store-currency">
+                      {t('system.base_currency')}
+                    </Label>
+                    <Input
+                      type="text"
+                      id="store-currency"
+                      name="store-currency"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="store-address">{t('system.address')}</Label>
+                    <Input
+                      type="text"
+                      id="store-address"
+                      name="store-address"
+                      value={storeInfo.address}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="store-city">{t('system.city')}</Label>
+                    <Input
+                      type="text"
+                      id="store-city"
+                      name="store-city"
+                      value={storeInfo.city}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="store-state">{t('system.state')}</Label>
+                    <Input
+                      type="text"
+                      id="store-state"
+                      name="store-state"
+                      value={storeInfo.state}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="store-country">{t('system.country')}</Label>
+                    <Input
+                      type="text"
+                      id="store-country"
+                      name="store-country"
+                      value={storeInfo.country}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="store-zipcode">{t('system.zipcode')}</Label>
+                    <Input
+                      type="text"
+                      id="store-zipcode"
+                      name="store-zipcode"
+                      value={storeInfo.zipcode}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <Label htmlFor="store-banners">{t('system.banners')}</Label>
+                  <Input type="text" id="store-banners" name="store-banners" />
+                </div>
               </div>
               <Button>{t('system.save')}</Button>
             </Form>
@@ -120,9 +200,9 @@ const CustomerList = ({ publicPages }: { publicPages: PublicPage[] }) => {
                   </TableHead>
                 </TableRow>
               </TableHeader>
-              {publicPages.length ? (
+              {storeInfo.publicPages.length ? (
                 <TableBody>
-                  {publicPages.map((item) => (
+                  {storeInfo.publicPages.map((item) => (
                     <TableRow key={item.name}>
                       <TableCell className="font-medium">{item.name}</TableCell>
                       <TableCell>/{item.slug}</TableCell>

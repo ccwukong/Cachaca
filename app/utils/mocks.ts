@@ -1,9 +1,9 @@
-import products from '../../mockdata/products.json'
 import banners from '../../mockdata/banners.json'
-import settings from '../../mockdata/site_settings.json'
 import cart from '../../mockdata/cart.json'
 import categories from '../../mockdata/categories.json'
 import orders from '../../mockdata/orders.json'
+import products from '../../mockdata/products.json'
+import settings from '../../mockdata/site_settings.json'
 
 export function getMockProductById(id: string) {
   const item = products.find((item) => item.id === id || item.slug === id)
@@ -61,7 +61,7 @@ export function getStoreInfo(): Promise<object> {
       logo: settings.logo,
       description: settings.description,
       currency: settings.currency,
-      pageLinks: settings.pageLinks,
+      publicPages: settings.publicPages,
       copyright: settings.copyright,
     }),
   )

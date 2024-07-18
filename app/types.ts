@@ -71,7 +71,7 @@ export type BannerItem = {
 export type HomeBannerSettings = {
   autoplay: boolean
   speed: number
-  bannerItems: BannerItem[]
+  items: BannerItem[]
 }
 
 export type PageLink = {
@@ -83,10 +83,18 @@ export type PageLink = {
 export type StoreSettings = {
   name: string
   logo: string
+  email: string
+  phone: string
+  address: string
+  city: string
+  state: string
+  country: string
+  zipcode: string
   description: string
   currency: Currency
-  pageLinks: PublicPage[]
+  publicPages: PublicPage[]
   copyright: string
+  banners: string
 }
 
 export type CheckoutInfo = {

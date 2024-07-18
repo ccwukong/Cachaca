@@ -124,17 +124,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const {
-    data: { orders, account },
-  } = useLoaderData<typeof loader>()
+  const { data } = useLoaderData<typeof loader>()
 
   return (
     <Suspense fallback={<Skeleton />}>
       <Home
         storeLogo=""
         storeName="Cachaca"
-        orders={orders}
-        account={account}
+        orders={data?.orders}
+        account={data?.account}
       />
     </Suspense>
   )

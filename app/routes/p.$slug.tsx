@@ -76,17 +76,15 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const {
-    data: { categories, storeSettings, page, publicPages },
-  } = useLoaderData<typeof loader>()
+  const { data } = useLoaderData<typeof loader>()
 
   return (
     <Suspense fallback={<Skeleton />}>
       <Page
-        categories={categories}
-        storeSettings={storeSettings}
-        content={page}
-        publicPages={publicPages || []}
+        categories={data?.categories}
+        storeSettings={data?.storeSettings}
+        content={data?.page}
+        publicPages={data?.publicPages || []}
       />
     </Suspense>
   )
