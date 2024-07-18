@@ -43,9 +43,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       error: null,
       data: {
         categories: await mocks.getCategories(),
-        storeSettings: await mocks.getStoreInfo(),
+        storeSettings: await StoreConfig.getStoreInfo(),
         suggestedProducts: await mocks.getMockProducts(),
-        publicPages: await StoreConfig.getPublicPages(),
         shippingFee: '9.9',
         account,
       },
@@ -73,7 +72,6 @@ export default function Index() {
         categories={data?.categories}
         storeSettings={data?.storeSettings}
         suggestedProducts={data?.suggestedProducts}
-        publicPages={data?.publicPages}
         shippingFee={data?.shippingFee}
         allowVoucher={true}
         allowGuestCheckout={true}

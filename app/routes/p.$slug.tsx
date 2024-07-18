@@ -41,8 +41,8 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     if (!(await Installer.isInstalled())) {
       throw new StoreNotInstalledError()
     }
-    const publicPages = await StoreConfig.getPublicPages()
-    const page = publicPages.filter(
+    const storeSettings = await StoreConfig.getStoreInfo()
+    const page = storeSettings.publicPages.filter(
       (item) => item.name.toLowerCase() === (params.slug || '').toLowerCase(),
     )
     if (!page.length) {
@@ -53,9 +53,8 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
       error: null,
       data: {
         categories: await mocks.getCategories(),
-        storeSettings: await mocks.getStoreInfo(),
+        storeSettings,
         page: page[0],
-        publicPages,
       },
     })
   } catch (e) {
@@ -84,7 +83,6 @@ export default function Index() {
         categories={data?.categories}
         storeSettings={data?.storeSettings}
         content={data?.page}
-        publicPages={data?.publicPages || []}
       />
     </Suspense>
   )

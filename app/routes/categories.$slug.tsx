@@ -26,9 +26,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       error: null,
       data: {
         categories: await mocks.getCategories(),
-        storeSettings: await mocks.getStoreInfo(),
+        storeSettings: await StoreConfig.getStoreInfo(),
         products: await mocks.getMockProducts(),
-        publicPages: await StoreConfig.getPublicPages(),
         categoryName: (await mocks.getCategories()).find(
           (item) => item.slug === (request.url.split('/').at(-1) || ''),
         )?.name,
