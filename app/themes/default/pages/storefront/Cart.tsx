@@ -93,6 +93,7 @@ const Cart = ({
         menuItems={categories}
         cartItems={cart}
         updateCartItemHandler={updateCartItemHandler}
+        currency={storeSettings.currency.symbol}
       />
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
         <p className="text-2xl font-light">
@@ -100,9 +101,9 @@ const Cart = ({
         </p>
         <div className="mt-6 grid grid-cols-1 md:grid-cols-5 gap-8">
           <div className="md:col-span-3">
-            {cart.map((item, index) => (
+            {cart.map((item) => (
               <CartItem
-                key={index}
+                key={item.id}
                 id={item.id}
                 slug={item.slug}
                 coverImage={item.coverImage}

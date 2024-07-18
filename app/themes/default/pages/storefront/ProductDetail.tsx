@@ -77,6 +77,7 @@ const ProductDetail = ({
         menuItems={categories}
         cartItems={useLiveQuery(() => idb.cart.toArray()) || []}
         updateCartItemHandler={updateCartItemHandler}
+        currency={storeSettings.currency.symbol}
       />
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
         {product && (

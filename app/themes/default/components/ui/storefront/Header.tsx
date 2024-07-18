@@ -23,6 +23,7 @@ const Header = ({
   menuItems,
   cartItems,
   updateCartItemHandler,
+  currency,
   logoOnly = false,
 }: {
   storeLogo: string
@@ -30,6 +31,7 @@ const Header = ({
   menuItems?: CategoryItem[]
   cartItems?: { [key: string]: string | number }[]
   updateCartItemHandler?: (id: string, quantity: number) => void
+  currency?: string
   logoOnly?: boolean
 }) => {
   const { t } = useTranslation()
@@ -125,7 +127,7 @@ const Header = ({
                             {item.name}
                           </Link>
                         </div>
-                        <div>{`${item.currency}${
+                        <div>{`${currency}${
                           Number(item.quantity) * Number(item.price)
                         }`}</div>
                         <div>

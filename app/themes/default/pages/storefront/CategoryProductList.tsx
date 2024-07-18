@@ -61,6 +61,7 @@ const CategoryProductList = ({
         storeName="Cachaca"
         menuItems={categories}
         cartItems={useLiveQuery(() => idb.cart.toArray()) || []}
+        currency={storeSettings.currency.symbol}
       />
 
       <div className="max-w-screen-xl mx-auto h-auto pt-24">

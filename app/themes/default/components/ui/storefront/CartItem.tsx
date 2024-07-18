@@ -1,4 +1,5 @@
-import { Link, Trash2 } from 'lucide-react'
+import { Link } from '@remix-run/react'
+import { Trash2 } from 'lucide-react'
 import { Input } from '~/themes/default/components/ui/input'
 
 const CartItem = ({
