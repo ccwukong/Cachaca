@@ -5,9 +5,17 @@ import { currency } from './schema'
 import seeddata from './seeddata.json'
 dotenv.config()
 ;(async () => {
-  const connection = await mysql.createConnection(
-    `mysql://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
-  )
+  const connection = await mysql.createConnection({
+    host: process.env.DB_HOST!,
+    user: process.env.DB_USER!,
+    password: process.env.DB_PASS!,
+    database: process.env.DB_NAME!,
+    port: Number(process.env.DB_PORT!),
+    ssl: {
+      ca: process.env.DB_SSL_CA || '',
+      rejectUnauthorized: false,
+    },
+  })
   const db = drizzle(connection)
 
   console.log('Seeding start')
