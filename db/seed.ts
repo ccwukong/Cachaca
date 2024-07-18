@@ -1,9 +1,7 @@
-import * as dotenv from 'dotenv'
 import { drizzle } from 'drizzle-orm/mysql2'
 import mysql from 'mysql2/promise'
 import { currency } from './schema'
 import seeddata from './seeddata.json'
-dotenv.config()
 ;(async () => {
   const connection = await mysql.createConnection({
     host: process.env.DB_HOST!,
