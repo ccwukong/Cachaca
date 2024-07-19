@@ -108,5 +108,7 @@
   "system.edit": "Edit",
   "system.disable": "Disable",
   "system.remove": "Remove",
-  "system.dashboard": "Dashboard"
+  "system.dashboard": "Dashboard",
+  "system.product_categories": "Product categories",
+  "system.product_variants": "Product variants"
 }

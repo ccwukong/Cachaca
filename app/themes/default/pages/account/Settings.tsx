@@ -94,23 +94,11 @@ const Settings = ({
                 {t('system.shipping_address_hint')}
               </p>
               <div className="space-y-2">
-                <Label htmlFor="shipping-address-line-1">
-                  {t('system.address_line_1')}
-                </Label>
+                <Label htmlFor="shipping-address">{t('system.address')}</Label>
                 <Input
                   type="text"
-                  id="shipping-address-line-1"
-                  name="shipping-address-line-1"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="shipping-address-line-2">
-                  {t('system.address_line_2')}
-                </Label>
-                <Input
-                  type="text"
-                  id="shipping-address-line-2"
-                  name="shipping-address-line-2"
+                  id="shipping-address"
+                  name="shipping-address"
                 />
               </div>
               <div className="space-y-2">
@@ -151,23 +139,11 @@ const Settings = ({
                 </span>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="billing-address-line-1">
-                  {t('system.address_line_1')}
-                </Label>
+                <Label htmlFor="billing-address">{t('system.address')}</Label>
                 <Input
                   type="text"
-                  id="billing-address-line-1"
-                  name="billing-address-line-1"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="billing-address-line-2">
-                  {t('system.address_line_2')}
-                </Label>
-                <Input
-                  type="text"
-                  id="billing-address-line-2"
-                  name="billing-address-line-2"
+                  id="billing-address"
+                  name="billing-address"
                 />
               </div>
               <div className="space-y-2">

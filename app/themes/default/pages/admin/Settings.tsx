@@ -72,6 +72,12 @@ const CustomerList = ({
             <TabsTrigger value="account-settings">
               {t('system.account_settings')}
             </TabsTrigger>
+            <TabsTrigger value="product-categories">
+              {t('system.product_categories')}
+            </TabsTrigger>
+            <TabsTrigger value="product-variants">
+              {t('system.product_variants')}
+            </TabsTrigger>
             <TabsTrigger value="public-pages">
               {t('system.public_pages')}
             </TabsTrigger>
@@ -215,8 +221,83 @@ const CustomerList = ({
             </Form>
           </TabsContent>
           <TabsContent value="account-settings">
-            Change your password here.
+            <Tabs defaultValue="account-settings" className="w-full">
+              <TabsList>
+                <TabsTrigger value="account-settings">
+                  {t('system.account_settings')}
+                </TabsTrigger>
+                <TabsTrigger value="change-password">
+                  {t('system.change_password')}
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="account-settings">
+                <Form method="POST" className="space-y-4 w-[480px]">
+                  <div className="space-y-2">
+                    <Label htmlFor="first-name">{t('system.firstname')}</Label>
+                    <Input
+                      type="text"
+                      id="first-name"
+                      name="first-name"
+                      value={account.firstName}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="store-email">{t('system.lastname')}</Label>
+                    <Input
+                      type="text"
+                      id="last-name"
+                      name="last-name"
+                      value={account.lastName}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">{t('system.email')}</Label>
+                    <Input
+                      type="text"
+                      id="email"
+                      name="email"
+                      value={account.email}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">{t('system.phone')}</Label>
+                    <Input
+                      type="text"
+                      id="phone"
+                      name="phone"
+                      value={account.phone}
+                    />
+                  </div>
+                  <Button>{t('system.save')}</Button>
+                </Form>
+              </TabsContent>
+              <TabsContent value="change-password">
+                <Form method="POST" className="space-y-4 w-[480px]">
+                  <div className="space-y-2">
+                    <Label htmlFor="old-password">
+                      {t('system.old_password')}
+                    </Label>
+                    <Input
+                      type="password"
+                      id="old-password"
+                      name="old-password"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="new-password">
+                      {t('system.new_password')}
+                    </Label>
+                    <Input type="text" id="new-password" name="new-password" />
+                  </div>
+                  <Button>{t('system.save')}</Button>
+                </Form>
+              </TabsContent>
+            </Tabs>
           </TabsContent>
+          <TabsContent value="product-categories">
+            Product categories
+          </TabsContent>
+          <TabsContent value="product-variants">Product variants</TabsContent>
           <TabsContent value="public-pages">
             <Table>
               <TableHeader>

@@ -1,10 +1,17 @@
+import { MoreHorizontal } from 'lucide-react'
 import moment from 'moment'
 import { useTranslation } from 'react-i18next'
 import AdminHeader from '~/themes/default/components/ui/admin/Header'
 import { Button } from '~/themes/default/components/ui/button'
 import { CardFooter } from '~/themes/default/components/ui/card'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '~/themes/default/components/ui/dropdown-menu'
 import { Input } from '~/themes/default/components/ui/input'
-import { Switch } from '~/themes/default/components/ui/switch'
 import {
   Table,
   TableBody,
@@ -54,7 +61,7 @@ const CustomerList = ({
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Registered On</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -67,10 +74,29 @@ const CustomerList = ({
                         {moment.unix(item.createdOn).format('DD MMM, YYYY')}
                       </TableCell>
                       <TableCell>
-                        <Switch
-                          checked={item.status === 1}
-                          onCheckedChange={() => {}}
-                        />
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              aria-haspopup="true"
+                              size="icon"
+                              variant="ghost"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                              <span className="sr-only">Toggle menu</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>
+                              {t('system.actions')}
+                            </DropdownMenuLabel>
+                            <DropdownMenuItem>
+                              {t('system.edit')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              {t('system.disable')}
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </TableCell>
                     </TableRow>
                   )
