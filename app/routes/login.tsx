@@ -33,6 +33,8 @@ export const loader = async () => {
       return redirect('/install')
     } else if (e instanceof JWTTokenSecretNotFoundException) {
       // TODO: handle this seperately
+    } else if (e?.code === FatalErrorTypes.DatabaseConnection) {
+      return redirect('/error')
     }
 
     return json({ error: e, data: null })
@@ -73,9 +75,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
   } catch (e) {
     console.error(e) // TODO: replace this with a proper logger
-    if (e?.code === FatalErrorTypes.DatabaseConnection) {
-      return redirect('/error')
-    }
+
     return json({ error: e, data: {} })
   }
 }

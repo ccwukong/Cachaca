@@ -3,6 +3,7 @@
   "system.installation_desc": "The store installation is not yet complete. Please finish the setup by filling out the forms below.",
   "system.install": "Install",
   "system.add_cart": "Add to cart",
+  "system.cart": "Cart",
   "system.my_cart_ph": "My shopping cart ({{no_of_items}})",
   "system.register": "Register",
   "system.login": "Login",

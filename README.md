@@ -34,7 +34,15 @@ The project is developed on top of:
 
 **Note**: This project is still at its very early stage. I'm currently working on the frontend development with all the mock data. No backend services is ready at the moment.
 
-🎯🎯🎯 **[Pending tasks for RC1](docs/tasks.md)** 🎯🎯🎯
+🎯 **[Pending tasks for RC1](docs/tasks.md)**
+
+🐞 **[Common issues and solutions](https://github.com/ccwukong/Cachaca/discussions/11)**
+
+### Store installation
+
+If you start fresh, you will see the **Installation** screen below. Please ensure the store is properly installed by providing the required information for **Store information** and **Admin account**
+
+<img src="docs/install.png" width="600">
 
 ### Demo accounts
 
@@ -74,12 +82,12 @@ Then, you can run the following command:
 docker compose up -d
 ```
 
-The default template of the **.env.dev** file
+The default template of the **.env** file
 
 ```
 DB_HOST=localhost
 DB_PORT=3306
-DB_USER=<database username>
+DB_USER=root
 DB_PASS=<database user password>
 DB_NAME=<database name>
 JWT_TOKEN_SECRET=<a long random string that is used to sign JWT auth token>

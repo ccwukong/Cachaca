@@ -1,4 +1,9 @@
+import dotenv from 'dotenv'
 import { defineConfig } from 'drizzle-kit'
+
+if (!process.env.DB_HOST) {
+  dotenv.config()
+}
 
 export default defineConfig({
   schema: './db/schema.ts',
@@ -11,7 +16,7 @@ export default defineConfig({
     database: process.env.DB_NAME!,
     port: Number(process.env.DB_PORT!),
     ssl: {
-      ca: '/Users/chencheng/Documents/certificate.pem',
+      ca: process.env.DB_SSL_CA || '',
       rejectUnauthorized: false,
     },
   },

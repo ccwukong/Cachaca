@@ -2,6 +2,7 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
+import { useTranslation } from 'react-i18next'
 import StoreContext from '~/contexts/storeContext'
 import { cookie } from '~/cookie'
 import { AddressModel, Installer, StoreConfig } from '~/models'
@@ -16,7 +17,9 @@ import { decode, isValid } from '~/utils/jwt'
 import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'Cart' }]
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { t } = useTranslation()
+  return [{ title: t('system.cart') }]
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

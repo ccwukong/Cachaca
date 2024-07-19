@@ -24,6 +24,24 @@ export const meta: MetaFunction = () => {
   return [{ title: t('system.create_new_account') }]
 }
 
+export const loader = async () => {
+  try {
+    if (!(await Installer.isInstalled())) {
+      throw new StoreNotInstalledError()
+    }
+
+    return json({ error: null, data: {} })
+  } catch (e) {
+    if (e instanceof StoreNotInstalledError) {
+      return redirect('/install')
+    } else if (e?.code === FatalErrorTypes.DatabaseConnection) {
+      return redirect('/error')
+    }
+
+    return json({ error: e, data: null })
+  }
+}
+
 export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     if (!(await Installer.isInstalled())) {
@@ -81,8 +99,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return redirect('/install')
     } else if (e instanceof JWTTokenSecretNotFoundException) {
       //TODO: handle this seperately
-    } else if (e?.code === FatalErrorTypes.DatabaseConnection) {
-      return redirect('/error')
     }
 
     return json({ error: e, data: {} })
