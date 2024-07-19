@@ -2,11 +2,12 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
+import StoreContext from '~/contexts/storeContext'
 import { cookie } from '~/cookie'
 import { AddressModel, Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Cart from '~/themes/default/pages/storefront/Cart'
-import { FatalErrorTypes } from '~/types'
+import { AddressItem, CategoryItem, FatalErrorTypes } from '~/types'
 import {
   JWTTokenSecretNotFoundException,
   StoreNotInstalledError,
@@ -29,7 +30,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }
 
     let account = null
-    let addresses = []
+    let addresses: AddressItem[] = []
     const cookieStr = request.headers.get('Cookie') || ''
 
     if (cookieStr) {
@@ -69,20 +70,25 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const { data } = useLoaderData<typeof loader>()
-  console.log(data.addresses)
+  const loaderData = useLoaderData<typeof loader>()
+
   return (
     <Suspense fallback={<Skeleton />}>
-      <Cart
-        categories={data?.categories}
-        storeSettings={data?.storeSettings}
-        suggestedProducts={data?.suggestedProducts}
-        shippingFee={data?.shippingFee}
-        addresses={data?.addresses}
-        allowVoucher={true}
-        allowGuestCheckout={true}
-        account={data?.account}
-      />
+      <StoreContext.Provider
+        value={{
+          storeSettings: loaderData!.data!.storeSettings,
+          categories: loaderData!.data!.categories as CategoryItem[],
+        }}
+      >
+        <Cart
+          suggestedProducts={loaderData!.data!.suggestedProducts}
+          shippingFee={loaderData!.data!.shippingFee}
+          addresses={loaderData!.data!.addresses}
+          allowVoucher={true}
+          allowGuestCheckout={true}
+          account={loaderData!.data!.account}
+        />
+      </StoreContext.Provider>
     </Suspense>
   )
 }

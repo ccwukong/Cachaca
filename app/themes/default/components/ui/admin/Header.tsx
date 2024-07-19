@@ -1,5 +1,7 @@
 import { Link } from '@remix-run/react'
+import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
+import AdminContext from '~/contexts/adminContext'
 import { Avatar, AvatarFallback } from '~/themes/default/components/ui/avatar'
 import { Button } from '~/themes/default/components/ui/button'
 import {
@@ -11,16 +13,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/themes/default/components/ui/dropdown-menu'
-import { PageLink, UserPublicInfo } from '~/types'
 
-const Header = ({
-  navItems,
-  account,
-}: {
-  navItems: PageLink[]
-  account: UserPublicInfo
-}) => {
+const Header = () => {
   const { t } = useTranslation()
+  const { navItems, account } = useContext(AdminContext)
+
   return (
     <div className="left-0 bg-white border-b fixed w-full flex justify-center z-50">
       <div className="max-w-screen-xl w-full flex h-16 items-center px-4">
@@ -42,39 +39,44 @@ const Header = ({
           <Link to="/" className="text-sm text-slate-600">
             {t('system.go_storefront')}
           </Link>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback>{`${account.firstName
-                    .slice(0, 1)
-                    .toUpperCase()}${account.lastName
-                    .slice(0, 1)
-                    .toUpperCase()}`}</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{`${account.firstName} ${account.lastName}`}</p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    {account.email}
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
+          {account && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="relative h-8 w-8 rounded-full"
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback>{`${account.firstName
+                      .slice(0, 1)
+                      .toUpperCase()}${account.lastName
+                      .slice(0, 1)
+                      .toUpperCase()}`}</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{`${account.firstName} ${account.lastName}`}</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {account.email}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <Link to="/admin/settings">{t('system.settings')}</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Link to="/admin/settings">{t('system.settings')}</Link>
+                  <Link to="/logout">{t('system.logout')}</Link>
                 </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Link to="/logout">{t('system.logout')}</Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
     </div>

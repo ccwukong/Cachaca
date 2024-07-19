@@ -15,21 +15,11 @@ import {
   TableHeader,
   TableRow,
 } from '~/themes/default/components/ui/table'
-import { UserPublicInfo } from '~/types'
 
-const MemberList = ({ account }: { account: UserPublicInfo }) => {
+const MemberList = () => {
   return (
     <div className="mx-6 overflow-hidden">
-      <AdminHeader
-        navItems={[
-          { title: 'Overview', url: '/admin', order: 1 },
-          { title: 'Customers', url: '/admin/customers', order: 2 },
-          { title: 'Orders', url: '/admin/orders', order: 3 },
-          { title: 'Products', url: '/admin/products', order: 4 },
-          { title: 'Settings', url: '/admin/settings', order: 5 },
-        ]}
-        account={account}
-      />
+      <AdminHeader />
 
       <div className="max-w-screen-xl w-full flex-1 space-y-4 p-8 pt-6 mx-auto h-auto mt-16">
         <div className="flex items-center justify-between space-y-2">

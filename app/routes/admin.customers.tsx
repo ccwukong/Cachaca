@@ -7,6 +7,7 @@ import {
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
+import AdminContext from '~/contexts/adminContext'
 import { adminCookie } from '~/cookie'
 import { CustomerModel, UserModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
@@ -80,10 +81,21 @@ export default function Index() {
 
   return (
     <Suspense fallback={<Skeleton />}>
-      <CustomerList
-        customers={loaderData?.data?.customers || []}
-        account={loaderData?.data?.account || {}}
-      />
+      <AdminContext.Provider
+        value={{
+          navItems: [
+            { title: 'Overview', url: '/admin', order: 1 },
+            { title: 'Customers', url: '/admin/customers', order: 2 },
+            { title: 'Orders', url: '/admin/orders', order: 3 },
+            { title: 'Products', url: '/admin/products', order: 4 },
+            { title: 'Settings', url: '/admin/settings', order: 5 },
+          ],
+          account: loaderData!.data!.account,
+          storeSettings: loaderData!.data!.storeSettings,
+        }}
+      >
+        <CustomerList customers={loaderData?.data?.customers || []} />
+      </AdminContext.Provider>
     </Suspense>
   )
 }

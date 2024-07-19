@@ -7,6 +7,7 @@ import {
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
+import CustomerContext from '~/contexts/customerContext'
 import { cookie } from '~/cookie'
 import { CustomerModel, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
@@ -72,13 +73,17 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const { data } = useLoaderData<typeof loader>()
+  const loaderData = useLoaderData<typeof loader>()
   return (
     <Suspense fallback={<Skeleton />}>
-      <Settings
-        account={data?.account}
-        storeSettings={data?.storeSettings || {}}
-      />
+      <CustomerContext.Provider
+        value={{
+          account: loaderData!.data!.account,
+          storeSettings: loaderData!.data!.storeSettings,
+        }}
+      >
+        <Settings />
+      </CustomerContext.Provider>
     </Suspense>
   )
 }

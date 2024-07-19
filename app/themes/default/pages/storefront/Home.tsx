@@ -1,7 +1,8 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import Autoplay from 'embla-carousel-autoplay'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import StoreContext from '~/contexts/storeContext'
 import {
   Carousel,
   CarouselContent,
@@ -10,20 +11,13 @@ import {
 import Footer from '~/themes/default/components/ui/storefront/Footer'
 import Header from '~/themes/default/components/ui/storefront/Header'
 import ProductCard from '~/themes/default/components/ui/storefront/ProductCard'
-import { CategoryItem, ProductPublicInfo, StoreSettings } from '~/types'
+import { ProductPublicInfo } from '~/types'
 import type { LocalCartItem } from '~/utils/indexedDB'
 import { idb } from '~/utils/indexedDB'
 
-const Home = ({
-  categories,
-  storeSettings,
-  products,
-}: {
-  categories: CategoryItem[]
-  storeSettings: StoreSettings
-  products: ProductPublicInfo[]
-}) => {
+const Home = ({ products }: { products: ProductPublicInfo[] }) => {
   const { t } = useTranslation()
+  const { storeSettings } = useContext(StoreContext)
   const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
     {},
   )
@@ -64,16 +58,12 @@ const Home = ({
   return (
     <div className="mx-6 overflow-hidden">
       <Header
-        storeLogo={storeSettings.logo}
-        storeName={storeSettings.name}
-        menuItems={categories}
         cartItems={useLiveQuery(() => idb.cart.toArray()) || []}
         updateCartItemHandler={updateCartItemHandler}
-        currency={storeSettings.currency.symbol}
       />
 
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
-        {storeSettings.banners && (
+        {storeSettings && storeSettings.banners && (
           <Carousel
             className="mb-10"
             plugins={
@@ -110,7 +100,7 @@ const Home = ({
                 coverImage={item.coverImage}
                 title={item.name}
                 link={`/products/${item.slug}`}
-                price={`${storeSettings.currency.symbol}${item.basePrice}`}
+                price={`${storeSettings!.currency.symbol}${item.basePrice}`}
                 onClick={() => {
                   setCartItem({
                     id: item.id,
@@ -120,7 +110,7 @@ const Home = ({
                     price: item.basePrice,
                     quantity: 1,
                     slug: item.slug,
-                    currency: storeSettings.currency.symbol,
+                    currency: storeSettings!.currency.symbol,
                   })
                 }}
               />
@@ -129,8 +119,8 @@ const Home = ({
         </div>
       </div>
       <Footer
-        publicPages={storeSettings.publicPages}
-        copyright={storeSettings?.other?.copyright}
+        publicPages={storeSettings!.publicPages}
+        copyright={storeSettings!.other!.copyright}
       />
     </div>
   )

@@ -21,7 +21,6 @@ import {
   PopoverTrigger,
 } from '~/themes/default/components/ui/popover'
 import { cn } from '~/themes/lib/utils'
-import { PageLink, UserPublicInfo } from '~/types'
 
 const data = [
   {
@@ -74,13 +73,7 @@ const data = [
   },
 ]
 
-const Dashboard = ({
-  navLinks,
-  account,
-}: {
-  navLinks: PageLink[]
-  account: UserPublicInfo
-}) => {
+const Dashboard = () => {
   const { t } = useTranslation()
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(2023, 0, 20),
@@ -89,7 +82,7 @@ const Dashboard = ({
 
   return (
     <div className="mx-6 overflow-hidden">
-      <AdminHeader navItems={navLinks} account={account} />
+      <AdminHeader />
       <div className="max-w-screen-xl w-full flex-1 space-y-4 p-8 pt-6 mx-auto h-auto mt-16">
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">

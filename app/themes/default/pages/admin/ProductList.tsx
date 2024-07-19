@@ -1,6 +1,8 @@
 import { Form } from '@remix-run/react'
 import { MoreHorizontal, WandSparkles } from 'lucide-react'
+import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
+import AdminContext from '~/contexts/adminContext'
 import AdminHeader from '~/themes/default/components/ui/admin/Header'
 import { Button } from '~/themes/default/components/ui/button'
 import { CardFooter } from '~/themes/default/components/ui/card'
@@ -30,28 +32,14 @@ import {
   TableRow,
 } from '~/themes/default/components/ui/table'
 import { Textarea } from '~/themes/default/components/ui/textarea'
-import {
-  PageLink,
-  ProductPublicInfo,
-  StoreSettings,
-  UserPublicInfo,
-} from '~/types'
+import { ProductPublicInfo } from '~/types'
 
-const ProductList = ({
-  navLinks,
-  products,
-  storeSettings,
-  account,
-}: {
-  navLinks: PageLink[]
-  products: ProductPublicInfo[]
-  storeSettings: StoreSettings
-  account: UserPublicInfo
-}) => {
+const ProductList = ({ products }: { products: ProductPublicInfo[] }) => {
   const { t } = useTranslation()
+  const { storeSettings } = useContext(AdminContext)
   return (
     <div className="mx-6 overflow-hidden">
-      <AdminHeader navItems={navLinks} account={account} />
+      <AdminHeader />
 
       <div className="max-w-screen-xl w-full flex-1 space-y-4 p-8 pt-6 mx-auto h-auto mt-16">
         <div className="flex items-center justify-between space-y-2">
@@ -146,7 +134,9 @@ const ProductList = ({
                         <img src={item.coverImage} alt={item.name} />
                       </TableCell>
                       <TableCell>{item.name}</TableCell>
-                      <TableCell>{`${storeSettings.currency.symbol}${item.basePrice}`}</TableCell>
+                      <TableCell>{`${
+                        storeSettings && storeSettings.currency.symbol
+                      }${item.basePrice}`}</TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>

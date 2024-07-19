@@ -1,23 +1,23 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import StoreContext from '~/contexts/storeContext'
 import Footer from '~/themes/default/components/ui/storefront/Footer'
 import Header from '~/themes/default/components/ui/storefront/Header'
 import ProductCard from '~/themes/default/components/ui/storefront/ProductCard'
-import { CategoryItem, ProductPublicInfo, StoreSettings } from '~/types'
+import { ProductPublicInfo } from '~/types'
 import type { LocalCartItem } from '~/utils/indexedDB'
 import { idb } from '~/utils/indexedDB'
 
 const CategoryProductList = ({
-  categories,
-  storeSettings,
   products,
   category,
 }: {
-  categories: CategoryItem[]
   products: ProductPublicInfo[]
-  storeSettings: StoreSettings
   category: string
 }) => {
+  const { t } = useTranslation()
+  const { storeSettings } = useContext(StoreContext)
   const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
     {},
   )
@@ -49,13 +49,7 @@ const CategoryProductList = ({
 
   return (
     <div className="mx-6 overflow-hidden">
-      <Header
-        storeLogo={storeSettings.logo}
-        storeName={storeSettings.name}
-        menuItems={categories}
-        cartItems={useLiveQuery(() => idb.cart.toArray()) || []}
-        currency={storeSettings.currency.symbol}
-      />
+      <Header cartItems={useLiveQuery(() => idb.cart.toArray()) || []} />
 
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
         <h2 className="mb-6 text-xl">{category}</h2>
@@ -67,7 +61,7 @@ const CategoryProductList = ({
                 coverImage={item.coverImage}
                 title={item.name}
                 link={`/products/${item.slug}`}
-                price={`${storeSettings.currency.symbol}${item.basePrice}`}
+                price={`${storeSettings!.currency.symbol}${item.basePrice}`}
                 onClick={() => {
                   setCartItem({
                     id: item.id,
@@ -77,7 +71,7 @@ const CategoryProductList = ({
                     price: item.basePrice,
                     quantity: 1,
                     slug: item.slug,
-                    currency: storeSettings.currency.symbol,
+                    currency: storeSettings!.currency.symbol,
                   })
                 }}
               />
@@ -86,8 +80,8 @@ const CategoryProductList = ({
         </div>
       </div>
       <Footer
-        publicPages={storeSettings.publicPages}
-        copyright={storeSettings?.other?.copyright}
+        publicPages={storeSettings!.publicPages}
+        copyright={storeSettings!.other!.copyright}
       />
     </div>
   )

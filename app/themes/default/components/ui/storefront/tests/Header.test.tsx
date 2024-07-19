@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
-import { CategoryItem } from '~/types'
+import StoreContext from '~/contexts/storeContext'
+import { CategoryItem, StoreSettings } from '~/types'
 import * as mocks from '~/utils/mocks'
 import Header from '../Header'
 
@@ -9,7 +10,7 @@ describe('Testing storefront Header component', () => {
   test('Testing storefront Header without logo image', async () => {
     const user = userEvent.setup()
 
-    const mockdata: CategoryItem[] = (
+    const mockCategories: CategoryItem[] = (
       (await mocks.getCategories()) as CategoryItem[]
     ).map((item) => {
       return {
@@ -20,11 +21,18 @@ describe('Testing storefront Header component', () => {
       }
     })
     render(
-      <Header storeLogo="" storeName="cachaca store" menuItems={mockdata} />,
+      <StoreContext.Provider
+        value={{
+          storeSettings: (await mocks.getStoreInfo()) as StoreSettings,
+          categories: mockCategories,
+        }}
+      >
+        <Header />
+      </StoreContext.Provider>,
       { wrapper: MemoryRouter },
     )
 
-    expect(screen.getByText('cachaca store')).toBeDefined()
+    expect(screen.getByText('Cachaca')).toBeDefined()
     expect(screen.getAllByText('Men')).toBeDefined()
   })
 })

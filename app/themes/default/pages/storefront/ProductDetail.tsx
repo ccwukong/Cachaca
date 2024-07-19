@@ -1,6 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import StoreContext from '~/contexts/storeContext'
 import { Button } from '~/themes/default/components/ui/button'
 import {
   Select,
@@ -11,20 +12,13 @@ import {
 } from '~/themes/default/components/ui/select'
 import Footer from '~/themes/default/components/ui/storefront/Footer'
 import Header from '~/themes/default/components/ui/storefront/Header'
-import { CategoryItem, ProductPublicInfo, StoreSettings } from '~/types'
+import { ProductPublicInfo } from '~/types'
 import type { LocalCartItem } from '~/utils/indexedDB'
 import { idb } from '~/utils/indexedDB'
 
-const ProductDetail = ({
-  categories,
-  storeSettings,
-  product,
-}: {
-  categories: CategoryItem[]
-  product: ProductPublicInfo | null
-  storeSettings: StoreSettings
-}) => {
+const ProductDetail = ({ product }: { product: ProductPublicInfo | null }) => {
   const { t } = useTranslation()
+  const { storeSettings } = useContext(StoreContext)
   const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
     {},
   )
@@ -65,12 +59,8 @@ const ProductDetail = ({
   return (
     <div className="mx-6 overflow-hidden">
       <Header
-        storeLogo={storeSettings.logo}
-        storeName={storeSettings.name}
-        menuItems={categories}
         cartItems={useLiveQuery(() => idb.cart.toArray()) || []}
         updateCartItemHandler={updateCartItemHandler}
-        currency={storeSettings.currency.symbol}
       />
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
         {product && (
@@ -89,7 +79,9 @@ const ProductDetail = ({
             </div>
             <div className="md:col-span-2">
               <p className="text-xl font-light">{product.name}</p>
-              <p className="text-2xl mt-5">{`${storeSettings.currency.symbol}${product.basePrice}`}</p>
+              <p className="text-2xl mt-5">{`${storeSettings!.currency.symbol}${
+                product.basePrice
+              }`}</p>
               <p
                 className="mt-5"
                 dangerouslySetInnerHTML={{ __html: product.description }}
@@ -134,7 +126,7 @@ const ProductDetail = ({
                     price: product.basePrice,
                     quantity: 1,
                     slug: product.slug,
-                    currency: storeSettings.currency.symbol,
+                    currency: storeSettings!.currency.symbol,
                   })
                 }}
               >
@@ -145,8 +137,8 @@ const ProductDetail = ({
         )}
       </div>
       <Footer
-        publicPages={storeSettings.publicPages}
-        copyright={storeSettings?.other?.copyright}
+        publicPages={storeSettings!.publicPages}
+        copyright={storeSettings!.other!.copyright}
       />
     </div>
   )

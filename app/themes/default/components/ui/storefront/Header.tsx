@@ -1,7 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Link } from '@remix-run/react'
 import { Menu, ShoppingCart, UserRound } from 'lucide-react'
+import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
+import StoreContext from '~/contexts/storeContext'
 import {
   Accordion,
   AccordionContent,
@@ -15,26 +17,18 @@ import {
   HoverCardTrigger,
 } from '~/themes/default/components/ui/hover-card'
 import { Input } from '~/themes/default/components/ui/input'
-import { CategoryItem } from '~/types'
 
 const Header = ({
-  storeLogo,
-  storeName,
-  menuItems,
   cartItems,
   updateCartItemHandler,
-  currency,
   logoOnly = false,
 }: {
-  storeLogo: string
-  storeName: string
-  menuItems?: CategoryItem[]
   cartItems?: { [key: string]: string | number }[]
   updateCartItemHandler?: (id: string, quantity: number) => void
-  currency?: string
   logoOnly?: boolean
 }) => {
   const { t } = useTranslation()
+  const { storeSettings, categories } = useContext(StoreContext)
   const subtotal =
     cartItems && cartItems.length
       ? cartItems.reduce(
@@ -47,22 +41,22 @@ const Header = ({
       <div className="items-center max-w-screen-xl mx-auto flex justify-between">
         <div className="ml-6 flex items-center justify-between py-3 md:py-5">
           <Link to="/">
-            {storeLogo ? (
+            {storeSettings?.logo ? (
               <img
-                src={storeLogo}
-                alt={storeName}
+                src={storeSettings.logo}
+                alt={storeSettings.name}
                 className="object-cover h-18 w-32"
               />
             ) : (
-              <h1 className="text-2xl font-bold">{storeName}</h1>
+              <h1 className="text-2xl font-bold">{storeSettings?.name}</h1>
             )}
           </Link>
         </div>
 
-        {menuItems && (
+        {categories && (
           <div className="hidden pb-3 mt-8 md:pb-0 md:mt-0 md:flex-1 md:block">
             <ul className="justify-center items-center space-y-8 md:flex md:space-x-6 md:space-y-0">
-              {menuItems.map((item, idx) => (
+              {categories.map((item, idx) => (
                 <li key={item.id}>
                   <HoverCard openDelay={50} closeDelay={50}>
                     <HoverCardTrigger>
@@ -127,7 +121,7 @@ const Header = ({
                             {item.name}
                           </Link>
                         </div>
-                        <div>{`${currency}${
+                        <div>{`${storeSettings!.currency.symbol}${
                           Number(item.quantity) * Number(item.price)
                         }`}</div>
                         <div>
@@ -153,7 +147,9 @@ const Header = ({
                   <>
                     <div className="flex justify-between mt-3">
                       <div className="font-bold">{t('system.subtotal')}</div>
-                      <div>{`${currency}${subtotal}`}</div>
+                      <div>{`${
+                        storeSettings!.currency.symbol
+                      }${subtotal}`}</div>
                     </div>
                     <div className="mt-5">
                       <Link to="/cart" className="flex justify-end font-bold">
@@ -172,9 +168,9 @@ const Header = ({
           <Menu size={36} className="cursor-pointer md:hidden" />
         </label>
         <div className="left-[-100%] peer-checked:left-0 transition-all duration-500 fixed top-16 h-screen w-[100%] z-50 bg-stone-200 bg-opacity-95 block md:hidden">
-          {menuItems && (
+          {categories && (
             <ul className="justify-center items-center md:flex">
-              {menuItems.map((item, idx) => (
+              {categories.map((item, idx) => (
                 <li key={idx}>
                   <Accordion type="single" collapsible>
                     <AccordionItem value="item-1" className="text-center">

@@ -2,10 +2,11 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
+import StoreContext from '~/contexts/storeContext'
 import { Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import ProductDetail from '~/themes/default/pages/storefront/ProductDetail'
-import { FatalErrorTypes } from '~/types'
+import { CategoryItem, FatalErrorTypes } from '~/types'
 import { StoreNotInstalledError } from '~/utils/exception'
 import * as mocks from '~/utils/mocks'
 
@@ -67,15 +68,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const { data } = useLoaderData<typeof loader>()
+  const loaderData = useLoaderData<typeof loader>()
 
   return (
     <Suspense fallback={<Skeleton />}>
-      <ProductDetail
-        product={data?.product}
-        storeSettings={data?.storeSettings}
-        categories={data?.categories}
-      />
+      <StoreContext.Provider
+        value={{
+          storeSettings: loaderData!.data!.storeSettings,
+          categories: loaderData!.data!.categories as CategoryItem[],
+        }}
+      >
+        <ProductDetail product={loaderData!.data!.product} />
+      </StoreContext.Provider>
     </Suspense>
   )
 }
