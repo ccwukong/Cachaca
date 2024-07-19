@@ -17,6 +17,7 @@ The project is developed on top of:
 
 - [Demo](#demo)
   - [Demo accounts](#demo-accounts)
+  - [Store installation](#store-installation)
 - [Development](#development)
   - [Development environment](#development-environment)
   - [Database](#database)
