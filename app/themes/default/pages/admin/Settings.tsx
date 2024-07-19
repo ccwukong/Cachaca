@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/themes/default/components/ui/select'
+import { Switch } from '~/themes/default/components/ui/switch'
 import {
   Tabs,
   TabsContent,
@@ -185,8 +186,29 @@ const CustomerList = ({
                 </div>
 
                 <div className="space-y-3">
-                  <Label htmlFor="store-banners">{t('system.banners')}</Label>
-                  <Input type="text" id="store-banners" name="store-banners" />
+                  <div className="space-y-2">
+                    <Label htmlFor="store-banner-autoplay">
+                      {t('system.banner_autoplay')}
+                    </Label>
+                    <div>
+                      <Switch
+                        checked={storeSettings.banners?.autoplay}
+                        id="store-banner-autoplay"
+                        name="store-banner-autoplay"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="store-banner-speed">
+                      {t('system.banner_autoplay_speed')}
+                    </Label>
+                    <Input
+                      type="text"
+                      id="store-banner-speed"
+                      name="store-banner-speed"
+                      value={storeSettings.banners?.speed}
+                    />
+                  </div>
                 </div>
               </div>
               <Button>{t('system.save')}</Button>

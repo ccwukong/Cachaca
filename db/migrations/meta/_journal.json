@@ -5,64 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1720790153035,
-      "tag": "0000_daily_jocasta",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1720952130612,
-      "tag": "0001_soft_punisher",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1721036218213,
-      "tag": "0002_silent_drax",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1721116710098,
-      "tag": "0003_small_gladiator",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1721117508918,
-      "tag": "0004_omniscient_iceman",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1721274597935,
-      "tag": "0005_overrated_star_brand",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1721276061412,
-      "tag": "0006_wandering_namor",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "5",
-      "when": 1721300568103,
-      "tag": "0007_strange_exiles",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "5",
-      "when": 1721357496937,
-      "tag": "0008_useful_maddog",
+      "when": 1721361218491,
+      "tag": "0000_long_trish_tilby",
       "breakpoints": true
     }
   ]

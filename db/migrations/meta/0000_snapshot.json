@@ -1,9 +1,39 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "408f356f-a3db-4a8f-8deb-7f49d68664a8",
+  "id": "a29674f9-c65e-4e55-b20f-eea7fe7bce71",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "api": {
+      "name": "api",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "config": {
+          "name": "config",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "api_id": {
+          "name": "api_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "checkout": {
       "name": "checkout",
       "columns": {
@@ -415,16 +445,9 @@
           "notNull": true,
           "autoincrement": false
         },
-        "address_line_1": {
-          "name": "address_line_1",
-          "type": "varchar(120)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "address_line_2": {
-          "name": "address_line_2",
-          "type": "varchar(120)",
+        "address": {
+          "name": "address",
+          "type": "varchar(250)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -459,7 +482,7 @@
         },
         "type": {
           "name": "type",
-          "type": "varchar(10)",
+          "type": "tinyint",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -546,14 +569,14 @@
         },
         "payment_status": {
           "name": "payment_status",
-          "type": "varchar(20)",
+          "type": "tinyint",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "shipping_status": {
           "name": "shipping_status",
-          "type": "varchar(20)",
+          "type": "tinyint",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -574,63 +597,14 @@
         },
         "shipping_method": {
           "name": "shipping_method",
-          "type": "varchar(30)",
+          "type": "tinyint",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "shipping_cost": {
-          "name": "shipping_cost",
+        "shipping_fee": {
+          "name": "shipping_fee",
           "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "tax": {
-          "name": "tax",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "discount": {
-          "name": "discount",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "note": {
-          "name": "note",
-          "type": "varchar(250)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "payment_method": {
-          "name": "payment_method",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "payment_scheme": {
-          "name": "payment_scheme",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "payment_instrument": {
-          "name": "payment_instrument",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "payment_reference": {
-          "name": "payment_reference",
-          "type": "varchar(60)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -644,6 +618,69 @@
         },
         "shipping_tracking": {
           "name": "shipping_tracking",
+          "type": "varchar(60)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "tax": {
+          "name": "tax",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "tax_rate": {
+          "name": "tax_rate",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "discount": {
+          "name": "discount",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "voucher": {
+          "name": "voucher",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "note": {
+          "name": "note",
+          "type": "varchar(250)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payment_method": {
+          "name": "payment_method",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payment_scheme": {
+          "name": "payment_scheme",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payment_instrument": {
+          "name": "payment_instrument",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payment_reference": {
+          "name": "payment_reference",
           "type": "varchar(60)",
           "primaryKey": false,
           "notNull": true,
@@ -717,14 +754,14 @@
       "columns": {
         "name": {
           "name": "name",
-          "type": "varchar(60)",
+          "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "slug": {
           "name": "slug",
-          "type": "varchar(60)",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -741,20 +778,6 @@
           "type": "tinyint",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
-        },
-        "created_on": {
-          "name": "created_on",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "updated_on": {
-          "name": "updated_on",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": false,
           "autoincrement": false
         },
         "status": {
@@ -775,14 +798,7 @@
           ]
         }
       },
-      "uniqueConstraints": {
-        "page_slug_unique": {
-          "name": "page_slug_unique",
-          "columns": [
-            "slug"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "product": {
       "name": "product",
@@ -923,6 +939,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "status": {
           "name": "status",
           "type": "tinyint",
@@ -941,7 +964,14 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "product_category_slug_unique": {
+          "name": "product_category_slug_unique",
+          "columns": [
+            "slug"
+          ]
+        }
+      }
     },
     "product_image": {
       "name": "product_image",
@@ -1019,6 +1049,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "category_id": {
           "name": "category_id",
           "type": "varchar(36)",
@@ -1052,7 +1089,14 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "product_subcategory_slug_unique": {
+          "name": "product_subcategory_slug_unique",
+          "columns": [
+            "slug"
+          ]
+        }
+      }
     },
     "product_variant": {
       "name": "product_variant",
@@ -1223,44 +1267,9 @@
           "notNull": false,
           "autoincrement": false
         },
-        "address_line_1": {
-          "name": "address_line_1",
-          "type": "varchar(120)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "address_line_2": {
-          "name": "address_line_2",
-          "type": "varchar(120)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "city": {
-          "name": "city",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "state": {
-          "name": "state",
-          "type": "varchar(60)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "country": {
-          "name": "country",
-          "type": "varchar(60)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "zipcode": {
-          "name": "zipcode",
-          "type": "varchar(10)",
+        "address": {
+          "name": "address",
+          "type": "json",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -1279,30 +1288,16 @@
           "notNull": false,
           "autoincrement": false
         },
-        "created_by": {
-          "name": "created_by",
-          "type": "varchar(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "created_on": {
-          "name": "created_on",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "updated_by": {
-          "name": "updated_by",
-          "type": "varchar(36)",
+        "banners": {
+          "name": "banners",
+          "type": "json",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "updated_on": {
-          "name": "updated_on",
-          "type": "int",
+        "other": {
+          "name": "other",
+          "type": "json",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false

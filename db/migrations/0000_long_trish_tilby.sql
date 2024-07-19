@@ -1,3 +1,9 @@
+CREATE TABLE `api` (
+	`id` tinyint NOT NULL,
+	`config` varchar(500) NOT NULL,
+	CONSTRAINT `api_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
 CREATE TABLE `checkout` (
 	`id` varchar(36) NOT NULL,
 	`customer_id` varchar(36),
@@ -63,13 +69,12 @@ CREATE TABLE `customer` (
 CREATE TABLE `customer_address` (
 	`id` varchar(36) NOT NULL,
 	`customer_id` varchar(36) NOT NULL,
-	`address_line_1` varchar(120),
-	`address_line_2` varchar(120),
+	`address` varchar(250),
 	`city` varchar(50),
 	`state` varchar(60),
 	`country` varchar(60),
 	`zipcode` varchar(10),
-	`type` varchar(10) NOT NULL,
+	`type` tinyint NOT NULL,
 	`created_on` int NOT NULL,
 	`updated_on` int,
 	`status` tinyint NOT NULL,
@@ -82,21 +87,23 @@ CREATE TABLE `order` (
 	`checkout_id` varchar(36) NOT NULL,
 	`customer_id` varchar(36) NOT NULL,
 	`currency_id` tinyint NOT NULL,
-	`payment_status` varchar(20) NOT NULL,
-	`shipping_status` varchar(20) NOT NULL,
+	`payment_status` tinyint NOT NULL,
+	`shipping_status` tinyint NOT NULL,
 	`shipping_address` varchar(160) NOT NULL,
 	`billing_address` varchar(160) NOT NULL,
-	`shipping_method` varchar(30) NOT NULL,
-	`shipping_cost` varchar(20) NOT NULL,
-	`tax` varchar(20) NOT NULL,
-	`discount` varchar(20) NOT NULL,
-	`note` varchar(250) NOT NULL,
-	`payment_method` varchar(20) NOT NULL,
-	`payment_scheme` varchar(20) NOT NULL,
-	`payment_instrument` varchar(20) NOT NULL,
-	`payment_reference` varchar(60) NOT NULL,
+	`shipping_method` tinyint NOT NULL,
+	`shipping_fee` varchar(20) NOT NULL,
 	`shipping_reference` varchar(60) NOT NULL,
 	`shipping_tracking` varchar(60) NOT NULL,
+	`tax` varchar(20) NOT NULL,
+	`tax_rate` varchar(20) NOT NULL,
+	`discount` varchar(20) NOT NULL,
+	`voucher` varchar(50) NOT NULL,
+	`note` varchar(250) NOT NULL,
+	`payment_method` tinyint NOT NULL,
+	`payment_scheme` tinyint NOT NULL,
+	`payment_instrument` varchar(20) NOT NULL,
+	`payment_reference` varchar(60) NOT NULL,
 	`created_by` varchar(36) NOT NULL,
 	`created_on` int NOT NULL,
 	`updated_by` varchar(36),
@@ -106,15 +113,12 @@ CREATE TABLE `order` (
 );
 --> statement-breakpoint
 CREATE TABLE `page` (
-	`name` varchar(60) NOT NULL,
-	`slug` varchar(60) NOT NULL,
+	`name` varchar(50) NOT NULL,
+	`slug` varchar(100) NOT NULL,
 	`content` text NOT NULL,
 	`order` tinyint NOT NULL,
-	`created_on` int NOT NULL,
-	`updated_on` int,
 	`status` tinyint NOT NULL,
-	CONSTRAINT `page_name` PRIMARY KEY(`name`),
-	CONSTRAINT `page_slug_unique` UNIQUE(`slug`)
+	CONSTRAINT `page_name` PRIMARY KEY(`name`)
 );
 --> statement-breakpoint
 CREATE TABLE `product` (
@@ -138,8 +142,10 @@ CREATE TABLE `product` (
 CREATE TABLE `product_category` (
 	`id` varchar(36) NOT NULL,
 	`name` varchar(60) NOT NULL,
+	`slug` varchar(100) NOT NULL,
 	`status` tinyint NOT NULL,
-	CONSTRAINT `product_category_id` PRIMARY KEY(`id`)
+	CONSTRAINT `product_category_id` PRIMARY KEY(`id`),
+	CONSTRAINT `product_category_slug_unique` UNIQUE(`slug`)
 );
 --> statement-breakpoint
 CREATE TABLE `product_image` (
@@ -154,9 +160,11 @@ CREATE TABLE `product_image` (
 CREATE TABLE `product_subcategory` (
 	`id` varchar(36) NOT NULL,
 	`name` varchar(60) NOT NULL,
+	`slug` varchar(100) NOT NULL,
 	`category_id` varchar(36),
 	`status` tinyint NOT NULL,
-	CONSTRAINT `product_subcategory_id` PRIMARY KEY(`id`)
+	CONSTRAINT `product_subcategory_id` PRIMARY KEY(`id`),
+	CONSTRAINT `product_subcategory_slug_unique` UNIQUE(`slug`)
 );
 --> statement-breakpoint
 CREATE TABLE `product_variant` (
@@ -185,18 +193,11 @@ CREATE TABLE `shop` (
 	`logo` varchar(255) NOT NULL,
 	`email` varchar(60),
 	`phone` varchar(30),
-	`address_line_1` varchar(120),
-	`address_line_2` varchar(120),
-	`city` varchar(50),
-	`state` varchar(60),
-	`country` varchar(60),
-	`zipcode` varchar(10),
+	`address` json,
 	`base_currency_id` tinyint NOT NULL,
 	`description` varchar(500),
-	`created_by` varchar(36) NOT NULL,
-	`created_on` int NOT NULL,
-	`updated_by` varchar(36),
-	`updated_on` int,
+	`banners` json,
+	`other` json,
 	`status` tinyint NOT NULL,
 	CONSTRAINT `shop_name` PRIMARY KEY(`name`)
 );
