@@ -3,14 +3,15 @@ import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { adminCookie } from '~/cookie'
+import { UserModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import ProductList from '~/themes/default/pages/admin/ProductList'
-import { FatalErrorTypes, ProductPublicInfo, StoreSettings } from '~/types'
+import { FatalErrorTypes } from '~/types'
 import {
   JWTTokenSecretNotFoundException,
   UnAuthenticatedException,
 } from '~/utils/exception'
-import { isValid } from '~/utils/jwt'
+import { decode, isValid } from '~/utils/jwt'
 import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction = () => {
@@ -33,6 +34,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     if (!(await isValid(accessToken, process.env.JWT_TOKEN_SECRET))) {
       throw new UnAuthenticatedException()
     } else {
+      const payload = (await decode(
+        accessToken,
+        process.env.JWT_TOKEN_SECRET,
+      )) as {
+        id: string
+        firstName: string
+        lastName: string
+        email: string
+      }
+
+      const account = await new UserModel().find(payload.id)
+
       return json({
         error: null,
         data: {
@@ -41,6 +54,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
           items: await mocks.getCart(),
           suggestedProducts: await mocks.getMockProducts(),
           shippingFee: '9.9',
+          account,
         },
       })
     }
@@ -59,7 +73,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const { data } = useLoaderData<typeof loader>()
+  const loaderData = useLoaderData<typeof loader>()
   return (
     <Suspense fallback={<Skeleton />}>
       <ProductList
@@ -70,8 +84,9 @@ export default function Index() {
           { title: 'Products', url: '/admin/products', order: 4 },
           { title: 'Settings', url: '/admin/settings', order: 5 },
         ]}
-        products={data?.suggestedProducts as ProductPublicInfo[]}
-        storeSettings={data?.storeSettings as StoreSettings}
+        products={loaderData?.data?.suggestedProducts}
+        storeSettings={loaderData?.data?.storeSettings}
+        account={loaderData?.data?.account}
       />
     </Suspense>
   )

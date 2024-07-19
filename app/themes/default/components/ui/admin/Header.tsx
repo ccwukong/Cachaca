@@ -11,9 +11,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/themes/default/components/ui/dropdown-menu'
-import { PageLink } from '~/types'
+import { PageLink, UserPublicInfo } from '~/types'
 
-const Header = ({ navItems }: { navItems: PageLink[] }) => {
+const Header = ({
+  navItems,
+  account,
+}: {
+  navItems: PageLink[]
+  account: UserPublicInfo
+}) => {
   const { t } = useTranslation()
   return (
     <div className="left-0 bg-white border-b fixed w-full flex justify-center z-50">
@@ -40,22 +46,28 @@ const Header = ({ navItems }: { navItems: PageLink[] }) => {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback>SC</AvatarFallback>
+                  <AvatarFallback>{`${account.firstName
+                    .slice(0, 1)
+                    .toUpperCase()}${account.lastName
+                    .slice(0, 1)
+                    .toUpperCase()}`}</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">John Doe</p>
+                  <p className="text-sm font-medium leading-none">{`${account.firstName} ${account.lastName}`}</p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    m@example.com
+                    {account.email}
                   </p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem>{t('system.settings')}</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/admin/settings">{t('system.settings')}</Link>
+                </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem>

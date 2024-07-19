@@ -1,9 +1,10 @@
 import type { MetaFunction } from '@remix-run/node'
 import { json, LoaderFunctionArgs, redirect } from '@remix-run/node'
+import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { adminCookie } from '~/cookie'
-import { Installer } from '~/models'
+import { Installer, UserModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Dashboard from '~/themes/default/pages/admin/Dashboard'
 import { FatalErrorTypes, Role } from '~/types'
@@ -82,7 +83,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         })
       }
     } else {
-      return json({ error: null, data: {} })
+      const payload = (await decode(
+        accessToken,
+        process.env.JWT_TOKEN_SECRET,
+      )) as {
+        id: string
+        firstName: string
+        lastName: string
+        email: string
+      }
+
+      const account = await new UserModel().find(payload.id)
+      return json({ error: null, data: { account } })
     }
   } catch (e) {
     console.error(e) // TODO: replace this with a proper logger
@@ -104,7 +116,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  // const { data } = useLoaderData<typeof loader>()
+  const { data } = useLoaderData<typeof loader>()
 
   return (
     <Suspense fallback={<Skeleton />}>
@@ -116,6 +128,7 @@ export default function Index() {
           { title: 'Products', url: '/admin/products', order: 4 },
           { title: 'Settings', url: '/admin/settings', order: 5 },
         ]}
+        account={data?.account}
       />
     </Suspense>
   )

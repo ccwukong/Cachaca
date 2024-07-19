@@ -8,7 +8,7 @@ import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { adminCookie } from '~/cookie'
-import { CustomerModel } from '~/models'
+import { CustomerModel, UserModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import CustomerList from '~/themes/default/pages/admin/CustomerList'
 import { FatalErrorTypes } from '~/types'
@@ -16,7 +16,7 @@ import {
   JWTTokenSecretNotFoundException,
   UnAuthenticatedException,
 } from '~/utils/exception'
-import { isValid } from '~/utils/jwt'
+import { decode, isValid } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -46,7 +46,20 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         Number(page) < 1 ? 0 : Number(page) - 1,
         Number(size) < 1 ? 1 : Number(size),
       )
-      return json({ error: null, data: customers })
+
+      const payload = (await decode(
+        accessToken,
+        process.env.JWT_TOKEN_SECRET,
+      )) as {
+        id: string
+        firstName: string
+        lastName: string
+        email: string
+      }
+
+      const account = await new UserModel().find(payload.id)
+
+      return json({ error: null, data: { customers, account } })
     }
   } catch (e) {
     console.error(e) // TODO: replace this with a proper logger
@@ -63,11 +76,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const { data } = useLoaderData<typeof loader>()
+  const loaderData = useLoaderData<typeof loader>()
 
   return (
     <Suspense fallback={<Skeleton />}>
-      <CustomerList customers={data || []} />
+      <CustomerList
+        customers={loaderData?.data?.customers || []}
+        account={loaderData?.data?.account || {}}
+      />
     </Suspense>
   )
 }

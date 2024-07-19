@@ -4,8 +4,10 @@ import {
   redirect,
   type MetaFunction,
 } from '@remix-run/node'
+import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { adminCookie } from '~/cookie'
+import { UserModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import MemberList from '~/themes/default/pages/admin/MemberList'
 import { FatalErrorTypes } from '~/types'
@@ -13,7 +15,7 @@ import {
   JWTTokenSecretNotFoundException,
   UnAuthenticatedException,
 } from '~/utils/exception'
-import { isValid } from '~/utils/jwt'
+import { decode, isValid } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Admin Dashboard - Store members' }]
@@ -35,7 +37,19 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     if (!(await isValid(accessToken, process.env.JWT_TOKEN_SECRET))) {
       throw new UnAuthenticatedException()
     } else {
-      return json({ error: null, data: {} })
+      const payload = (await decode(
+        accessToken,
+        process.env.JWT_TOKEN_SECRET,
+      )) as {
+        id: string
+        firstName: string
+        lastName: string
+        email: string
+      }
+
+      const account = await new UserModel().find(payload.id)
+
+      return json({ error: null, data: { account } })
     }
   } catch (e) {
     console.error(e) // TODO: replace this with a proper logger
@@ -52,9 +66,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
+  const loaderData = useLoaderData<typeof loader>()
   return (
     <Suspense fallback={<Skeleton />}>
-      <MemberList />
+      <MemberList account={loaderData?.data?.account || {}} />
     </Suspense>
   )
 }

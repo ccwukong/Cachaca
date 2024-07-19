@@ -12,10 +12,16 @@ import {
   TableHeader,
   TableRow,
 } from '~/themes/default/components/ui/table'
-import { UserPublicInfo } from '~/types'
+import { UserPublicInfo, UserPublicInfo } from '~/types'
 import { CardFooter } from '../../components/ui/card'
 
-const CustomerList = ({ customers }: { customers: UserPublicInfo[] }) => {
+const CustomerList = ({
+  customers,
+  account,
+}: {
+  customers: UserPublicInfo[]
+  account: UserPublicInfo
+}) => {
   const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden">
@@ -27,6 +33,7 @@ const CustomerList = ({ customers }: { customers: UserPublicInfo[] }) => {
           { title: 'Products', url: '/admin/products', order: 4 },
           { title: 'Settings', url: '/admin/settings', order: 5 },
         ]}
+        account={account}
       />
 
       <div className="max-w-screen-xl w-full flex-1 space-y-4 p-8 pt-6 mx-auto h-auto mt-16">

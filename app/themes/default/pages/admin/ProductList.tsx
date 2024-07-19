@@ -23,21 +23,28 @@ import {
   TableRow,
 } from '~/themes/default/components/ui/table'
 import { Textarea } from '~/themes/default/components/ui/textarea'
-import { PageLink, ProductPublicInfo, StoreSettings } from '~/types'
+import {
+  PageLink,
+  ProductPublicInfo,
+  StoreSettings,
+  UserPublicInfo,
+} from '~/types'
 
 const ProductList = ({
   navLinks,
   products,
   storeSettings,
+  account,
 }: {
   navLinks: PageLink[]
   products: ProductPublicInfo[]
   storeSettings: StoreSettings
+  account: UserPublicInfo
 }) => {
   const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden">
-      <AdminHeader navItems={navLinks} />
+      <AdminHeader navItems={navLinks} account={account} />
 
       <div className="max-w-screen-xl w-full flex-1 space-y-4 p-8 pt-6 mx-auto h-auto mt-16">
         <div className="flex items-center justify-between space-y-2">

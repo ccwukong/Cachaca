@@ -15,8 +15,9 @@ import {
   TableHeader,
   TableRow,
 } from '~/themes/default/components/ui/table'
+import { UserPublicInfo } from '~/types'
 
-const OrderList = () => {
+const OrderList = ({ account }: { account: UserPublicInfo }) => {
   return (
     <div className="mx-6 overflow-hidden">
       <AdminHeader
@@ -27,6 +28,7 @@ const OrderList = () => {
           { title: 'Products', url: '/admin/products', order: 4 },
           { title: 'Settings', url: '/admin/settings', order: 5 },
         ]}
+        account={account}
       />
 
       <div className="max-w-screen-xl w-full flex-1 space-y-4 p-8 pt-6 mx-auto h-auto mt-16">

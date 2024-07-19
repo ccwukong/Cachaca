@@ -7,7 +7,7 @@ import {
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { adminCookie } from '~/cookie'
-import { StoreConfig } from '~/models'
+import { StoreConfig, UserModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Settings from '~/themes/default/pages/admin/Settings'
 import { FatalErrorTypes } from '~/types'
@@ -15,7 +15,7 @@ import {
   JWTTokenSecretNotFoundException,
   UnAuthenticatedException,
 } from '~/utils/exception'
-import { isValid } from '~/utils/jwt'
+import { decode, isValid } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Admin Dashboard - Settings' }]
@@ -37,9 +37,21 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     if (!(await isValid(accessToken, process.env.JWT_TOKEN_SECRET))) {
       throw new UnAuthenticatedException()
     } else {
+      const payload = (await decode(
+        accessToken,
+        process.env.JWT_TOKEN_SECRET,
+      )) as {
+        id: string
+        firstName: string
+        lastName: string
+        email: string
+      }
+
+      const account = await new UserModel().find(payload.id)
+
       return json({
         error: null,
-        data: { storeSettings: await StoreConfig.getStoreInfo() },
+        data: { storeSettings: await StoreConfig.getStoreInfo(), account },
       })
     }
   } catch (e) {
@@ -57,11 +69,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const { data } = useLoaderData<typeof loader>()
+  const loaderData = useLoaderData<typeof loader>()
 
   return (
     <Suspense fallback={<Skeleton />}>
-      <Settings storeSettings={data?.storeSettings} />
+      <Settings
+        storeSettings={loaderData?.data?.storeSettings}
+        account={loaderData?.data?.account}
+      />
     </Suspense>
   )
 }

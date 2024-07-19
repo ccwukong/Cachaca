@@ -26,7 +26,7 @@ import {
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
 import { Textarea } from '~/themes/default/components/ui/textarea'
-import { StoreSettings } from '~/types'
+import { StoreSettings, UserPublicInfo } from '~/types'
 import {
   Table,
   TableBody,
@@ -36,7 +36,13 @@ import {
   TableRow,
 } from '../../components/ui/table'
 
-const CustomerList = ({ storeSettings }: { storeSettings: StoreSettings }) => {
+const CustomerList = ({
+  storeSettings,
+  account,
+}: {
+  storeSettings: StoreSettings
+  account: UserPublicInfo
+}) => {
   const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden">
@@ -48,6 +54,7 @@ const CustomerList = ({ storeSettings }: { storeSettings: StoreSettings }) => {
           { title: 'Products', url: '/admin/products', order: 4 },
           { title: 'Settings', url: '/admin/settings', order: 5 },
         ]}
+        account={account}
       />
 
       <div className="max-w-screen-xl w-full flex-1 space-y-4 p-8 pt-6 mx-auto h-auto mt-16">
