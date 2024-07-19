@@ -2,6 +2,7 @@ import moment from 'moment'
 import { useTranslation } from 'react-i18next'
 import AdminHeader from '~/themes/default/components/ui/admin/Header'
 import { Button } from '~/themes/default/components/ui/button'
+import { CardFooter } from '~/themes/default/components/ui/card'
 import { Input } from '~/themes/default/components/ui/input'
 import { Switch } from '~/themes/default/components/ui/switch'
 import {
@@ -12,8 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '~/themes/default/components/ui/table'
-import { UserPublicInfo, UserPublicInfo } from '~/types'
-import { CardFooter } from '../../components/ui/card'
+import { UserPublicInfo } from '~/types'
 
 const CustomerList = ({
   customers,

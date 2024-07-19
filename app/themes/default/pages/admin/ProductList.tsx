@@ -1,8 +1,9 @@
 import { Form } from '@remix-run/react'
-import { WandSparkles } from 'lucide-react'
+import { MoreHorizontal, WandSparkles } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import AdminHeader from '~/themes/default/components/ui/admin/Header'
 import { Button } from '~/themes/default/components/ui/button'
+import { CardFooter } from '~/themes/default/components/ui/card'
 import {
   Dialog,
   DialogContent,
@@ -11,9 +12,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '~/themes/default/components/ui/dialog'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '~/themes/default/components/ui/dropdown-menu'
 import { Input } from '~/themes/default/components/ui/input'
 import { Label } from '~/themes/default/components/ui/label'
-import { Switch } from '~/themes/default/components/ui/switch'
 import {
   Table,
   TableBody,
@@ -122,32 +129,61 @@ const ProductList = ({
           </div>
         </div>
         {products ? (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead></TableHead>
-                <TableHead>{t('system.name')}</TableHead>
-                <TableHead>{t('system.base_price')}</TableHead>
-                <TableHead>{t('system.status')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {products.map((item) => {
-                return (
-                  <TableRow key={item.id}>
-                    <TableCell className="w-[72px]">
-                      <img src={item.coverImage} alt={item.name} />
-                    </TableCell>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{`${storeSettings.currency.symbol}${item.basePrice}`}</TableCell>
-                    <TableCell>
-                      <Switch />
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table>
+          <>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead></TableHead>
+                  <TableHead>{t('system.name')}</TableHead>
+                  <TableHead>{t('system.base_price')}</TableHead>
+                  <TableHead></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {products.map((item) => {
+                  return (
+                    <TableRow key={item.id}>
+                      <TableCell className="w-[72px]">
+                        <img src={item.coverImage} alt={item.name} />
+                      </TableCell>
+                      <TableCell>{item.name}</TableCell>
+                      <TableCell>{`${storeSettings.currency.symbol}${item.basePrice}`}</TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              aria-haspopup="true"
+                              size="icon"
+                              variant="ghost"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                              <span className="sr-only">Toggle menu</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>
+                              {t('system.actions')}
+                            </DropdownMenuLabel>
+                            <DropdownMenuItem>
+                              {t('system.edit')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              {t('system.disable')}
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+            </Table>
+            <CardFooter>
+              <div className="text-xs text-muted-foreground">
+                Showing <strong>1-10</strong> of <strong>32</strong> records
+              </div>
+            </CardFooter>
+          </>
         ) : (
           <div className="text-center">{t('system.no_records_found')}</div>
         )}

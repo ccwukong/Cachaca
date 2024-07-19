@@ -3,7 +3,7 @@ import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { adminCookie } from '~/cookie'
-import { UserModel } from '~/models'
+import { StoreConfig, UserModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import ProductList from '~/themes/default/pages/admin/ProductList'
 import { FatalErrorTypes } from '~/types'
@@ -50,7 +50,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         error: null,
         data: {
           categories: await mocks.getCategories(),
-          storeSettings: await mocks.getStoreInfo(),
+          storeSettings: await StoreConfig.getStoreInfo(),
           items: await mocks.getCart(),
           suggestedProducts: await mocks.getMockProducts(),
           shippingFee: '9.9',
@@ -84,9 +84,9 @@ export default function Index() {
           { title: 'Products', url: '/admin/products', order: 4 },
           { title: 'Settings', url: '/admin/settings', order: 5 },
         ]}
-        products={loaderData?.data?.suggestedProducts}
-        storeSettings={loaderData?.data?.storeSettings}
-        account={loaderData?.data?.account}
+        products={loaderData!.data!.suggestedProducts}
+        storeSettings={loaderData!.data!.storeSettings}
+        account={loaderData!.data!.account}
       />
     </Suspense>
   )

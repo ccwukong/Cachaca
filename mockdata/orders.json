@@ -13,6 +13,11 @@
     "shippingStatus": "Shipped",
     "paymentStatus": "Paid",
     "paymentMethod": "Credit card",
+    "customer": {
+      "id": "7d7d7d7d-7d7d-7d7d-7d7d-7d7d7d7d7d7d",
+      "firstName": "John",
+      "lastName": "Doe"
+    },
     "items": [
       {
         "id": "93b400e5-e708-434e-9543-3047619bccf6",
@@ -46,6 +51,11 @@
     "shippingStatus": "Pending",
     "paymentStatus": "Paid",
     "paymentMethod": "Credit card",
+    "customer": {
+      "id": "7d7d7d7d-7d7d-7d7d-7d7d-7d7d7d7d7d7d",
+      "firstName": "John",
+      "lastName": "Doe"
+    },
     "items": [
       {
         "id": "93b400e5-e708-434e-9543-3047619bccf6",

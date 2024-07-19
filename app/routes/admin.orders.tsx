@@ -7,15 +7,16 @@ import {
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { adminCookie } from '~/cookie'
-import { UserModel } from '~/models'
+import { StoreConfig, UserModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import OrderList from '~/themes/default/pages/admin/OrderList'
-import { FatalErrorTypes } from '~/types'
+import { FatalErrorTypes, OrderItem } from '~/types'
 import {
   JWTTokenSecretNotFoundException,
   UnAuthenticatedException,
 } from '~/utils/exception'
 import { decode, isValid } from '~/utils/jwt'
+import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Admin Dashboard - Orders' }]
@@ -49,7 +50,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
       const account = await new UserModel().find(payload.id)
 
-      return json({ error: null, data: { account } })
+      return json({
+        error: null,
+        data: {
+          orders: (await mocks.getOrders()) as OrderItem[],
+          storeSettings: await StoreConfig.getStoreInfo(),
+          account,
+        },
+      })
     }
   } catch (e) {
     console.error(e) // TODO: replace this with a proper logger
@@ -69,7 +77,11 @@ export default function Index() {
   const loaderData = useLoaderData<typeof loader>()
   return (
     <Suspense fallback={<Skeleton />}>
-      <OrderList account={loaderData?.data?.account || {}} />
+      <OrderList
+        orders={loaderData!.data!.orders}
+        storeSettings={loaderData!.data!.storeSettings}
+        account={loaderData!.data!.account}
+      />
     </Suspense>
   )
 }

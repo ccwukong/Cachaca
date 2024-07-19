@@ -74,8 +74,8 @@ export default function Index() {
   return (
     <Suspense fallback={<Skeleton />}>
       <Settings
-        storeSettings={loaderData?.data?.storeSettings}
-        account={loaderData?.data?.account}
+        storeSettings={loaderData!.data!.storeSettings}
+        account={loaderData!.data!.account}
       />
     </Suspense>
   )

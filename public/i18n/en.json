@@ -36,6 +36,8 @@
   "system.billing_address_same_shipping_address": "Billing address is same as shipping address",
   "system.total_due": "Total due",
   "system.orders": "Orders",
+  "system.order_id": "Order #",
+  "system.customer": "Customer",
   "system.settings": "Settings",
   "system.payment": "Payment",
   "system.payment_details": "Payment details",
@@ -101,5 +103,9 @@
   "system.system_error_public_message": "We encountered some internal system issues, please visit us later.",
   "system.go_storefront": "Go to storefront",
   "system.banner_autoplay": "Banner autoplay",
-  "system.banner_autoplay_speed": "Banner autoplay speed (in milliseconds)"
+  "system.banner_autoplay_speed": "Banner autoplay speed (in milliseconds)",
+  "system.actions": "Actions",
+  "system.edit": "Edit",
+  "system.disable": "Disable",
+  "system.remove": "Remove"
 }
