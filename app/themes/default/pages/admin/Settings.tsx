@@ -36,7 +36,7 @@ import {
   TableRow,
 } from '../../components/ui/table'
 
-const CustomerList = ({ storeInfo }: { storeInfo: StoreSettings }) => {
+const CustomerList = ({ storeSettings }: { storeSettings: StoreSettings }) => {
   const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden">
@@ -82,7 +82,7 @@ const CustomerList = ({ storeInfo }: { storeInfo: StoreSettings }) => {
                       type="text"
                       id="store-name"
                       name="store-name"
-                      value={storeInfo.name}
+                      value={storeSettings.name}
                     />
                   </div>
                   <div className="space-y-2">
@@ -96,7 +96,7 @@ const CustomerList = ({ storeInfo }: { storeInfo: StoreSettings }) => {
                     <Textarea
                       id="store-description"
                       name="store-description"
-                      value={storeInfo.description}
+                      value={storeSettings.description}
                     />
                   </div>
                   <div className="space-y-2">
@@ -105,7 +105,7 @@ const CustomerList = ({ storeInfo }: { storeInfo: StoreSettings }) => {
                       type="text"
                       id="store-email"
                       name="store-email"
-                      value={storeInfo.email}
+                      value={storeSettings.email}
                     />
                   </div>
                   <div className="space-y-2">
@@ -114,7 +114,7 @@ const CustomerList = ({ storeInfo }: { storeInfo: StoreSettings }) => {
                       type="text"
                       id="store-phone"
                       name="store-phone"
-                      value={storeInfo.phone}
+                      value={storeSettings.phone}
                     />
                   </div>
                   <div className="space-y-2">
@@ -136,7 +136,7 @@ const CustomerList = ({ storeInfo }: { storeInfo: StoreSettings }) => {
                       type="text"
                       id="store-address"
                       name="store-address"
-                      value={storeInfo.address}
+                      value={storeSettings?.address?.address}
                     />
                   </div>
                   <div className="space-y-2">
@@ -145,7 +145,7 @@ const CustomerList = ({ storeInfo }: { storeInfo: StoreSettings }) => {
                       type="text"
                       id="store-city"
                       name="store-city"
-                      value={storeInfo.city}
+                      value={storeSettings?.address?.city}
                     />
                   </div>
                   <div className="space-y-2">
@@ -154,7 +154,7 @@ const CustomerList = ({ storeInfo }: { storeInfo: StoreSettings }) => {
                       type="text"
                       id="store-state"
                       name="store-state"
-                      value={storeInfo.state}
+                      value={storeSettings?.address?.state}
                     />
                   </div>
                   <div className="space-y-2">
@@ -163,7 +163,7 @@ const CustomerList = ({ storeInfo }: { storeInfo: StoreSettings }) => {
                       type="text"
                       id="store-country"
                       name="store-country"
-                      value={storeInfo.country}
+                      value={storeSettings?.address?.country}
                     />
                   </div>
                   <div className="space-y-2">
@@ -172,7 +172,7 @@ const CustomerList = ({ storeInfo }: { storeInfo: StoreSettings }) => {
                       type="text"
                       id="store-zipcode"
                       name="store-zipcode"
-                      value={storeInfo.zipcode}
+                      value={storeSettings?.address?.zipcode}
                     />
                   </div>
                 </div>
@@ -200,9 +200,9 @@ const CustomerList = ({ storeInfo }: { storeInfo: StoreSettings }) => {
                   </TableHead>
                 </TableRow>
               </TableHeader>
-              {storeInfo.publicPages.length ? (
+              {storeSettings.publicPages.length ? (
                 <TableBody>
-                  {storeInfo.publicPages.map((item) => (
+                  {storeSettings.publicPages.map((item) => (
                     <TableRow key={item.name}>
                       <TableCell className="font-medium">{item.name}</TableCell>
                       <TableCell>/{item.slug}</TableCell>

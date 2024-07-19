@@ -39,7 +39,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     } else {
       return json({
         error: null,
-        data: { storeInfo: await StoreConfig.getStoreInfo() },
+        data: { storeSettings: await StoreConfig.getStoreInfo() },
       })
     }
   } catch (e) {
@@ -61,7 +61,7 @@ export default function Index() {
 
   return (
     <Suspense fallback={<Skeleton />}>
-      <Settings storeInfo={data?.storeInfo} />
+      <Settings storeSettings={data?.storeSettings} />
     </Suspense>
   )
 }
