@@ -107,5 +107,6 @@
   "system.actions": "Actions",
   "system.edit": "Edit",
   "system.disable": "Disable",
-  "system.remove": "Remove"
+  "system.remove": "Remove",
+  "system.dashboard": "Dashboard"
 }

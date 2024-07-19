@@ -118,14 +118,13 @@ const ProductList = ({
                   </div>
                 </Form>
                 <DialogFooter>
-                  <Button variant="secondary">
-                    <WandSparkles size={16} color="#f5c20a" />{' '}
-                    {t('system.try_ai')}
-                  </Button>
                   <Button type="submit">{t('system.save')}</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
+            <Button variant="secondary">
+              <WandSparkles size={16} color="#f5c20a" /> {t('system.try_ai')}
+            </Button>
           </div>
         </div>
         {products ? (

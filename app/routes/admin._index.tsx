@@ -128,7 +128,7 @@ export default function Index() {
           { title: 'Products', url: '/admin/products', order: 4 },
           { title: 'Settings', url: '/admin/settings', order: 5 },
         ]}
-        account={data?.account}
+        account={data!.account}
       />
     </Suspense>
   )
