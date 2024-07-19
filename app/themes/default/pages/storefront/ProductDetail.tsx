@@ -146,7 +146,7 @@ const ProductDetail = ({
       </div>
       <Footer
         publicPages={storeSettings.publicPages}
-        copyright={storeSettings.copyright}
+        copyright={storeSettings?.other?.copyright}
       />
     </div>
   )
