@@ -4,6 +4,8 @@
 
 A GenAI-embedded open source e-commerce solution.
 
+You can also reach out to me via the [Discord channel](https://discord.gg/Ygc2tr8Z)
+
 The project is developed on top of:
 
 - [Remix](https://remix.run/)

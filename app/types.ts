@@ -74,6 +74,11 @@ export type HomeBannerSettings = {
   items: BannerItem[]
 }
 
+export type OtherStoreConfigs = {
+  copyright: string
+  apis: APIConfig[]
+}
+
 export type PageLink = {
   title: string
   url: string
@@ -85,16 +90,12 @@ export type StoreSettings = {
   logo: string
   email: string
   phone: string
-  address: string
-  city: string
-  state: string
-  country: string
-  zipcode: string
+  address: AddressItem | null
   description: string
   currency: Currency
   publicPages: PublicPage[]
-  copyright: string
-  banners: string
+  other: OtherStoreConfigs | null
+  banners: HomeBannerSettings | null
 }
 
 export type CheckoutInfo = {
@@ -166,7 +167,8 @@ export type AddressItem = {
 export enum AddressType {
   Shipping = 1,
   Billing = 2,
-  Other = 3,
+  Store = 3,
+  Other = 4,
 }
 
 export enum Role {

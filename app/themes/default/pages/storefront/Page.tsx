@@ -18,8 +18,8 @@ const Page = ({
   return (
     <div className="mx-6 overflow-hidden">
       <Header
-        storeLogo=""
-        storeName="Cachaca"
+        storeLogo={storeSettings.logo}
+        storeName={storeSettings.name}
         menuItems={categories}
         cartItems={useLiveQuery(() => idb.cart.toArray()) || []}
         currency={storeSettings.currency.symbol}

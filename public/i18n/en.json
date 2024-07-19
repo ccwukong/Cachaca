@@ -98,5 +98,6 @@
   "system.old_password": "Old password",
   "system.new_password": "New password",
   "system.email_service_provider_hint": "For sending transactional emails, such as password reset link etc.",
-  "system.system_error_public_message": "We encountered some internal system issues, please visit us later."
+  "system.system_error_public_message": "We encountered some internal system issues, please visit us later.",
+  "system.go_storefront": "Go to storefront"
 }

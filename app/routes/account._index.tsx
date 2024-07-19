@@ -4,7 +4,7 @@ import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cookie } from '~/cookie'
-import { CustomerModel, Installer } from '~/models'
+import { CustomerModel, Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Home from '~/themes/default/pages/account/Home'
 import { FatalErrorTypes, OrderItem, Role } from '~/types'
@@ -100,6 +100,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         error: null,
         data: {
           orders: (await mocks.getOrders()) as OrderItem[],
+          storeSettings: await StoreConfig.getStoreInfo(),
           account,
         },
       })
@@ -129,10 +130,9 @@ export default function Index() {
   return (
     <Suspense fallback={<Skeleton />}>
       <Home
-        storeLogo=""
-        storeName="Cachaca"
         orders={data?.orders}
         account={data?.account}
+        storeSettings={data?.storeSettings || {}}
       />
     </Suspense>
   )

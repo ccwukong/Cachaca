@@ -88,8 +88,8 @@ const Cart = ({
   return (
     <div className="mx-6 overflow-hidden">
       <Header
-        storeLogo=""
-        storeName="Cachaca"
+        storeLogo={storeSettings.logo}
+        storeName={storeSettings.name}
         menuItems={categories}
         cartItems={cart}
         updateCartItemHandler={updateCartItemHandler}

@@ -31,7 +31,11 @@ const Header = ({ navItems }: { navItems: PageLink[] }) => {
             )
           })}
         </nav>
+
         <div className="ml-auto flex items-center space-x-4">
+          <Link to="/" className="text-sm text-slate-600">
+            {t('system.go_storefront')}
+          </Link>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">

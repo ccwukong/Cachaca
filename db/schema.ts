@@ -1,12 +1,14 @@
 import {
   index,
   int,
+  json,
   mysqlTable,
   primaryKey,
   text,
   tinyint,
   varchar,
 } from 'drizzle-orm/mysql-core'
+import { AddressItem, HomeBannerSettings, OtherStoreConfigs } from '~/types'
 
 export const user = mysqlTable(
   'user',
@@ -120,15 +122,11 @@ export const shop = mysqlTable('shop', {
   logo: varchar('logo', { length: 255 }).notNull(),
   email: varchar('email', { length: 60 }),
   phone: varchar('phone', { length: 30 }),
-  address: varchar('address', { length: 250 }),
-  city: varchar('city', { length: 50 }),
-  state: varchar('state', { length: 60 }),
-  country: varchar('country', { length: 60 }),
-  zipcode: varchar('zipcode', { length: 10 }),
+  address: json('address').$type<AddressItem>(),
   baseCurrencyId: tinyint('base_currency_id').notNull(),
   description: varchar('description', { length: 500 }),
-  banners: text('banners'),
-  copyright: varchar('copyright', { length: 50 }),
+  banners: json('banners').$type<HomeBannerSettings>(),
+  other: json('other').$type<OtherStoreConfigs>(),
   status: tinyint('status').notNull(),
 })
 

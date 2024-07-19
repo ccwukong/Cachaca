@@ -11,21 +11,23 @@ import {
   TabsList,
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
-import { UserPublicInfo } from '~/types'
+import { StoreSettings, UserPublicInfo } from '~/types'
 
 const Settings = ({
-  storeLogo,
-  storeName,
   account,
+  storeSettings,
 }: {
-  storeLogo: string
-  storeName: string
   account: UserPublicInfo
+  storeSettings: StoreSettings
 }) => {
   const { t } = useTranslation()
   return (
     <div className="mx-6 overflow-hidden">
-      <Header storeLogo={storeLogo} storeName={storeName} account={account} />
+      <Header
+        storeLogo={storeSettings.logo}
+        storeName={storeSettings.name}
+        account={account}
+      />
       <div className="max-w-screen-xl w-full flex-1 space-y-4 p-8 pt-6 mx-auto h-auto mt-16">
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">

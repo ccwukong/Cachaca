@@ -596,11 +596,7 @@ export class StoreConfig {
       logo: sdata[0].shop.logo,
       email: sdata[0].shop.email || '',
       phone: sdata[0].shop.phone || '',
-      address: sdata[0].shop.address || '',
-      city: sdata[0].shop.city || '',
-      state: sdata[0].shop.state || '',
-      country: sdata[0].shop.country || '',
-      zipcode: sdata[0].shop.zipcode || '',
+      address: sdata[0].shop.address,
       description: sdata[0].shop.description || '',
       currency: {
         id: sdata[0]?.currency?.id as number,
@@ -616,10 +612,11 @@ export class StoreConfig {
           order: item.order,
         }
       }),
-      copyright: sdata[0].shop.copyright || '',
-      banners: sdata[0].shop.banners ? JSON.parse(sdata[0].shop.banners) : null,
+      other: sdata[0].shop.other,
+      banners: sdata[0].shop.banners,
     }
   }
+
   public static async getPublicPageByName(name: string): Promise<PublicPage> {
     const res = await db
       .select()
