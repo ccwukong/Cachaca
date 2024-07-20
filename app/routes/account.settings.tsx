@@ -82,7 +82,7 @@ export default function Index() {
           storeSettings: loaderData!.data!.storeSettings,
         }}
       >
-        <Settings />
+        <Settiangs />
       </CustomerContext.Provider>
     </Suspense>
   )
