@@ -589,7 +589,6 @@ export class StoreConfig {
     }
 
     const pdata = await db.select().from(page).orderBy(asc(page.order))
-
     return {
       name: sdata[0].shop.name,
       logo: sdata[0].shop.logo,

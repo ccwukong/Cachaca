@@ -150,8 +150,8 @@ export type PublicPage = {
 }
 
 export type APIConfig = {
-  id: ExternalAPIType
-  config: string
+  type: ExternalAPIType
+  config: { [key: string]: string | number }
 }
 
 export type AddressItem = {

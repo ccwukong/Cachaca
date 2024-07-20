@@ -29,6 +29,7 @@ import {
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
 import { Textarea } from '~/themes/default/components/ui/textarea'
+import { ExternalAPIType } from '~/types'
 import {
   Table,
   TableBody,
@@ -372,7 +373,7 @@ const CustomerList = () => {
                 </p>
                 <div className="space-y-2">
                   <Label>{t('system.provider')}</Label>
-                  <Select>
+                  <Select value="openai">
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder={t('system.select')} />
                     </SelectTrigger>
@@ -395,7 +396,7 @@ const CustomerList = () => {
                 </p>
                 <div className="space-y-2">
                   <Label>{t('system.provider')}</Label>
-                  <Select>
+                  <Select value="cloudflare-r2">
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder={t('system.select')} />
                     </SelectTrigger>
@@ -438,7 +439,7 @@ const CustomerList = () => {
                 </p>
                 <div className="space-y-2">
                   <Label>{t('system.provider')}</Label>
-                  <Select>
+                  <Select value="mailtrap">
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder={t('system.select')} />
                     </SelectTrigger>
@@ -448,10 +449,36 @@ const CustomerList = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
+                  <Label htmlFor="email-service-provider-host">
+                    {t('system.api_endpoint')}
+                  </Label>
+                  <Input
+                    type="text"
+                    id="email-endpoint"
+                    name="email-endpoint"
+                    value={
+                      storeSettings.other?.apis.filter(
+                        (item) => item.type === ExternalAPIType.Email,
+                      )[0]?.config.host
+                    }
+                  />
+                </div>
+                <div>
                   <Label htmlFor="email-service-provider-token">
                     {t('system.api_token_or_key')} ({t('system.if_any')})
                   </Label>
-                  <Input type="text" id="email-token" name="email-token" />
+                  <Input
+                    type="text"
+                    id="email-token"
+                    name="email-token"
+                    value={
+                      (
+                        storeSettings.other!.apis.filter(
+                          (item) => item.type === ExternalAPIType.Email,
+                        )[0]?.config.token as string
+                      ).slice(0, 6) + '******'
+                    }
+                  />
                 </div>
                 <Button>{t('system.save')}</Button>
               </Form>

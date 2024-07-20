@@ -111,5 +111,6 @@
   "system.remove": "Remove",
   "system.dashboard": "Dashboard",
   "system.product_categories": "Product categories",
-  "system.product_variants": "Product variants"
+  "system.product_variants": "Product variants",
+  "system.api_endpoint": "API endpoint"
 }
