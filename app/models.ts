@@ -102,24 +102,23 @@ export class Installer {
         createdOn,
         status: 1,
       })
-
-      await tx.insert(shop).values({
+      const storeData = {
         name: store.name,
         logo: '',
         email: '',
         phone: '',
-        addressLine1: '',
-        addressLine2: '',
-        city: '',
-        state: '',
-        country: '',
-        zipcode: '',
         baseCurrencyId: 1, //Default to USD
         description: store.description,
+        other: {
+          copyright: `${store.name} ©${new Date().getFullYear()}`,
+          apis: [],
+        },
         createdBy: adminId,
         createdOn,
         status: 1,
-      })
+      }
+
+      await tx.insert(shop).values(storeData)
     })
 
     return {

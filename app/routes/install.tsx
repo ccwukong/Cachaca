@@ -3,7 +3,7 @@ import { json, redirect } from '@remix-run/node'
 import { useActionData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cookie } from '~/cookie'
+import { adminCookie } from '~/cookie'
 import { Installer } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Install from '~/themes/default/pages/Install'
@@ -72,7 +72,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     return redirect('/admin', {
       headers: {
-        'Set-Cookie': await cookie.serialize({
+        'Set-Cookie': await adminCookie.serialize({
           accessToken: accessToken,
           refreshToken: refreshToken,
         }),
