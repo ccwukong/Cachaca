@@ -21,10 +21,11 @@ The project is developed on top of:
 - [Development](#development)
   - [Development environment](#development-environment)
   - [Database](#database)
-  - [Multimedia file hosting](#multimedia-file-hosting)
+  - [File hosting](#file-hosting)
   - [i18n localization](#i18n-localization)
   - [Customization](#customization)
     - [Creating a new theme](#creating-a-new-theme)
+  - [Unit test](#unit-test)
 - [Deployment](#deployment)
   - [Web hosting](#web-hosting)
   - [Database hosting](#database-hosting)
@@ -95,7 +96,7 @@ JWT_TOKEN_SECRET=<a long random string that is used to sign JWT auth token>
 SESSION_COOKIE_SECRET=<a long random string that is used to sign cookie message>
 ```
 
-### Multimedia file hosting
+### File hosting
 
 Cachaca is designed to be deployed in different environments including Serverless environments, therefore, it is our design decision to use a file/object hosting service to host all multimedia files such as product images, audio/video files etc.
 
@@ -137,6 +138,14 @@ If you wish to create a custom theme for any reasons, you shall follow the guide
 - If you only wanted to customize the UI components for storefront, and use the default components from the **default** theme, you can copy the rest of the directories and files into your own theme directory.
 
 - Make sure you add all the new translation keys under the **/public/i18n/** directory accordingly.
+
+### Unit test
+
+It's important to ensure the UI components and backend services are well tested. We aim to achieve **90%** test coverage for the entire codebase for RC1.
+
+For Frontend, we use [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) for component testing
+
+For Backend, we rely on Jest built-in functions + our own [mockdata](./mockdata/) for function and model testing
 
 ## Deployment
 
