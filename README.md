@@ -23,7 +23,7 @@ The project is developed on top of:
   - [System](#system)
   - [Admin dashboard](#admin-dashboard)
   - [Storefront](#storefront)
-- [Development](#development)
+- [How to contribute](#how-to-contribute)
   - [Development environment](#development-environment)
   - [Database](#database)
   - [File hosting](#file-hosting)
@@ -123,7 +123,16 @@ Please use the issue template to file an issue report, and try to provide the de
 - [ ] Customer order management
 - [ ] Customer account management
 
-## Development
+## How to contribute
+
+It's very easy to contribute to this project. You just need to make sure you read and understand the development guidelines, and test everything on your localhost, and send a PR(Pull Request) from your branch to the **main** branch.
+
+When you send a PR, you need to make sure:
+  - to include detailed information in the PR about what feature/bug you created/fixed
+  - to include screenshots for the feature/bug fixing if it's UI related
+  - sufficient test coverage for your code (min. 90% coverage)
+  - to add the translation items if any ([See how to add translation items](#i18n-localization))
+  - inform the code owner to review your PR
 
 ### Development environment
 
@@ -160,6 +169,32 @@ DB_NAME=<database name>
 JWT_TOKEN_SECRET=<a long random string that is used to sign JWT auth token>
 SESSION_COOKIE_SECRET=<a long random string that is used to sign cookie message>
 ```
+
+Next, run the following command to push the schema to your local database and seed the common tables:
+
+```shellscript
+yarn db:push
+yarn db:seed
+```
+
+#### Updating database schemas
+
+When you need to add new tables or alter the existing tables in the database, you shall do it through our database migration script instead of doing it yourself manually.
+
+First, you need to add your changes to the **/db/schema.ts** file. And then run the following command to migrate the changes(means exporting the changes to a new .sql file):
+
+```shellscript
+yarn db:migrate
+```
+
+Once the step above is done, run the following command to push the changes to your local database
+
+```shellscript
+yarn db:push
+```
+
+Remember to commit your changes to your branch
+
 
 ### File hosting
 

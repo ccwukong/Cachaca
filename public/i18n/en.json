@@ -103,6 +103,7 @@
   "system.email_service_provider_hint": "For sending transactional emails, such as password reset link etc.",
   "system.system_error_public_message": "We encountered some internal system issues, please visit us later.",
   "system.go_storefront": "Go to storefront",
+  "system.banners": "Banners",
   "system.banner_autoplay": "Banner autoplay",
   "system.banner_autoplay_speed": "Banner autoplay speed (in milliseconds)",
   "system.actions": "Actions",
@@ -112,5 +113,6 @@
   "system.dashboard": "Dashboard",
   "system.product_categories": "Product categories",
   "system.product_variants": "Product variants",
-  "system.api_endpoint": "API endpoint"
+  "system.api_endpoint": "API endpoint",
+  "system.preview": "Preview"
 }
