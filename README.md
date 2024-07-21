@@ -6,12 +6,21 @@ A GenAI-embedded open source e-commerce solution.
 
 You can also reach out to me via the [Discord channel](https://discord.com/invite/GJJ3pU7BdN)
 
-The project is developed on top of:
+Tech stack:
 
+- TypeScript
+- React
+- MySQL
+- Jest
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) - A developer friendly React component testing library
 - [Remix V2](https://remix.run/) - A fullstack SSR framework, backed by Shopify
 - [Tailwind CSS](https://tailwindcss.com/) - A CSS library which vastly improves developers' productivity
 - [Shadcn](https://ui.shadcn.com/) - A UI library built on Tailwind CSS + React
 - [Drizzle](https://orm.drizzle.team/) - A TypeScript based ORM
+- OpenAI
+- LangChain
+- Cloudinary
+- Mailtrap
 
 ## Table of Contents
 
