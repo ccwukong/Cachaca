@@ -509,15 +509,13 @@ const CustomerList = () => {
                     {t('system.api_token_or_key')} ({t('system.if_any')})
                   </Label>
                   <Input
-                    type="text"
+                    type="password"
                     id="email-token"
                     name="email-token"
                     value={
-                      (
-                        storeSettings.other!.apis.filter(
-                          (item) => item.type === ExternalAPIType.Email,
-                        )[0]?.config.token as string
-                      ).slice(0, 6) + '******'
+                      storeSettings.other!.apis.filter(
+                        (item) => item.type === ExternalAPIType.Email,
+                      )[0]?.config.token
                     }
                   />
                 </div>
