@@ -18,6 +18,7 @@ The project is developed on top of:
 - [Demo](#demo)
   - [Demo accounts](#demo-accounts)
   - [Store installation](#store-installation)
+- [Report an issue](#report-an-issue)
 - [RC1 roadmap](#rc1-roadmap)
   - [System](#system)
   - [Admin dashboard](#admin-dashboard)
@@ -59,6 +60,12 @@ If you start fresh, you will see the **Installation** screen below. Please ensur
 
 - Email: admin@test.com
 - Password: 123456
+
+## Report an issue
+
+Please use the issue template to file an issue report, and try to provide the detail as much as possible.
+
+<img src="docs/report_issue.png" width="600">
 
 ## RC1 roadmap
 
