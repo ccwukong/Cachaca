@@ -165,7 +165,7 @@ SESSION_COOKIE_SECRET=<a long random string that is used to sign cookie message>
 
 Cachaca is designed to be deployed in different environments including Serverless environments, therefore, it is our design decision to use a file/object hosting service to host all multimedia files such as product images, audio/video files etc.
 
-By default, Cachaca uses [Cloudinary](https://cloudinary.com/pricing) as it provides a free tier and friendly integration.
+By default, Cachaca uses [Cloudinary](https://cloudinary.com/pricing) as it provides a free tier and user friendly integration.
 
 You can also use other file/object storage service providers by customizing the integration yourself:
 
