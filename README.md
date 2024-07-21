@@ -4,7 +4,7 @@
 
 A GenAI-embedded open source e-commerce solution.
 
-You can also reach out to me via the [Discord channel](https://discord.com/invite/GJJ3pU7BdN)
+[Discord channel](https://discord.com/invite/GJJ3pU7BdN)
 
 Tech stack:
 
