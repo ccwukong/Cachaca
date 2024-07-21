@@ -8,10 +8,10 @@ You can also reach out to me via the [Discord channel](https://discord.com/invit
 
 The project is developed on top of:
 
-- [Remix](https://remix.run/)
-- [Tailwind](https://tailwindcss.com/)
-- [Shadcn](https://ui.shadcn.com/)
-- [Drizzle](https://orm.drizzle.team/)
+- [Remix V2](https://remix.run/) - A fullstack SSR framework, backed by Shopify
+- [Tailwind CSS](https://tailwindcss.com/) - A CSS library which vastly improves developers' productivity
+- [Shadcn](https://ui.shadcn.com/) - A UI library built on Tailwind CSS + React
+- [Drizzle](https://orm.drizzle.team/) - A TypeScript based ORM
 
 ## Table of Contents
 
