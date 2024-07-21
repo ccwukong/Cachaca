@@ -23,6 +23,14 @@ import {
 } from '~/themes/default/components/ui/select'
 import { Switch } from '~/themes/default/components/ui/switch'
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '~/themes/default/components/ui/table'
+import {
   Tabs,
   TabsContent,
   TabsList,
@@ -31,13 +39,12 @@ import {
 import { Textarea } from '~/themes/default/components/ui/textarea'
 import { ExternalAPIType } from '~/types'
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '../../components/ui/table'
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '../../components/ui/carousel'
 
 const CustomerList = () => {
   const { t } = useTranslation()
@@ -121,18 +128,7 @@ const CustomerList = () => {
                         value={storeSettings.phone}
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="store-currency">
-                        {t('system.base_currency')}
-                      </Label>
-                      <Input
-                        type="text"
-                        id="store-currency"
-                        name="store-currency"
-                      />
-                    </div>
                   </div>
-
                   <div className="space-y-3">
                     <div className="space-y-2">
                       <Label htmlFor="store-address">
@@ -186,7 +182,24 @@ const CustomerList = () => {
                       />
                     </div>
                   </div>
-
+                  <div className="space-y-3">
+                    <div className="space-y-2">
+                      <Label htmlFor="store-currency">
+                        {t('system.base_currency')}
+                      </Label>
+                      <Input
+                        type="text"
+                        id="store-currency"
+                        name="store-currency"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <Button>{t('system.save')}</Button>
+              </Form>
+              <p className="mt-10 text-xl">{t('system.banners')}</p>
+              <Form className="mt-3">
+                <div className="grid grid-cols-3 gap-24">
                   <div className="space-y-3">
                     <div className="space-y-2">
                       <Label htmlFor="store-banner-autoplay">
@@ -211,9 +224,37 @@ const CustomerList = () => {
                         value={storeSettings.banners?.speed}
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="store-banner-speed">
+                        {t('system.banner_autoplay_speed')}
+                      </Label>
+                      <Input
+                        type="text"
+                        id="store-banner-speed"
+                        name="store-banner-speed"
+                        value={storeSettings.banners?.speed}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-span-2 w-full space-y-3">
+                    <p>{t('system.preview')}</p>
+                    <Carousel className="w-2/3 h-[200px]">
+                      <CarouselContent>
+                        {Array.from({ length: 5 }).map((_, index) => (
+                          <CarouselItem key={index}>
+                            <img
+                              src="https://images.unsplash.com/photo-1462927114214-6956d2fddd4e?q=80&w=3869&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                              className="w-full h-[200px] object-cover"
+                            />
+                          </CarouselItem>
+                        ))}
+                      </CarouselContent>
+                      <CarouselPrevious type="button" />
+                      <CarouselNext type="button" />
+                    </Carousel>
                   </div>
                 </div>
-                <Button>{t('system.save')}</Button>
+                <Button className="mt-4">{t('system.save')}</Button>
               </Form>
             </TabsContent>
             <TabsContent value="account-settings">

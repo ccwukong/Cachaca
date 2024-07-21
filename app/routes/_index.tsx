@@ -6,7 +6,7 @@ import StoreContext from '~/contexts/storeContext'
 import { Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Home from '~/themes/default/pages/storefront/Home'
-import { CategoryItem, FatalErrorTypes } from '~/types'
+import { CategoryItem, FatalErrorTypes, ProductPublicInfo } from '~/types'
 import { StoreNotInstalledError } from '~/utils/exception'
 import * as mocks from '~/utils/mocks'
 
@@ -54,7 +54,7 @@ export default function Index() {
           categories: loaderData!.data!.categories as CategoryItem[],
         }}
       >
-        <Home products={loaderData!.data!.products} />
+        <Home products={loaderData!.data!.products as ProductPublicInfo[]} />
       </StoreContext.Provider>
     </Suspense>
   )

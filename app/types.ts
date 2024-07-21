@@ -235,6 +235,10 @@ export enum ExternalAPIType {
   Email = 3,
 }
 
+export enum FileHostingProvider {
+  Cloudinary = 1,
+}
+
 export enum FatalErrorTypes {
   DatabaseConnection = 'ECONNREFUSED',
 }

@@ -4,7 +4,7 @@
 
 A GenAI-embedded open source e-commerce solution.
 
-You can also reach out to me via the [Discord channel](https://discord.gg/Ygc2tr8Z)
+You can also reach out to me via the [Discord channel](https://discord.com/invite/GJJ3pU7BdN)
 
 The project is developed on top of:
 
@@ -66,11 +66,12 @@ If you start fresh, you will see the **Installation** screen below. Please ensur
 
 - [x] Store installation
 - [x] DB connection check, promps error message if DB connection isn't estabilished
-- [ ] Integration with Cloudflare R2 for image hosting
+- [ ] Integration with Cloudinary for image hosting
 - [x] Email service provider integration for transactional emails
 - [ ] Email service provider integration for marketing emails
 - [ ] OpenAI integration
 - [ ] Add TiDB and Netlify integration as default option for pre-installation
+- [ ] System log
 
 ### Admin dashboard
 
@@ -157,12 +158,11 @@ SESSION_COOKIE_SECRET=<a long random string that is used to sign cookie message>
 
 Cachaca is designed to be deployed in different environments including Serverless environments, therefore, it is our design decision to use a file/object hosting service to host all multimedia files such as product images, audio/video files etc.
 
-By default, Cachaca uses [Cloudflare R2](https://www.cloudflare.com/developer-platform/r2/) as it provides a generous free tier hosting quota.
+By default, Cachaca uses [Cloudinary](https://cloudinary.com/pricing) as it provides a free tier and friendly integration.
 
 You can also use other file/object storage service providers by customizing the integration yourself:
 
 - [AWS S3](https://aws.amazon.com/s3/) - 12 months free tier available
-- [Cloudinary](https://cloudinary.com/pricing) - Free tier available
 - [Google cloud storage](https://cloud.google.com/storage/pricing#price-tables)
 - Many more...
 
