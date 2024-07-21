@@ -25,6 +25,7 @@ The project is developed on top of:
   - [Storefront](#storefront)
 - [How to contribute](#how-to-contribute)
   - [Development environment](#development-environment)
+  - [MVC pattern](#mvc-pattern)
   - [Database](#database)
   - [File hosting](#file-hosting)
   - [i18n localization](#i18n-localization)
@@ -125,14 +126,15 @@ Please use the issue template to file an issue report, and try to provide the de
 
 ## How to contribute
 
-It's very easy to contribute to this project. You just need to make sure you read and understand the development guidelines, and test everything on your localhost, and send a PR(Pull Request) from your branch to the **main** branch.
+It's very easy to contribute to this project. You just need to make sure you read and understand the development guidelines, test everything on your localhost, and send a PR(Pull Request) from your branch to the **main** branch.
 
 When you send a PR, you need to make sure:
-  - to include detailed information in the PR about what feature/bug you created/fixed
-  - to include screenshots for the feature/bug fixing if it's UI related
-  - sufficient test coverage for your code (min. 90% coverage)
-  - to add the translation items if any ([See how to add translation items](#i18n-localization))
-  - inform the code owner to review your PR
+
+- to include detailed information in the PR about what feature/bug you created/fixed
+- to include screenshots for the feature/bug fixing if it's UI related
+- sufficient unit test coverage for your code (min. 90% coverage)
+- to add the translation items if any ([See how to add translation items](#i18n-localization))
+- inform the code owner to review your PR
 
 ### Development environment
 
@@ -145,6 +147,24 @@ Run the dev server:
 ```shellscript
 yarn dev
 ```
+
+### MVC pattern
+
+We adopt the MVC pattern to structure our codebase:
+
+M(Model) - we handle all the database queries, data modeling here. You can find all the models in the **/app/models.ts** file
+
+V(View) - The presentation layer. All the UI related React components are stored under the **/app/themes** directory. We already have the **default** theme, and you can create your own theme to suit your needs. ([See how to create your own theme](#creating-a-new-theme)). There are some guideline you need to follow when you are working on the View layer.
+
+- Every route should match to a React page component under **/app/themes/<theme name>/pages**, e.g. the URL https://your-domain.com/cart requires a matching page component **/app/themes/<theme name>/pages/storefront/Cart.tsx**, https://your-domain.com/admin/settings matches to the page component **/app/themes/<theme name>/pages/admin/Settings.tsx**
+- We use Tailwind CSS + shadcn UI library for frontend development, and we seperate the pre-built components and customized components strictly:
+
+  - All the files with the **lowercase names** under the **/app/themes/<theme name>/components/ui** directory are the pre-built shadcn UI components, and you shall NOT modify those files directly. such as **/app/themes/<theme name>/components/ui/card.tsx** is a pre-built shadcn component, which you're not supposed to modify it directly.
+  - All the files with **TitleCase names** are the customized UI components, such as **/app/themes/<theme name>/components/ui/storefront/Header.tsx**, are maintained by Cachaca contributors.
+
+  When you need to create a new React component, you should follow this convention.
+
+C(Controller) - All the files under the **/app/routes** directory are the controller files. What controllers do is to send the data from Models to Views. Please read the [Remix doc](https://remix.run/docs/en/main/discussion/routes) to learn how routing works.
 
 ### Database
 
@@ -195,7 +215,6 @@ yarn db:push
 
 Remember to commit your changes to your branch
 
-
 ### File hosting
 
 Cachaca is designed to be deployed in different environments including Serverless environments, therefore, it is our design decision to use a file/object hosting service to host all multimedia files such as product images, audio/video files etc.
@@ -218,7 +237,7 @@ We use the **remix-i18next** package. To add a translation item, you should:
 
    - All pre-defined translation keys have the **system.** prefix, for example, **system.login** is translated as **Login** in English. These keys are used for the static instructions/description of the UI components.
 
-   - If you wish to add your own UI components with new translation items, please use the prefix **custom.**. For instance, if you want to add translation for the word **Dropshipping**, you should add a new key `{"custom.dropshipping": "Dropshipping"}` in the translation.json files.
+   - If you wish to add your own UI components with new translation items, please use the prefix **custom.**. For instance, if you want to add translation for the word **Dropshipping**, you should add a new key `{"custom.dropshipping": "Dropshipping"}` in the xx.json files.
 
 3. Add the new language code as a supported language in the **/app/i18n.ts** file.
 
