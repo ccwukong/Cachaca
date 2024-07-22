@@ -17,7 +17,7 @@ describe('Testing storefront Header component', () => {
         id: item.id,
         name: item.name,
         slug: item.slug,
-        subCategories: item.subCategories,
+        parentId: null,
       }
     })
     render(

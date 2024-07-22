@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Link } from '@remix-run/react'
 import { Menu, ShoppingCart, UserRound } from 'lucide-react'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import StoreContext from '~/contexts/storeContext'
 import {
@@ -29,6 +29,8 @@ const Header = ({
 }) => {
   const { t } = useTranslation()
   const { storeSettings, categories } = useContext(StoreContext)
+  const [subOpen, setSubOpen] = useState(false)
+  const [subCategories, setSubCategories] = useState([])
   const subtotal =
     cartItems && cartItems.length
       ? cartItems.reduce(
@@ -56,33 +58,36 @@ const Header = ({
         {categories && (
           <div className="hidden pb-3 mt-8 md:pb-0 md:mt-0 md:flex-1 md:block">
             <ul className="justify-center items-center space-y-8 md:flex md:space-x-6 md:space-y-0">
-              {categories.map((item, idx) => (
-                <li key={item.id}>
-                  <HoverCard openDelay={50} closeDelay={50}>
-                    <HoverCardTrigger>
-                      <Link to={`/categories/${item.slug}`}>{item.name}</Link>
-                    </HoverCardTrigger>
-                    {item.subCategories && (
+              {categories
+                .filter((item) => item.parentId === null)
+                .map((item, idx) => (
+                  <li key={item.id}>
+                    <HoverCard openDelay={50} closeDelay={50}>
+                      <HoverCardTrigger>
+                        <Link to={`/categories/${item.slug}`}>{item.name}</Link>
+                      </HoverCardTrigger>
+
                       <HoverCardContent className="flex justify-around">
-                        {item.subCategories.map((sub) => {
-                          return (
-                            <li
-                              key={idx}
-                              className="hover:text-indigo-600 inline-block"
-                            >
-                              <Link
-                                to={`/categories/${item.slug}/s/${sub.slug}`}
+                        {categories
+                          .filter((sub) => sub.parentId === item.id)
+                          .map((sub) => {
+                            return (
+                              <li
+                                key={idx}
+                                className="hover:text-indigo-600 inline-block"
                               >
-                                {sub.name}
-                              </Link>
-                            </li>
-                          )
-                        })}
+                                <Link
+                                  to={`/categories/${item.slug}/s/${sub.slug}`}
+                                >
+                                  {sub.name}
+                                </Link>
+                              </li>
+                            )
+                          })}
                       </HoverCardContent>
-                    )}
-                  </HoverCard>
-                </li>
-              ))}
+                    </HoverCard>
+                  </li>
+                ))}
             </ul>
           </div>
         )}
@@ -170,36 +175,38 @@ const Header = ({
         <div className="left-[-100%] peer-checked:left-0 transition-all duration-500 fixed top-16 h-screen w-[100%] z-50 bg-stone-200 bg-opacity-95 block md:hidden">
           {categories && (
             <ul className="justify-center items-center md:flex">
-              {categories.map((item, idx) => (
-                <li key={idx}>
-                  <Accordion type="single" collapsible>
-                    <AccordionItem value="item-1" className="text-center">
-                      <AccordionTrigger>
-                        <div className="w-full">
-                          <Link to={`/categories/${item.slug}`}>
-                            {item.name}
-                          </Link>
-                        </div>
-                      </AccordionTrigger>
-                      {item.subCategories && (
+              {categories
+                .filter((item) => item.parentId === null)
+                .map((item, idx) => (
+                  <li key={idx}>
+                    <Accordion type="single" collapsible>
+                      <AccordionItem value="item-1" className="text-center">
+                        <AccordionTrigger>
+                          <div className="w-full">
+                            <Link to={`/categories/${item.slug}`}>
+                              {item.name}
+                            </Link>
+                          </div>
+                        </AccordionTrigger>
                         <AccordionContent>
-                          {item.subCategories.map((sub) => {
-                            return (
-                              <li key={idx} className="block py-2 text-lg">
-                                <Link
-                                  to={`/categories/${item.slug}/s/${sub.slug}`}
-                                >
-                                  {sub.name}
-                                </Link>
-                              </li>
-                            )
-                          })}
+                          {categories
+                            .filter((sub) => sub.parentId === item.id)
+                            .map((sub) => {
+                              return (
+                                <li key={idx} className="block py-2 text-lg">
+                                  <Link
+                                    to={`/categories/${item.slug}/s/${sub.slug}`}
+                                  >
+                                    {sub.name}
+                                  </Link>
+                                </li>
+                              )
+                            })}
                         </AccordionContent>
-                      )}
-                    </AccordionItem>
-                  </Accordion>
-                </li>
-              ))}
+                      </AccordionItem>
+                    </Accordion>
+                  </li>
+                ))}
             </ul>
           )}
           {logoOnly || (

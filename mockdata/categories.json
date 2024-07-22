@@ -3,29 +3,36 @@
     "id": 1,
     "name": "Men",
     "slug": "men",
-    "subCategories": [
-      { "id": 1, "name": "Top", "slug": "top" },
-      { "id": 2, "name": "Pants", "slug": "pants" },
-      { "id": 3, "name": "Jacket", "slug": "jacket" }
-    ]
+    "parentId": null
   },
   {
     "id": 2,
     "name": "Women",
     "slug": "women",
-    "subCategories": [
-      { "id": 4, "name": "Top", "slug": "top" },
-      { "id": 5, "name": "Pants", "slug": "pants" },
-      { "id": 6, "name": "Jacket", "slug": "jacket" }
-    ]
+    "parentId": null
   },
   {
     "id": 3,
     "name": "Accessories",
     "slug": "accessories",
-    "subCategories": [
-      { "id": 7, "name": "Sunglasses", "slug": "sunglasses" },
-      { "id": 8, "name": "Backpack", "slug": "backpack" }
-    ]
+    "parentId": null
+  },
+  {
+    "id": 4,
+    "name": "Jeans",
+    "slug": "jeans",
+    "parentId": 1
+  },
+  {
+    "id": 5,
+    "name": "Top",
+    "slug": "top",
+    "parentId": 2
+  },
+  {
+    "id": 6,
+    "name": "Backpack",
+    "slug": "backpack",
+    "parentId": 3
   }
 ]

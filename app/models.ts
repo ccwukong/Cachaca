@@ -40,7 +40,6 @@ import {
   page,
   product,
   productCategory,
-  productSubCategory,
   productVariant,
   productVariantCategory,
   shop,
@@ -497,7 +496,6 @@ export class ProductModel implements CRUDModel<ProductPublicInfo> {
     coverImage: string
     basePrice: string
     categoryId: string
-    subCategoryId: string
     createdBy: string
   }): Promise<string> {
     const {
@@ -508,7 +506,6 @@ export class ProductModel implements CRUDModel<ProductPublicInfo> {
       coverImage,
       basePrice,
       categoryId,
-      subCategoryId,
       createdBy,
     } = data
 
@@ -520,7 +517,6 @@ export class ProductModel implements CRUDModel<ProductPublicInfo> {
       coverImage,
       basePrice,
       categoryId,
-      subCategoryId,
       createdBy,
       createdOn: Math.floor(Date.now() / 1000),
       status: DatabaseRecordStatus.Active,
@@ -546,19 +542,11 @@ export class ProductModel implements CRUDModel<ProductPublicInfo> {
           id: productCategory.id,
           name: productCategory.name,
           slug: productCategory.slug,
-        },
-        subCategory: {
-          id: productSubCategory.id,
-          name: productSubCategory.name,
-          slug: productSubCategory.slug,
+          parentId: productCategory.parentId,
         },
       })
       .from(product)
       .leftJoin(productCategory, eq(product.categoryId, productCategory.id))
-      .leftJoin(
-        productSubCategory,
-        eq(product.subCategoryId, productSubCategory.id),
-      )
       .where(
         and(
           eq(product.id, id),
@@ -596,7 +584,6 @@ export class ProductModel implements CRUDModel<ProductPublicInfo> {
       basePrice: res[0].basePrice,
       coverImage: res[0].coverImage,
       category: res[0].category as CategoryItem,
-      subCategory: res[0].subCategory as CategoryItem,
       variants,
     }
   }
@@ -614,19 +601,11 @@ export class ProductModel implements CRUDModel<ProductPublicInfo> {
           id: productCategory.id,
           name: productCategory.name,
           slug: productCategory.slug,
-        },
-        subCategory: {
-          id: productSubCategory.id,
-          name: productSubCategory.name,
-          slug: productSubCategory.slug,
+          parentId: productCategory.parentId,
         },
       })
       .from(product)
       .leftJoin(productCategory, eq(product.categoryId, productCategory.id))
-      .leftJoin(
-        productSubCategory,
-        eq(product.subCategoryId, productSubCategory.id),
-      )
       .where(ne(product.status, DatabaseRecordStatus.Deleted))
       .orderBy(desc(product.createdOn))
       .limit(size)
@@ -641,7 +620,6 @@ export class ProductModel implements CRUDModel<ProductPublicInfo> {
         basePrice: item.basePrice,
         coverImage: item.coverImage,
         category: item.category as CategoryItem,
-        subCategory: item.subCategory as CategoryItem,
         variants: [],
       }
     })
@@ -651,7 +629,6 @@ export class ProductModel implements CRUDModel<ProductPublicInfo> {
     page: number,
     size: number,
     categoryId: string,
-    subCategoryId: string,
   ): Promise<ProductPublicInfo[]> {
     const res = await db
       .select({
@@ -666,22 +643,12 @@ export class ProductModel implements CRUDModel<ProductPublicInfo> {
           name: productCategory.name,
           slug: productCategory.slug,
         },
-        subCategory: {
-          id: productSubCategory.id,
-          name: productSubCategory.name,
-          slug: productSubCategory.slug,
-        },
       })
       .from(product)
       .leftJoin(productCategory, eq(product.categoryId, productCategory.id))
-      .leftJoin(
-        productSubCategory,
-        eq(product.subCategoryId, productSubCategory.id),
-      )
       .where(
         or(
           eq(product.categoryId, categoryId),
-          eq(product.subCategoryId, subCategoryId),
           ne(product.status, DatabaseRecordStatus.Deleted),
         ),
       )
@@ -698,7 +665,6 @@ export class ProductModel implements CRUDModel<ProductPublicInfo> {
         basePrice: item.basePrice,
         coverImage: item.coverImage,
         category: item.category as CategoryItem,
-        subCategory: item.subCategory as CategoryItem,
         variants: [],
       }
     })
@@ -720,7 +686,76 @@ export class ProductModel implements CRUDModel<ProductPublicInfo> {
   }
 }
 
-export class ProductCategoryModel implements CRUDModel<CategoryItem> {}
+export class ProductCategoryModel implements CRUDModel<CategoryItem> {
+  async create(data: {
+    id: string
+    slug: string
+    name: string
+    parentId?: string
+  }): Promise<string> {
+    const { id, slug, name, parentId } = data
+
+    const result = await db.insert(productCategory).values({
+      id,
+      slug,
+      name,
+      parentId: parentId ?? null,
+      status: DatabaseRecordStatus.Active,
+    })
+
+    if (!result[0].affectedRows) {
+      throw new ServerInternalError()
+    }
+
+    return id
+  }
+
+  async find(id: string): Promise<CategoryItem> {
+    const res = await db
+      .select()
+      .from(productCategory)
+      .where(
+        and(
+          eq(productCategory.id, id),
+          ne(productCategory.status, DatabaseRecordStatus.Deleted),
+        ),
+      )
+
+    if (!res.length) {
+      throw new NotFoundException()
+    }
+
+    return {
+      id: res[0].id,
+      name: res[0].name,
+      slug: res[0].slug,
+      parentId: res[0].parentId,
+    }
+  }
+
+  async findMany(page: number, size: number): Promise<CategoryItem[]> {
+    const res = await db
+      .select()
+      .from(productCategory)
+      .where(ne(productCategory.status, DatabaseRecordStatus.Deleted))
+      .orderBy(asc(productCategory.name))
+      .limit(size)
+      .offset(page * size)
+
+    if (!res.length) {
+      throw new NotFoundException()
+    }
+
+    return res.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        slug: item.slug,
+        parentId: item.parentId,
+      }
+    })
+  }
+}
 
 export class StoreConfig {
   public static async getStoreInfo(): Promise<StoreSettings> {

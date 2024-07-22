@@ -13,7 +13,6 @@ export type ProductPublicInfo = {
   basePrice: string
   coverImage: string
   category: CategoryItem
-  subCategory: CategoryItem
   variants: ProductVariant[]
 }
 
@@ -58,7 +57,7 @@ export type CategoryItem = {
   id: string
   name: string
   slug: string
-  subCategories?: CategoryItem[]
+  parentId: string | null
 }
 
 export type BannerItem = {

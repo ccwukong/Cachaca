@@ -148,7 +148,6 @@ export const product = mysqlTable(
     coverImage: varchar('cover_image', { length: 255 }).notNull(),
     basePrice: varchar('base_price', { length: 20 }).notNull(),
     categoryId: varchar('category_id', { length: 36 }).notNull(),
-    subCategoryId: varchar('subcategory_id', { length: 36 }).notNull(),
     createdBy: varchar('created_by', { length: 36 }).notNull(),
     createdOn: int('created_on').notNull(),
     updatedBy: varchar('updated_by', { length: 36 }),
@@ -186,24 +185,9 @@ export const productCategory = mysqlTable('product_category', {
   id: varchar('id', { length: 36 }).primaryKey(),
   name: varchar('name', { length: 60 }).notNull(),
   slug: varchar('slug', { length: 100 }).notNull().unique(),
+  parentId: varchar('parent_id', { length: 36 }),
   status: tinyint('status').notNull(),
 })
-
-export const productSubCategory = mysqlTable(
-  'product_subcategory',
-  {
-    id: varchar('id', { length: 36 }).primaryKey(),
-    name: varchar('name', { length: 60 }).notNull(),
-    slug: varchar('slug', { length: 100 }).notNull().unique(),
-    categoryId: varchar('category_id', { length: 36 }),
-    status: tinyint('status').notNull(),
-  },
-  (table) => {
-    return {
-      categoryIdIdx: index('category_id_idx').on(table.categoryId),
-    }
-  },
-)
 
 export const collection = mysqlTable('collection', {
   id: varchar('id', { length: 36 }).primaryKey(),

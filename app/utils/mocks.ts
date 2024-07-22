@@ -91,7 +91,7 @@ export function getCategories(): Promise<object[]> {
           id: item.id,
           name: item.name,
           slug: item.slug,
-          subCategories: item.subCategories,
+          parentId: item.parentId,
         }
       }),
     ),
