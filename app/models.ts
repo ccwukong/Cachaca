@@ -47,7 +47,7 @@ import {
   user,
 } from '../db/schema'
 
-interface CRUDMode<T> {
+interface CRUDModel<T> {
   create(data: object): Promise<string | number>
   find(id: string | number): Promise<T>
   findMany(page: number, size: number): Promise<T[]>
@@ -257,7 +257,7 @@ export class CustomerAuthentication {
   }
 }
 
-export class UserModel implements CRUDMode<UserPublicInfo> {
+export class UserModel implements CRUDModel<UserPublicInfo> {
   async create(data: {
     id: string
     email: string
@@ -375,7 +375,7 @@ export class UserModel implements CRUDMode<UserPublicInfo> {
   }
 }
 
-export class CustomerModel implements CRUDMode<UserPublicInfo> {
+export class CustomerModel implements CRUDModel<UserPublicInfo> {
   async create(data: {
     id: string
     email: string
@@ -488,7 +488,7 @@ export class CustomerModel implements CRUDMode<UserPublicInfo> {
   }
 }
 
-export class ProductModel implements CRUDMode<ProductPublicInfo> {
+export class ProductModel implements CRUDModel<ProductPublicInfo> {
   async create(data: {
     id: string
     slug: string
@@ -720,6 +720,8 @@ export class ProductModel implements CRUDMode<ProductPublicInfo> {
   }
 }
 
+export class ProductCategoryModel implements CRUDModel<CategoryItem> {}
+
 export class StoreConfig {
   public static async getStoreInfo(): Promise<StoreSettings> {
     const sdata = await db
@@ -777,7 +779,7 @@ export class StoreConfig {
   }
 }
 
-export class OrderModel implements CRUDMode<OrderItem> {
+export class OrderModel implements CRUDModel<OrderItem> {
   async create(data: {
     id: string
     checkoutId: string
@@ -968,7 +970,7 @@ export class OrderModel implements CRUDMode<OrderItem> {
   }
 }
 
-export class AddressModel implements CRUDMode<AddressItem> {
+export class AddressModel implements CRUDModel<AddressItem> {
   async create(data: {
     id: string
     customerId: string
