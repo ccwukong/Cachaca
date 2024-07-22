@@ -2,14 +2,14 @@
  * The models WILL NOT handle the exceptions
  */
 
-import { and, asc, desc, eq } from 'drizzle-orm'
+import { and, asc, desc, eq, ne, or } from 'drizzle-orm'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 import {
   AddressItem,
   AddressType,
-  APIConfig,
   CategoryItem,
+  DatabaseRecordStatus,
   OrderItem,
   OrderStatus,
   PaymentMethod,
@@ -32,7 +32,6 @@ import {
 import { makeStr } from '~/utils/string'
 import db from '../db/connection'
 import {
-  api,
   checkoutItem,
   currency,
   customer,
@@ -41,6 +40,7 @@ import {
   page,
   product,
   productCategory,
+  productSubCategory,
   productVariant,
   productVariantCategory,
   shop,
@@ -100,7 +100,7 @@ export class Installer {
         avatar: '',
         role: Role.Admin,
         createdOn,
-        status: 1,
+        status: DatabaseRecordStatus.Active,
       })
       const storeData = {
         name: store.name,
@@ -115,7 +115,7 @@ export class Installer {
         },
         createdBy: adminId,
         createdOn,
-        status: 1,
+        status: DatabaseRecordStatus.Active,
       }
 
       await tx.insert(shop).values(storeData)
@@ -142,7 +142,12 @@ export class AdminAuthtication {
     const res = await db
       .select()
       .from(user)
-      .where(and(eq(user.email, email), eq(user.status, 1)))
+      .where(
+        and(
+          eq(user.email, email),
+          eq(user.status, DatabaseRecordStatus.Active),
+        ),
+      )
 
     if (!res.length) {
       throw new UnAuthenticatedException('User not found.')
@@ -205,7 +210,7 @@ export class CustomerAuthentication {
       salt,
       password: md5(password + salt),
       createdOn: Math.floor(Date.now() / 1000),
-      status: 1,
+      status: DatabaseRecordStatus.Active,
     })
 
     return {
@@ -223,7 +228,12 @@ export class CustomerAuthentication {
     const res = await db
       .select()
       .from(customer)
-      .where(and(eq(customer.email, email), eq(customer.status, 1)))
+      .where(
+        and(
+          eq(customer.email, email),
+          eq(customer.status, DatabaseRecordStatus.Active),
+        ),
+      )
 
     if (!res.length) {
       throw new UnAuthenticatedException('Customer account not found.')
@@ -273,7 +283,7 @@ export class UserModel implements CRUDMode<UserPublicInfo> {
       avatar,
       role,
       createdOn: Math.floor(Date.now() / 1000),
-      status: 1,
+      status: DatabaseRecordStatus.Active,
     })
 
     if (!result[0].affectedRows) {
@@ -287,7 +297,12 @@ export class UserModel implements CRUDMode<UserPublicInfo> {
     const res = await db
       .select()
       .from(user)
-      .where(eq(user.id, id as string))
+      .where(
+        and(
+          eq(user.id, id as string),
+          ne(user.status, DatabaseRecordStatus.Deleted),
+        ),
+      )
 
     if (!res.length) {
       throw new NotFoundException()
@@ -312,6 +327,7 @@ export class UserModel implements CRUDMode<UserPublicInfo> {
     const res = await db
       .select()
       .from(user)
+      .where(ne(user.status, DatabaseRecordStatus.Deleted))
       .orderBy(desc(user.createdOn))
       .limit(size)
       .offset(page * size)
@@ -351,7 +367,7 @@ export class UserModel implements CRUDMode<UserPublicInfo> {
     await db
       .update(user)
       .set({
-        status: 0,
+        status: DatabaseRecordStatus.Deleted,
       })
       .where(eq(user.id, id))
 
@@ -382,7 +398,7 @@ export class CustomerModel implements CRUDMode<UserPublicInfo> {
       lastName,
       avatar,
       createdOn: Math.floor(Date.now() / 1000),
-      status: 1,
+      status: DatabaseRecordStatus.Active,
     })
 
     if (!result[0].affectedRows) {
@@ -396,7 +412,12 @@ export class CustomerModel implements CRUDMode<UserPublicInfo> {
     const res = await db
       .select()
       .from(customer)
-      .where(eq(customer.id, id as string))
+      .where(
+        and(
+          eq(customer.id, id as string),
+          ne(customer.status, DatabaseRecordStatus.Deleted),
+        ),
+      )
 
     if (!res.length) {
       throw new NotFoundException()
@@ -421,6 +442,7 @@ export class CustomerModel implements CRUDMode<UserPublicInfo> {
     const res = await db
       .select()
       .from(customer)
+      .where(and(ne(customer.status, DatabaseRecordStatus.Deleted)))
       .orderBy(desc(customer.createdOn))
       .limit(size)
       .offset(page * size)
@@ -458,7 +480,7 @@ export class CustomerModel implements CRUDMode<UserPublicInfo> {
     await db
       .update(customer)
       .set({
-        status: 0,
+        status: DatabaseRecordStatus.Deleted,
       })
       .where(eq(user.id, id))
 
@@ -501,7 +523,7 @@ export class ProductModel implements CRUDMode<ProductPublicInfo> {
       subCategoryId,
       createdBy,
       createdOn: Math.floor(Date.now() / 1000),
-      status: 1,
+      status: DatabaseRecordStatus.Active,
     })
 
     if (!result[0].affectedRows) {
@@ -525,14 +547,46 @@ export class ProductModel implements CRUDMode<ProductPublicInfo> {
           name: productCategory.name,
           slug: productCategory.slug,
         },
+        subCategory: {
+          id: productSubCategory.id,
+          name: productSubCategory.name,
+          slug: productSubCategory.slug,
+        },
       })
       .from(product)
       .leftJoin(productCategory, eq(product.categoryId, productCategory.id))
-      .where(eq(product.id, id))
+      .leftJoin(
+        productSubCategory,
+        eq(product.subCategoryId, productSubCategory.id),
+      )
+      .where(
+        and(
+          eq(product.id, id),
+          ne(product.status, DatabaseRecordStatus.Deleted),
+        ),
+      )
 
-    if (!res.length) {
-      throw new NotFoundException()
-    }
+    const variants = await db
+      .select({
+        id: productVariant.id,
+        name: productVariant.name,
+        description: productVariant.description,
+        priceVariant: productVariant.priceVariant,
+        quantity: productVariant.quantity,
+        sku: productVariant.sku,
+        coverImage: productVariant.coverImage,
+      })
+      .from(productVariant)
+      .leftJoin(
+        productVariantCategory,
+        eq(productVariant.variantCategoryId, productVariantCategory.id),
+      )
+      .where(
+        and(
+          eq(product.id, id),
+          ne(productVariant.status, DatabaseRecordStatus.Deleted),
+        ),
+      )
 
     return {
       id,
@@ -542,28 +596,110 @@ export class ProductModel implements CRUDMode<ProductPublicInfo> {
       basePrice: res[0].basePrice,
       coverImage: res[0].coverImage,
       category: res[0].category as CategoryItem,
+      subCategory: res[0].subCategory as CategoryItem,
+      variants,
     }
   }
 
   async findMany(page: number, size: number): Promise<ProductPublicInfo[]> {
     const res = await db
-      .select()
-      .from(user)
-      .orderBy(desc(user.createdOn))
+      .select({
+        id: product.id,
+        name: product.name,
+        slug: product.slug,
+        description: product.description,
+        basePrice: product.basePrice,
+        coverImage: product.coverImage,
+        category: {
+          id: productCategory.id,
+          name: productCategory.name,
+          slug: productCategory.slug,
+        },
+        subCategory: {
+          id: productSubCategory.id,
+          name: productSubCategory.name,
+          slug: productSubCategory.slug,
+        },
+      })
+      .from(product)
+      .leftJoin(productCategory, eq(product.categoryId, productCategory.id))
+      .leftJoin(
+        productSubCategory,
+        eq(product.subCategoryId, productSubCategory.id),
+      )
+      .where(ne(product.status, DatabaseRecordStatus.Deleted))
+      .orderBy(desc(product.createdOn))
       .limit(size)
       .offset(page * size)
 
     return res.map((item) => {
       return {
         id: item.id,
-        email: item.email,
-        phone: item.phone,
-        firstName: item.firstName,
-        lastName: item.lastName,
-        avatar: item.avatar,
-        role: item.role,
-        createdOn: item.createdOn,
-        updatedOn: item.updatedOn || undefined,
+        name: item.name,
+        slug: item.slug,
+        description: item.description,
+        basePrice: item.basePrice,
+        coverImage: item.coverImage,
+        category: item.category as CategoryItem,
+        subCategory: item.subCategory as CategoryItem,
+        variants: [],
+      }
+    })
+  }
+
+  async findManyByCategory(
+    page: number,
+    size: number,
+    categoryId: string,
+    subCategoryId: string,
+  ): Promise<ProductPublicInfo[]> {
+    const res = await db
+      .select({
+        id: product.id,
+        name: product.name,
+        slug: product.slug,
+        description: product.description,
+        basePrice: product.basePrice,
+        coverImage: product.coverImage,
+        category: {
+          id: productCategory.id,
+          name: productCategory.name,
+          slug: productCategory.slug,
+        },
+        subCategory: {
+          id: productSubCategory.id,
+          name: productSubCategory.name,
+          slug: productSubCategory.slug,
+        },
+      })
+      .from(product)
+      .leftJoin(productCategory, eq(product.categoryId, productCategory.id))
+      .leftJoin(
+        productSubCategory,
+        eq(product.subCategoryId, productSubCategory.id),
+      )
+      .where(
+        or(
+          eq(product.categoryId, categoryId),
+          eq(product.subCategoryId, subCategoryId),
+          ne(product.status, DatabaseRecordStatus.Deleted),
+        ),
+      )
+      .orderBy(desc(product.createdOn))
+      .limit(size)
+      .offset(page * size)
+
+    return res.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        slug: item.slug,
+        description: item.description,
+        basePrice: item.basePrice,
+        coverImage: item.coverImage,
+        category: item.category as CategoryItem,
+        subCategory: item.subCategory as CategoryItem,
+        variants: [],
       }
     })
   }
@@ -572,7 +708,14 @@ export class ProductModel implements CRUDMode<ProductPublicInfo> {
     return true
   }
 
-  async delete(): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
+    await db
+      .update(product)
+      .set({
+        status: DatabaseRecordStatus.Deleted,
+      })
+      .where(eq(product.id, id))
+
     return true
   }
 }
@@ -631,32 +774,6 @@ export class StoreConfig {
       content: res[0].content,
       order: res[0].order,
     }
-  }
-
-  public static async getAllAPIConfigs(): Promise<APIConfig[]> {
-    const res = await db.select().from(api)
-
-    if (!res.length) {
-      throw new NotFoundException()
-    }
-
-    return res.map((item) => {
-      return {
-        id: item.id,
-        config: item.config,
-      }
-    })
-  }
-
-  public static async updateAPIConfig(data: APIConfig): Promise<boolean> {
-    await db
-      .update(api)
-      .set({
-        config: data.config,
-      })
-      .where(eq(api.id, data.id))
-
-    return true
   }
 }
 
@@ -839,7 +956,14 @@ export class OrderModel implements CRUDMode<OrderItem> {
     return true
   }
 
-  async delete(): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
+    await db
+      .update(order)
+      .set({
+        status: DatabaseRecordStatus.Deleted,
+      })
+      .where(eq(order.id, id))
+
     return true
   }
 }
@@ -868,7 +992,7 @@ export class AddressModel implements CRUDMode<AddressItem> {
       zipcode,
       type,
       createdOn: Math.floor(Date.now() / 1000),
-      status: 1,
+      status: DatabaseRecordStatus.Active,
     })
 
     if (!result[0].affectedRows) {
@@ -878,15 +1002,42 @@ export class AddressModel implements CRUDMode<AddressItem> {
     return id
   }
 
-  async find(id: string | number): Promise<AddressItem[]> {
-    return []
-  }
-
-  async findByCustomerId(id: string): Promise<AddressItem[]> {
+  async find(id: string): Promise<AddressItem> {
     const res = await db
       .select()
       .from(customerAddress)
-      .where(eq(customerAddress.customerId, id))
+      .where(
+        and(
+          eq(customerAddress.id, id),
+          ne(customer.status, DatabaseRecordStatus.Deleted),
+        ),
+      )
+
+    if (!res.length) {
+      throw new NotFoundException()
+    }
+
+    return {
+      id: res[0].id,
+      address: res[0].address || '',
+      city: res[0].city || '',
+      state: res[0].state || '',
+      country: res[0].country || '',
+      zipcode: res[0].zipcode || '',
+      type: res[0].type,
+    }
+  }
+
+  async findManyByCustomerId(id: string): Promise<AddressItem[]> {
+    const res = await db
+      .select()
+      .from(customerAddress)
+      .where(
+        and(
+          eq(customerAddress.customerId, id),
+          ne(customerAddress.status, DatabaseRecordStatus.Deleted),
+        ),
+      )
 
     return res.map((item) => {
       return {
@@ -901,50 +1052,51 @@ export class AddressModel implements CRUDMode<AddressItem> {
     })
   }
 
-  async findMany(page: number, size: number): Promise<UserPublicInfo[]> {
+  async findMany(page: number, size: number): Promise<AddressItem[]> {
     const res = await db
       .select()
-      .from(customer)
-      .orderBy(desc(customer.createdOn))
+      .from(customerAddress)
+      .where(ne(customerAddress.status, DatabaseRecordStatus.Deleted))
+      .orderBy(desc(customerAddress.createdOn))
       .limit(size)
       .offset(page * size)
 
     return res.map((item) => {
       return {
         id: item.id,
-        email: item.email,
-        phone: item.phone,
-        firstName: item.firstName,
-        lastName: item.lastName,
-        avatar: item.avatar,
-        createdOn: item.createdOn,
-        updatedOn: item.updatedOn || undefined,
-        status: item.status,
+        address: item.address || '',
+        city: item.city || '',
+        state: item.state || '',
+        country: item.country || '',
+        zipcode: item.zipcode || '',
+        type: item.type,
       }
     })
   }
 
-  async update(data: UserPublicInfo): Promise<boolean> {
+  async update(data: AddressItem): Promise<boolean> {
     await db
-      .update(customer)
+      .update(customerAddress)
       .set({
-        phone: data.phone,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        avatar: data.avatar,
-        updatedOn: Math.floor(Date.now() / 1000),
+        address: data.address,
+        city: data.city,
+        state: data.state,
+        country: data.country,
+        zipcode: data.zipcode,
+        type: data.type,
       })
-      .where(eq(user.id, data.id))
+      .where(eq(customerAddress.id, data.id))
+
     return true
   }
 
   async delete(id: string): Promise<boolean> {
     await db
-      .update(customer)
+      .update(customerAddress)
       .set({
-        status: 0,
+        status: DatabaseRecordStatus.Deleted,
       })
-      .where(eq(user.id, id))
+      .where(eq(customerAddress.id, id))
 
     return true
   }

@@ -13,7 +13,7 @@ export type ProductPublicInfo = {
   basePrice: string
   coverImage: string
   category: CategoryItem
-  subCategoryId: CategoryItem
+  subCategory: CategoryItem
   variants: ProductVariant[]
 }
 
@@ -55,7 +55,7 @@ export type CartItem = {
 }
 
 export type CategoryItem = {
-  id: number
+  id: string
   name: string
   slug: string
   subCategories?: CategoryItem[]
@@ -241,4 +241,10 @@ export enum FileHostingProvider {
 
 export enum FatalErrorTypes {
   DatabaseConnection = 'ECONNREFUSED',
+}
+
+export enum DatabaseRecordStatus {
+  Deleted = -1,
+  Disabled = 0,
+  Active = 1,
 }
