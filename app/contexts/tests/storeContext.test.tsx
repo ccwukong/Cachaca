@@ -21,7 +21,7 @@ describe('StoreContext', () => {
     render(
       <StoreContext.Provider
         value={{
-          categories: [{ id: 1, name: 'Men', slug: 'men' }],
+          categories: [{ id: '1', name: 'Men', slug: 'men' }],
           storeSettings: {
             name: 'test store',
             logo: 'https//',
