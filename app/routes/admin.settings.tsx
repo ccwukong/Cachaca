@@ -1,4 +1,5 @@
 import {
+  ActionFunctionArgs,
   json,
   LoaderFunctionArgs,
   redirect,
@@ -11,7 +12,7 @@ import { adminCookie } from '~/cookie'
 import { StoreConfig, UserModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Settings from '~/themes/default/pages/admin/Settings'
-import { FatalErrorTypes } from '~/types'
+import { AddressType, FatalErrorTypes } from '~/types'
 import {
   JWTTokenSecretNotFoundException,
   UnAuthenticatedException,
@@ -65,6 +66,47 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       return redirect('/error')
     }
 
+    return json({ error: e, data: null })
+  }
+}
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  try {
+    const body = await request.formData()
+    if (
+      body.get('intent') === 'store-info' ||
+      body.get('intent') === 'store-banners' ||
+      body.get('intent') === 'api-info'
+    ) {
+      
+      await StoreConfig.updateStoreInfo({
+        name: String(body.get('store-name')),
+        description: String(body.get('store-description')),
+        address: {
+          id: '',
+          address: String(body.get('store-address')),
+          city: String(body.get('store-city')),
+          state: String(body.get('store-state')),
+          zipcode: String(body.get('store-zipcode')),
+          country: String(body.get('store-country')),
+          type: AddressType.Store,
+        },
+        phone: String(body.get('store-phone')),
+        email: String(body.get('store-email')),
+        logo: String(body.get('store-logo')),
+        banners: JSON.parse(String(body.get('banners'))),
+        other: JSON.parse(String(body.get('other'))),
+      })
+    } else if (body.get('intent') === 'account-info') {
+    } else if (body.get('intent') === 'account-password') {
+    }
+    return json({ error: null, data: {} })
+  } catch (e) {
+    console.error(e) // TODO: replace this with a proper logger
+
+    if (e?.code === FatalErrorTypes.DatabaseConnection) {
+      return redirect('/error')
+    }
     return json({ error: e, data: null })
   }
 }

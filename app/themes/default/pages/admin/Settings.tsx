@@ -1,6 +1,6 @@
 import { Form } from '@remix-run/react'
 import { MoreHorizontal } from 'lucide-react'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AdminContext from '~/contexts/adminContext'
 import AdminHeader from '~/themes/default/components/ui/admin/Header'
@@ -37,7 +37,7 @@ import {
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
 import { Textarea } from '~/themes/default/components/ui/textarea'
-import { ExternalAPIType } from '~/types'
+import { AddressItem, ExternalAPIType } from '~/types'
 import {
   Carousel,
   CarouselContent,
@@ -49,6 +49,15 @@ import {
 const CustomerList = () => {
   const { t } = useTranslation()
   const { account, storeSettings } = useContext(AdminContext)
+  const [form, setForm] = useState({
+    storeName: storeSettings?.name,
+    storeDescription: storeSettings?.description,
+    storeLogo: storeSettings?.logo,
+    storeAddress: storeSettings?.address,
+    storePhone: storeSettings?.phone,
+    storeEmail: storeSettings?.email,
+    storeCurrency: storeSettings?.currency,
+  })
   return (
     account &&
     storeSettings && (
@@ -93,7 +102,8 @@ const CustomerList = () => {
                         type="text"
                         id="store-name"
                         name="store-name"
-                        value={storeSettings.name}
+                        value={form.storeName}
+                        disabled
                       />
                     </div>
                     <div className="space-y-2">
@@ -107,7 +117,13 @@ const CustomerList = () => {
                       <Textarea
                         id="store-description"
                         name="store-description"
-                        value={storeSettings.description}
+                        value={form.storeDescription}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeDescription: e.target.value,
+                          })
+                        }}
                       />
                     </div>
                     <div className="space-y-2">
@@ -116,7 +132,13 @@ const CustomerList = () => {
                         type="text"
                         id="store-email"
                         name="store-email"
-                        value={storeSettings.email}
+                        value={form.storeEmail}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeEmail: e.target.value,
+                          })
+                        }}
                       />
                     </div>
                     <div className="space-y-2">
@@ -125,7 +147,13 @@ const CustomerList = () => {
                         type="text"
                         id="store-phone"
                         name="store-phone"
-                        value={storeSettings.phone}
+                        value={form.storePhone}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storePhone: e.target.value,
+                          })
+                        }}
                       />
                     </div>
                   </div>
@@ -138,7 +166,16 @@ const CustomerList = () => {
                         type="text"
                         id="store-address"
                         name="store-address"
-                        value={storeSettings?.address?.address}
+                        value={form?.storeAddress?.address}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeAddress: {
+                              ...form.storeAddress,
+                              address: e.target.value,
+                            } as AddressItem,
+                          })
+                        }}
                       />
                     </div>
                     <div className="space-y-2">
@@ -147,7 +184,16 @@ const CustomerList = () => {
                         type="text"
                         id="store-city"
                         name="store-city"
-                        value={storeSettings?.address?.city}
+                        value={form?.storeAddress?.city}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeAddress: {
+                              ...form.storeAddress,
+                              city: e.target.value,
+                            } as AddressItem,
+                          })
+                        }}
                       />
                     </div>
                     <div className="space-y-2">
@@ -156,7 +202,16 @@ const CustomerList = () => {
                         type="text"
                         id="store-state"
                         name="store-state"
-                        value={storeSettings?.address?.state}
+                        value={form?.storeAddress?.state}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeAddress: {
+                              ...form.storeAddress,
+                              state: e.target.value,
+                            } as AddressItem,
+                          })
+                        }}
                       />
                     </div>
                     <div className="space-y-2">
@@ -167,7 +222,16 @@ const CustomerList = () => {
                         type="text"
                         id="store-country"
                         name="store-country"
-                        value={storeSettings?.address?.country}
+                        value={form?.storeAddress?.country}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeAddress: {
+                              ...form.storeAddress,
+                              country: e.target.value,
+                            } as AddressItem,
+                          })
+                        }}
                       />
                     </div>
                     <div className="space-y-2">
@@ -178,7 +242,16 @@ const CustomerList = () => {
                         type="text"
                         id="store-zipcode"
                         name="store-zipcode"
-                        value={storeSettings?.address?.zipcode}
+                        value={form?.storeAddress?.zipcode}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeAddress: {
+                              ...form.storeAddress,
+                              zipcode: e.target.value,
+                            } as AddressItem,
+                          })
+                        }}
                       />
                     </div>
                   </div>
@@ -195,7 +268,9 @@ const CustomerList = () => {
                     </div>
                   </div>
                 </div>
-                <Button>{t('system.save')}</Button>
+                <Button type="submit" name="intent" value="store-info">
+                  {t('system.save')}
+                </Button>
               </Form>
               <p className="mt-10 text-xl">{t('system.banners')}</p>
               <Form className="mt-3">
@@ -254,7 +329,14 @@ const CustomerList = () => {
                     </Carousel>
                   </div>
                 </div>
-                <Button className="mt-4">{t('system.save')}</Button>
+                <Button
+                  className="mt-4"
+                  type="submit"
+                  name="intent"
+                  value="store-banners"
+                >
+                  {t('system.save')}
+                </Button>
               </Form>
             </TabsContent>
             <TabsContent value="account-settings">
@@ -309,7 +391,9 @@ const CustomerList = () => {
                         value={account.phone}
                       />
                     </div>
-                    <Button>{t('system.save')}</Button>
+                    <Button type="submit" name="intent" value="account-info">
+                      {t('system.save')}
+                    </Button>
                   </Form>
                 </TabsContent>
                 <TabsContent value="change-password">
@@ -334,7 +418,13 @@ const CustomerList = () => {
                         name="new-password"
                       />
                     </div>
-                    <Button>{t('system.save')}</Button>
+                    <Button
+                      type="submit"
+                      name="intent"
+                      value="account-password"
+                    >
+                      {t('system.save')}
+                    </Button>
                   </Form>
                 </TabsContent>
               </Tabs>
@@ -519,7 +609,9 @@ const CustomerList = () => {
                     }
                   />
                 </div>
-                <Button>{t('system.save')}</Button>
+                <Button type="submit" name="intent" value="api-info">
+                  {t('system.save')}
+                </Button>
               </Form>
             </TabsContent>
           </Tabs>

@@ -10,8 +10,10 @@ import {
   AddressType,
   CategoryItem,
   DatabaseRecordStatus,
+  HomeBannerSettings,
   OrderItem,
   OrderStatus,
+  OtherStoreConfigs,
   PaymentMethod,
   PaymentScheme,
   PaymentStatus,
@@ -804,11 +806,19 @@ export class StoreConfig {
     }
   }
 
-  public static async updateStoreInfo(data: StoreSettings): Promise<void> {
-    await db
+  public static async updateStoreInfo(data: {
+    name: string
+    logo: string
+    email: string
+    phone: string
+    address: AddressItem
+    description: string
+    other: OtherStoreConfigs
+    banners: HomeBannerSettings
+  }): Promise<void> {
+    const res = await db
       .update(shop)
       .set({
-        name: data.name,
         logo: data.logo,
         email: data.email,
         phone: data.phone,
@@ -818,6 +828,7 @@ export class StoreConfig {
         banners: data.banners,
       })
       .where(eq(shop.name, data.name))
+    console.log(res)
   }
 
   public static async getPublicPageByName(name: string): Promise<PublicPage> {
