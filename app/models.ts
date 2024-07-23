@@ -469,7 +469,7 @@ export class CustomerModel implements CRUDModel<UserPublicInfo> {
         avatar: data.avatar,
         updatedOn: Math.floor(Date.now() / 1000),
       })
-      .where(eq(user.id, data.id))
+      .where(eq(customer.id, data.id))
   }
 
   async delete(id: string): Promise<void> {

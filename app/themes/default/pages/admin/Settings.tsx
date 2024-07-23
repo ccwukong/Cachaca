@@ -269,7 +269,6 @@ const CustomerList = () => {
                     </div>
                   </div>
                 </div>
-
                 <p className="mt-10 text-xl">{t('system.banners')}</p>
                 <div className="grid grid-cols-3 gap-24">
                   <div className="space-y-3">

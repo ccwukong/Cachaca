@@ -39,7 +39,7 @@ export type UserPublicInfo = {
   lastName: string
   avatar: string
   role?: number
-  createdOn: number
+  createdOn?: number
   updatedOn?: number
   status?: number
 }
