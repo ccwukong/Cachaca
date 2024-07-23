@@ -72,7 +72,7 @@ const Header = () => {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Link to="/logout">{t('system.logout')}</Link>
+                  <Link to="/admin/logout">{t('system.logout')}</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
