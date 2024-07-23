@@ -1,33 +1,32 @@
-import { useEffect, useState } from 'react'
-import { Form } from '@remix-run/react'
-import { useTranslation } from 'react-i18next'
+import { useFetcher } from '@remix-run/react'
 import { AlertCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from '~/themes/default/components/ui/alert'
+import { Button } from '~/themes/default/components/ui/button'
 import {
   Card,
-  CardHeader,
-  CardTitle,
   CardContent,
   CardFooter,
+  CardHeader,
+  CardTitle,
 } from '~/themes/default/components/ui/card'
-import { Label } from '~/themes/default/components/ui/label'
 import { Input } from '~/themes/default/components/ui/input'
-import { Button } from '~/themes/default/components/ui/button'
+import { Label } from '~/themes/default/components/ui/label'
+import { Spinner } from '~/themes/default/components/ui/spinner'
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from '~/themes/default/components/ui/alert'
-import { Spinner } from '~/themes/default/components/ui/spinner'
 
 const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
   const { t } = useTranslation()
-  const [isLoginSubmitted, setIsLoginSubmitted] = useState<boolean>(false)
+  const fetcher = useFetcher()
 
   return (
     <div className="max-w-screen-xl mx-auto h-full pt-24 flex justify-center">
@@ -46,19 +45,11 @@ const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Form method="POST">
+              <fetcher.Form method="POST">
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">{t('system.email')}</Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      onChange={() => {
-                        setIsLoginSubmitted(false)
-                      }}
-                      required
-                    />
+                    <Input id="email" name="email" type="email" required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="password">{t('system.password')}</Label>
@@ -66,26 +57,17 @@ const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
                       id="password"
                       name="password"
                       type="password"
-                      onChange={() => {
-                        setIsLoginSubmitted(false)
-                      }}
                       required
                     />
                   </div>
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    onClick={() => {
-                      setIsLoginSubmitted(true)
-                    }}
-                  >
-                    {isLoginSubmitted ? (
+                  <Button type="submit" className="w-full">
+                    {fetcher.state !== 'idle' ? (
                       <Spinner size="small" className="text-white" />
                     ) : (
                       t('system.login')
                     )}
                   </Button>
-                  {!isLoginSuccessful && isLoginSubmitted ? (
+                  {!isLoginSuccessful && fetcher.state === 'idle' ? (
                     <Alert variant="destructive" className="mt-3">
                       <AlertCircle className="h-4 w-4" />
                       <AlertTitle>{t('system.error')}</AlertTitle>
@@ -95,7 +77,7 @@ const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
                     </Alert>
                   ) : null}
                 </div>
-              </Form>
+              </fetcher.Form>
             </CardContent>
           </Card>
         </TabsContent>

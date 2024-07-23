@@ -1,4 +1,4 @@
-import { Form } from '@remix-run/react'
+import { useFetcher } from '@remix-run/react'
 import { MoreHorizontal } from 'lucide-react'
 import { useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -45,10 +45,12 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '../../components/ui/carousel'
+import { Spinner } from '../../components/ui/spinner'
 
 const CustomerList = () => {
   const { t } = useTranslation()
   const { account, storeSettings } = useContext(AdminContext)
+  const fetcher = useFetcher()
   const [form, setForm] = useState({
     storeName: storeSettings?.name,
     storeDescription: storeSettings?.description,
@@ -63,37 +65,36 @@ const CustomerList = () => {
     storeSettings && (
       <div className="mx-6 overflow-hidden">
         <AdminHeader />
-
         <div className="max-w-screen-xl w-full flex-1 space-y-4 p-8 pt-6 mx-auto h-auto mt-16">
           <div className="flex items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">
               {t('system.settings')}
             </h2>
           </div>
-          <Tabs defaultValue="store-settings" className="w-full">
-            <TabsList>
-              <TabsTrigger value="store-settings">
-                {t('system.store_settings')}
-              </TabsTrigger>
-              <TabsTrigger value="account-settings">
-                {t('system.account_settings')}
-              </TabsTrigger>
-              <TabsTrigger value="product-categories">
-                {t('system.product_categories')}
-              </TabsTrigger>
-              <TabsTrigger value="product-variants">
-                {t('system.product_variants')}
-              </TabsTrigger>
-              <TabsTrigger value="public-pages">
-                {t('system.public_pages')}
-              </TabsTrigger>
-              <TabsTrigger value="payment">{t('system.payment')}</TabsTrigger>
-              <TabsTrigger value="third-party">
-                {t('system.thrid-party-services')}
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="store-settings">
-              <Form method="POST" className="space-y-4">
+          <fetcher.Form method="POST">
+            <Tabs defaultValue="store-settings" className="w-full">
+              <TabsList>
+                <TabsTrigger value="store-settings">
+                  {t('system.store_settings')}
+                </TabsTrigger>
+                <TabsTrigger value="account-settings">
+                  {t('system.account_settings')}
+                </TabsTrigger>
+                <TabsTrigger value="product-categories">
+                  {t('system.product_categories')}
+                </TabsTrigger>
+                <TabsTrigger value="product-variants">
+                  {t('system.product_variants')}
+                </TabsTrigger>
+                <TabsTrigger value="public-pages">
+                  {t('system.public_pages')}
+                </TabsTrigger>
+                <TabsTrigger value="payment">{t('system.payment')}</TabsTrigger>
+                <TabsTrigger value="third-party">
+                  {t('system.thrid-party-services')}
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="store-settings">
                 <div className="w-full grid grid-cols-3 gap-6">
                   <div className="space-y-3">
                     <div className="space-y-2">
@@ -103,7 +104,7 @@ const CustomerList = () => {
                         id="store-name"
                         name="store-name"
                         value={form.storeName}
-                        disabled
+                        readOnly
                       />
                     </div>
                     <div className="space-y-2">
@@ -268,12 +269,8 @@ const CustomerList = () => {
                     </div>
                   </div>
                 </div>
-                <Button type="submit" name="intent" value="store-info">
-                  {t('system.save')}
-                </Button>
-              </Form>
-              <p className="mt-10 text-xl">{t('system.banners')}</p>
-              <Form className="mt-3">
+
+                <p className="mt-10 text-xl">{t('system.banners')}</p>
                 <div className="grid grid-cols-3 gap-24">
                   <div className="space-y-3">
                     <div className="space-y-2">
@@ -333,288 +330,292 @@ const CustomerList = () => {
                   className="mt-4"
                   type="submit"
                   name="intent"
-                  value="store-banners"
+                  value="store-info"
                 >
-                  {t('system.save')}
+                  {fetcher.state !== 'idle' ? (
+                    <Spinner size="small" className="text-white" />
+                  ) : (
+                    t('system.save')
+                  )}
                 </Button>
-              </Form>
-            </TabsContent>
-            <TabsContent value="account-settings">
-              <Tabs defaultValue="account-settings" className="w-full">
-                <TabsList>
-                  <TabsTrigger value="account-settings">
-                    {t('system.account_settings')}
-                  </TabsTrigger>
-                  <TabsTrigger value="change-password">
-                    {t('system.change_password')}
-                  </TabsTrigger>
-                </TabsList>
-                <TabsContent value="account-settings">
-                  <Form method="POST" className="space-y-4 w-[480px]">
-                    <div className="space-y-2">
-                      <Label htmlFor="first-name">
-                        {t('system.firstname')}
-                      </Label>
-                      <Input
-                        type="text"
-                        id="first-name"
-                        name="first-name"
-                        value={account.firstName}
-                      />
+              </TabsContent>
+              <TabsContent value="account-settings">
+                <Tabs defaultValue="account-settings" className="w-full">
+                  <TabsList>
+                    <TabsTrigger value="account-settings">
+                      {t('system.account_settings')}
+                    </TabsTrigger>
+                    <TabsTrigger value="change-password">
+                      {t('system.change_password')}
+                    </TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="account-settings">
+                    <div className="space-y-4 w-[480px]">
+                      <div className="space-y-2">
+                        <Label htmlFor="first-name">
+                          {t('system.firstname')}
+                        </Label>
+                        <Input
+                          type="text"
+                          id="first-name"
+                          name="first-name"
+                          value={account.firstName}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="store-email">
+                          {t('system.lastname')}
+                        </Label>
+                        <Input
+                          type="text"
+                          id="last-name"
+                          name="last-name"
+                          value={account.lastName}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="email">{t('system.email')}</Label>
+                        <Input
+                          type="text"
+                          id="email"
+                          name="email"
+                          value={account.email}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="phone">{t('system.phone')}</Label>
+                        <Input
+                          type="text"
+                          id="phone"
+                          name="phone"
+                          value={account.phone}
+                        />
+                      </div>
+                      <Button type="submit" name="intent" value="account-info">
+                        {t('system.save')}
+                      </Button>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="store-email">
-                        {t('system.lastname')}
-                      </Label>
-                      <Input
-                        type="text"
-                        id="last-name"
-                        name="last-name"
-                        value={account.lastName}
-                      />
+                  </TabsContent>
+                  <TabsContent value="change-password">
+                    <div className="space-y-4 w-[480px]">
+                      <div className="space-y-2">
+                        <Label htmlFor="old-password">
+                          {t('system.old_password')}
+                        </Label>
+                        <Input
+                          type="password"
+                          id="old-password"
+                          name="old-password"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="new-password">
+                          {t('system.new_password')}
+                        </Label>
+                        <Input
+                          type="text"
+                          id="new-password"
+                          name="new-password"
+                        />
+                      </div>
+                      <Button
+                        type="submit"
+                        name="intent"
+                        value="account-password"
+                      >
+                        {t('system.save')}
+                      </Button>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">{t('system.email')}</Label>
-                      <Input
-                        type="text"
-                        id="email"
-                        name="email"
-                        value={account.email}
-                      />
+                  </TabsContent>
+                </Tabs>
+              </TabsContent>
+              <TabsContent value="product-categories">
+                {t('system.product_categories')}
+              </TabsContent>
+              <TabsContent value="product-variants">
+                {t('system.product_variants')}
+              </TabsContent>
+              <TabsContent value="public-pages">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>{t('system.title')}</TableHead>
+                      <TableHead>{t('system.url')}</TableHead>
+                      <TableHead>{t('system.order')}</TableHead>
+                      <TableHead>
+                        <span className="sr-only">{t('system.actions')}</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  {storeSettings.publicPages.length ? (
+                    <TableBody>
+                      {storeSettings.publicPages.map((item) => (
+                        <TableRow key={item.name}>
+                          <TableCell className="font-medium">
+                            {item.name}
+                          </TableCell>
+                          <TableCell>/{item.slug}</TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            {item.order}
+                          </TableCell>
+                          <TableCell>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  aria-haspopup="true"
+                                  size="icon"
+                                  variant="ghost"
+                                >
+                                  <MoreHorizontal className="h-4 w-4" />
+                                  <span className="sr-only">Toggle menu</span>
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>
+                                  {t('system.actions')}
+                                </DropdownMenuLabel>
+                                <DropdownMenuItem>
+                                  {t('system.edit')}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  {t('system.disable')}
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  ) : (
+                    <div className="text-center">
+                      {t('system.no_records_found')}
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">{t('system.phone')}</Label>
-                      <Input
-                        type="text"
-                        id="phone"
-                        name="phone"
-                        value={account.phone}
-                      />
-                    </div>
-                    <Button type="submit" name="intent" value="account-info">
-                      {t('system.save')}
-                    </Button>
-                  </Form>
-                </TabsContent>
-                <TabsContent value="change-password">
-                  <Form method="POST" className="space-y-4 w-[480px]">
-                    <div className="space-y-2">
-                      <Label htmlFor="old-password">
-                        {t('system.old_password')}
-                      </Label>
-                      <Input
-                        type="password"
-                        id="old-password"
-                        name="old-password"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="new-password">
-                        {t('system.new_password')}
-                      </Label>
-                      <Input
-                        type="text"
-                        id="new-password"
-                        name="new-password"
-                      />
-                    </div>
-                    <Button
-                      type="submit"
-                      name="intent"
-                      value="account-password"
-                    >
-                      {t('system.save')}
-                    </Button>
-                  </Form>
-                </TabsContent>
-              </Tabs>
-            </TabsContent>
-            <TabsContent value="product-categories">
-              {t('system.product_categories')}
-            </TabsContent>
-            <TabsContent value="product-variants">
-              {t('system.product_variants')}
-            </TabsContent>
-            <TabsContent value="public-pages">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>{t('system.title')}</TableHead>
-                    <TableHead>{t('system.url')}</TableHead>
-                    <TableHead>{t('system.order')}</TableHead>
-                    <TableHead>
-                      <span className="sr-only">{t('system.actions')}</span>
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                {storeSettings.publicPages.length ? (
-                  <TableBody>
-                    {storeSettings.publicPages.map((item) => (
-                      <TableRow key={item.name}>
-                        <TableCell className="font-medium">
-                          {item.name}
-                        </TableCell>
-                        <TableCell>/{item.slug}</TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          {item.order}
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="ghost"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>
-                                {t('system.actions')}
-                              </DropdownMenuLabel>
-                              <DropdownMenuItem>
-                                {t('system.edit')}
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                {t('system.disable')}
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                ) : (
-                  <div className="text-center">
-                    {t('system.no_records_found')}
+                  )}
+                </Table>
+              </TabsContent>
+              <TabsContent value="payment">
+                Change your payment settings here.
+              </TabsContent>
+              <TabsContent value="third-party">
+                <div className="space-y-4 w-[480px]">
+                  <p className="text-xl pt-6">{t('system.generative_ai')}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {t('system.generative_ai_hint')}
+                  </p>
+                  <div className="space-y-2">
+                    <Label>{t('system.provider')}</Label>
+                    <Select value="openai">
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder={t('system.select')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="openai">OpenAI</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
-                )}
-              </Table>
-            </TabsContent>
-            <TabsContent value="payment">
-              Change your payment settings here.
-            </TabsContent>
-            <TabsContent value="third-party">
-              <Form method="POST" className="space-y-4 w-[480px]">
-                <p className="text-xl pt-6">{t('system.generative_ai')}</p>
-                <p className="text-sm text-muted-foreground">
-                  {t('system.generative_ai_hint')}
-                </p>
-                <div className="space-y-2">
-                  <Label>{t('system.provider')}</Label>
-                  <Select value="openai">
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder={t('system.select')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="openai">OpenAI</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div className="space-y-2">
+                    <Label htmlFor="ai-model">{t('system.model')}</Label>
+                    <Input type="text" id="ai-model" name="ai-model" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="ai-api-key">{t('system.api_key')}</Label>
+                    <Input type="text" id="ai-api-key" name="ai-api-key" />
+                  </div>
+                  <p className="text-xl pt-6">{t('system.file_hosting')}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {t('system.file_hosting_hint')}
+                  </p>
+                  <div className="space-y-2">
+                    <Label>{t('system.provider')}</Label>
+                    <Select value="cloudflare-r2">
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder={t('system.select')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="cloudflare-r2">
+                          Cloudflare R2
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="file-token">
+                      {t('system.api_token_or_key')} ({t('system.if_any')})
+                    </Label>
+                    <Input type="text" id="file-token" name="file-token" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="file-access-key-id">
+                      {t('system.access_key_id')}
+                    </Label>
+                    <Input
+                      type="text"
+                      id="file-access-key-id"
+                      name="file-access-key-id"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="file-secret-access-key">
+                      {t('system.secret_access_key')}
+                    </Label>
+                    <Input
+                      type="text"
+                      id="file-secret-access-key"
+                      name="file-secret-access-key"
+                    />
+                  </div>
+                  <p className="text-xl pt-6">{t('system.email_service')}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {t('system.email_service_provider_hint')}
+                  </p>
+                  <div className="space-y-2">
+                    <Label>{t('system.provider')}</Label>
+                    <Select value="mailtrap">
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder={t('system.select')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="mailtrap">Mailtrap</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email-service-provider-host">
+                      {t('system.api_endpoint')}
+                    </Label>
+                    <Input
+                      type="text"
+                      id="email-endpoint"
+                      name="email-endpoint"
+                      value={
+                        storeSettings.other?.apis.filter(
+                          (item) => item.type === ExternalAPIType.Email,
+                        )[0]?.config.host
+                      }
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="email-service-provider-token">
+                      {t('system.api_token_or_key')} ({t('system.if_any')})
+                    </Label>
+                    <Input
+                      type="password"
+                      id="email-token"
+                      name="email-token"
+                      value={
+                        storeSettings.other!.apis.filter(
+                          (item) => item.type === ExternalAPIType.Email,
+                        )[0]?.config.token
+                      }
+                    />
+                  </div>
+                  <Button type="submit" name="intent" value="api-info">
+                    {t('system.save')}
+                  </Button>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="ai-model">{t('system.model')}</Label>
-                  <Input type="text" id="ai-model" name="ai-model" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="ai-api-key">{t('system.api_key')}</Label>
-                  <Input type="text" id="ai-api-key" name="ai-api-key" />
-                </div>
-                <p className="text-xl pt-6">{t('system.file_hosting')}</p>
-                <p className="text-sm text-muted-foreground">
-                  {t('system.file_hosting_hint')}
-                </p>
-                <div className="space-y-2">
-                  <Label>{t('system.provider')}</Label>
-                  <Select value="cloudflare-r2">
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder={t('system.select')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="cloudflare-r2">
-                        Cloudflare R2
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="file-token">
-                    {t('system.api_token_or_key')} ({t('system.if_any')})
-                  </Label>
-                  <Input type="text" id="file-token" name="file-token" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="file-access-key-id">
-                    {t('system.access_key_id')}
-                  </Label>
-                  <Input
-                    type="text"
-                    id="file-access-key-id"
-                    name="file-access-key-id"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="file-secret-access-key">
-                    {t('system.secret_access_key')}
-                  </Label>
-                  <Input
-                    type="text"
-                    id="file-secret-access-key"
-                    name="file-secret-access-key"
-                  />
-                </div>
-                <p className="text-xl pt-6">{t('system.email_service')}</p>
-                <p className="text-sm text-muted-foreground">
-                  {t('system.email_service_provider_hint')}
-                </p>
-                <div className="space-y-2">
-                  <Label>{t('system.provider')}</Label>
-                  <Select value="mailtrap">
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder={t('system.select')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="mailtrap">Mailtrap</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email-service-provider-host">
-                    {t('system.api_endpoint')}
-                  </Label>
-                  <Input
-                    type="text"
-                    id="email-endpoint"
-                    name="email-endpoint"
-                    value={
-                      storeSettings.other?.apis.filter(
-                        (item) => item.type === ExternalAPIType.Email,
-                      )[0]?.config.host
-                    }
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="email-service-provider-token">
-                    {t('system.api_token_or_key')} ({t('system.if_any')})
-                  </Label>
-                  <Input
-                    type="password"
-                    id="email-token"
-                    name="email-token"
-                    value={
-                      storeSettings.other!.apis.filter(
-                        (item) => item.type === ExternalAPIType.Email,
-                      )[0]?.config.token
-                    }
-                  />
-                </div>
-                <Button type="submit" name="intent" value="api-info">
-                  {t('system.save')}
-                </Button>
-              </Form>
-            </TabsContent>
-          </Tabs>
+              </TabsContent>
+            </Tabs>
+          </fetcher.Form>
         </div>
       </div>
     )

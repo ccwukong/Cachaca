@@ -1,6 +1,5 @@
-import { Form, Link } from '@remix-run/react'
+import { Form, Link, useFetcher } from '@remix-run/react'
 import { AlertCircle } from 'lucide-react'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Alert,
@@ -20,7 +19,7 @@ import { Spinner } from '~/themes/default/components/ui/spinner'
 
 const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
   const { t } = useTranslation()
-  const [isLoginSubmitted, setIsLoginSubmitted] = useState<boolean>(false)
+  const fetcher = useFetcher()
 
   return (
     <div className="mx-6 overflow-hidden">
@@ -32,15 +31,7 @@ const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
           <Form method="POST" className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">{t('system.email')}</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                onChange={() => {
-                  setIsLoginSubmitted(false)
-                }}
-                required
-              />
+              <Input id="email" name="email" type="email" required />
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
@@ -52,30 +43,16 @@ const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
                   {t('system.forgot_password_hint')}
                 </Link>
               </div>
-              <Input
-                id="password"
-                type="password"
-                name="password"
-                onChange={() => {
-                  setIsLoginSubmitted(false)
-                }}
-                required
-              />
+              <Input id="password" type="password" name="password" required />
             </div>
-            <Button
-              type="submit"
-              onClick={() => {
-                setIsLoginSubmitted(true)
-              }}
-              className="w-full"
-            >
-              {isLoginSubmitted ? (
+            <Button type="submit" className="w-full">
+              {fetcher.state !== 'idle' ? (
                 <Spinner size="small" className="text-white" />
               ) : (
                 t('system.login')
               )}
             </Button>
-            {!isLoginSuccessful && isLoginSubmitted ? (
+            {!isLoginSuccessful && fetcher.state === 'idle' ? (
               <Alert variant="destructive" className="mt-3">
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>{t('system.error')}</AlertTitle>

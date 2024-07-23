@@ -1,4 +1,4 @@
-import { Form, Link, useSubmit } from '@remix-run/react'
+import { Form, Link, useFetcher, useSubmit } from '@remix-run/react'
 import { AlertCircle } from 'lucide-react'
 import { FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -21,13 +21,13 @@ import { Spinner } from '~/themes/default/components/ui/spinner'
 
 const Register = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
   const { t } = useTranslation()
+  const fetcher = useFetcher()
   const [formData, SetFormData] = useState<{
     firstName: string
     lastName: string
     email: string
     password: string
   }>({ firstName: '', lastName: '', email: '', password: '' })
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
   const [formCompleted, setFormCompleted] = useState<boolean>(false)
   const submit = useSubmit()
 
@@ -39,7 +39,6 @@ const Register = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
     } else {
       setFormCompleted(false)
     }
-    setIsSubmitted(false)
   }, [formData])
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -47,7 +46,6 @@ const Register = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
     const { firstName, lastName, email, password } = formData
 
     if (firstName && lastName && email && password) {
-      setIsSubmitted(true)
       submit(formData, { method: 'POST' })
     }
   }
@@ -133,14 +131,14 @@ const Register = ({ isSubmitSuccessful }: { isSubmitSuccessful: boolean }) => {
                 className="w-full"
                 disabled={!formCompleted}
               >
-                {isSubmitted ? (
+                {fetcher.state !== 'idle' ? (
                   <Spinner size="small" className="text-white" />
                 ) : (
                   t('system.submit')
                 )}
               </Button>
 
-              {!isSubmitSuccessful && isSubmitted ? (
+              {!isSubmitSuccessful && fetcher.state === 'idle' ? (
                 <Alert variant="destructive" className="mt-3">
                   <AlertCircle className="h-4 w-4" />
                   <AlertTitle>{t('system.error')}</AlertTitle>
