@@ -50,8 +50,8 @@ interface CRUDModel<T> {
   create(data: object): Promise<string | number>
   find(id: string | number): Promise<T>
   findMany(page: number, size: number): Promise<T[]>
-  update(data: object): Promise<boolean>
-  delete(id: string | number): Promise<boolean>
+  update(data: object): Promise<void>
+  delete(id: string | number): Promise<void>
 }
 
 export class Installer {
@@ -346,7 +346,7 @@ export class UserModel implements CRUDModel<UserPublicInfo> {
     })
   }
 
-  async update(data: UserPublicInfo): Promise<boolean> {
+  async update(data: UserPublicInfo): Promise<void> {
     await db
       .update(user)
       .set({
@@ -358,19 +358,15 @@ export class UserModel implements CRUDModel<UserPublicInfo> {
         updatedOn: Math.floor(Date.now() / 1000),
       })
       .where(eq(user.id, data.id))
-
-    return true
   }
 
-  async delete(id: string): Promise<boolean> {
+  async delete(id: string): Promise<void> {
     await db
       .update(user)
       .set({
         status: DatabaseRecordStatus.Deleted,
       })
       .where(eq(user.id, id))
-
-    return true
   }
 }
 
@@ -461,7 +457,7 @@ export class CustomerModel implements CRUDModel<UserPublicInfo> {
     })
   }
 
-  async update(data: UserPublicInfo): Promise<boolean> {
+  async update(data: UserPublicInfo): Promise<void> {
     await db
       .update(customer)
       .set({
@@ -472,18 +468,15 @@ export class CustomerModel implements CRUDModel<UserPublicInfo> {
         updatedOn: Math.floor(Date.now() / 1000),
       })
       .where(eq(user.id, data.id))
-    return true
   }
 
-  async delete(id: string): Promise<boolean> {
+  async delete(id: string): Promise<void> {
     await db
       .update(customer)
       .set({
         status: DatabaseRecordStatus.Deleted,
       })
       .where(eq(user.id, id))
-
-    return true
   }
 }
 
@@ -670,19 +663,15 @@ export class ProductModel implements CRUDModel<ProductPublicInfo> {
     })
   }
 
-  async update(): Promise<boolean> {
-    return true
-  }
+  async update(): Promise<void> {}
 
-  async delete(id: string): Promise<boolean> {
+  async delete(id: string): Promise<void> {
     await db
       .update(product)
       .set({
         status: DatabaseRecordStatus.Deleted,
       })
       .where(eq(product.id, id))
-
-    return true
   }
 }
 
@@ -755,6 +744,26 @@ export class ProductCategoryModel implements CRUDModel<CategoryItem> {
       }
     })
   }
+
+  async update(data: CategoryItem): Promise<void> {
+    await db
+      .update(productCategory)
+      .set({
+        name: data.name,
+        slug: data.slug,
+        parentId: data.parentId,
+      })
+      .where(eq(productCategory.id, data.id))
+  }
+
+  async delete(id: string): Promise<void> {
+    await db
+      .update(productCategory)
+      .set({
+        status: DatabaseRecordStatus.Deleted,
+      })
+      .where(eq(productCategory.id, id))
+  }
 }
 
 export class StoreConfig {
@@ -793,6 +802,22 @@ export class StoreConfig {
       other: sdata[0].shop.other,
       banners: sdata[0].shop.banners,
     }
+  }
+
+  public static async updateStoreInfo(data: StoreSettings): Promise<void> {
+    await db
+      .update(shop)
+      .set({
+        name: data.name,
+        logo: data.logo,
+        email: data.email,
+        phone: data.phone,
+        address: data.address,
+        description: data.description,
+        other: data.other,
+        banners: data.banners,
+      })
+      .where(eq(shop.name, data.name))
   }
 
   public static async getPublicPageByName(name: string): Promise<PublicPage> {
@@ -989,19 +1014,15 @@ export class OrderModel implements CRUDModel<OrderItem> {
     return []
   }
 
-  async update(): Promise<boolean> {
-    return true
-  }
+  async update(): Promise<void> {}
 
-  async delete(id: string): Promise<boolean> {
+  async delete(id: string): Promise<void> {
     await db
       .update(order)
       .set({
         status: DatabaseRecordStatus.Deleted,
       })
       .where(eq(order.id, id))
-
-    return true
   }
 }
 
@@ -1111,7 +1132,7 @@ export class AddressModel implements CRUDModel<AddressItem> {
     })
   }
 
-  async update(data: AddressItem): Promise<boolean> {
+  async update(data: AddressItem): Promise<void> {
     await db
       .update(customerAddress)
       .set({
@@ -1123,18 +1144,14 @@ export class AddressModel implements CRUDModel<AddressItem> {
         type: data.type,
       })
       .where(eq(customerAddress.id, data.id))
-
-    return true
   }
 
-  async delete(id: string): Promise<boolean> {
+  async delete(id: string): Promise<void> {
     await db
       .update(customerAddress)
       .set({
         status: DatabaseRecordStatus.Deleted,
       })
       .where(eq(customerAddress.id, id))
-
-    return true
   }
 }
