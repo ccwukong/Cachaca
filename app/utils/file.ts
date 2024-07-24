@@ -4,6 +4,7 @@ import { FileHostingProvider } from '~/types'
 
 export default async function fileUpload(
   provider: FileHostingProvider,
+  file: File,
   configs: { [key: string]: string },
 ) {
   if (provider === FileHostingProvider.Cloudinary) {
@@ -13,10 +14,15 @@ export default async function fileUpload(
       api_secret: configs.apiSecret,
     })
   }
+
+  const arrayBuffer = await file.arrayBuffer()
+  const buffer = Buffer.from(arrayBuffer)
   const id = uuidv4()
-  await cloudinary.uploader.upload(configs.filename, {
-    public_id: id,
-  })
+  await cloudinary.uploader
+    .upload_stream({
+      public_id: id,
+    })
+    .end(buffer)
 
   const optimizeUrl = cloudinary.url(id, {
     fetch_format: 'auto',

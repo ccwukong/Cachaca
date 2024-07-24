@@ -12,11 +12,17 @@ import { adminCookie } from '~/cookie'
 import { StoreConfig, UserModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Settings from '~/themes/default/pages/admin/Settings'
-import { AddressType, FatalErrorTypes } from '~/types'
+import {
+  AddressType,
+  ExternalApiType,
+  FatalErrorTypes,
+  FileHostingProvider,
+} from '~/types'
 import {
   JWTTokenSecretNotFoundException,
   UnAuthenticatedException,
 } from '~/utils/exception'
+import fileUpload from '~/utils/file'
 import { decode, isValid } from '~/utils/jwt'
 
 export const meta: MetaFunction = () => {
@@ -73,6 +79,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     const body = await request.formData()
+
     if (
       body.get('intent') === 'store-info' ||
       body.get('intent') === 'api-info'
@@ -92,9 +99,41 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         phone: String(body.get('store-phone')),
         email: String(body.get('store-email')),
         logo: String(body.get('store-logo')),
-        banners: JSON.parse(String(body.get('banners'))),
-        other: JSON.parse(String(body.get('other'))),
+        banners: {
+          autoplay: String(body.get('store-banner-autoplay')) === 'on',
+          speed: Number(body.get('store-banner-speed')),
+          items: [],
+        },
+        other: {
+          copyright: String(body.get('store-copyright-info')),
+          apis: {
+            [ExternalApiType.File]: {
+              cloudName: String(body.get('file-cloud-name')),
+              apiKey: String(body.get('file-api-key')),
+              apiSecret: String(body.get('file-api-secret')),
+            },
+            [ExternalApiType.GenAI]: {},
+            [ExternalApiType.Email]: {
+              endpoint: String(body.get('email-endpoint')),
+              token: String(body.get('email-token')),
+            },
+          },
+        },
       })
+    } else if (String(body.get('intent')) === 'upload-banner') {
+      const storeSettings = await StoreConfig.getStoreInfo()
+      const res = await fileUpload(
+        FileHostingProvider.Cloudinary,
+        body.get('store-banner-upload') as File,
+        {
+          cloudName: storeSettings.other?.apis[ExternalApiType.File]
+            .cloudName as string,
+          apiKey: storeSettings.other?.apis[ExternalApiType.File]
+            .apiKey as string,
+          apiSecret: storeSettings.other?.apis[ExternalApiType.File]
+            .apiSecret as string,
+        },
+      )
     } else if (body.get('intent') === 'account-info') {
       await StoreConfig.updateStoreInfo({
         name: String(body.get('store-name')),

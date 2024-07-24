@@ -289,8 +289,3 @@ export const page = mysqlTable('page', {
   order: tinyint('order').notNull(),
   status: tinyint('status').notNull(),
 })
-
-export const api = mysqlTable('api', {
-  id: tinyint('id').primaryKey(),
-  config: varchar('config', { length: 500 }).notNull(),
-})

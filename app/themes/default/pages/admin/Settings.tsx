@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import AdminContext from '~/contexts/adminContext'
 import AdminHeader from '~/themes/default/components/ui/admin/Header'
 import { Button } from '~/themes/default/components/ui/button'
+import { Checkbox } from '~/themes/default/components/ui/checkbox'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,7 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/themes/default/components/ui/select'
-import { Switch } from '~/themes/default/components/ui/switch'
 import {
   Table,
   TableBody,
@@ -37,7 +37,7 @@ import {
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
 import { Textarea } from '~/themes/default/components/ui/textarea'
-import { AddressItem, ExternalAPIType } from '~/types'
+import { AddressItem, ExternalApiType, OtherStoreConfigs } from '~/types'
 import {
   Carousel,
   CarouselContent,
@@ -59,6 +59,8 @@ const CustomerList = () => {
     storePhone: storeSettings?.phone,
     storeEmail: storeSettings?.email,
     storeCurrency: storeSettings?.currency,
+    storeOtherInfo: storeSettings?.other,
+    storeBanners: storeSettings?.banners,
   })
   return (
     account &&
@@ -71,7 +73,7 @@ const CustomerList = () => {
               {t('system.settings')}
             </h2>
           </div>
-          <fetcher.Form method="POST">
+          <fetcher.Form method="POST" encType="multipart/form-data">
             <Tabs defaultValue="store-settings" className="w-full">
               <TabsList>
                 <TabsTrigger value="store-settings">
@@ -90,12 +92,12 @@ const CustomerList = () => {
                   {t('system.public_pages')}
                 </TabsTrigger>
                 <TabsTrigger value="payment">{t('system.payment')}</TabsTrigger>
-                <TabsTrigger value="third-party">
-                  {t('system.thrid-party-services')}
-                </TabsTrigger>
               </TabsList>
               <TabsContent value="store-settings">
-                <div className="w-full grid grid-cols-3 gap-6">
+                <p className="text-xl space-y-3 mt-3">
+                  {t('system.store_information')}
+                </p>
+                <div className="w-full grid grid-cols-3 gap-10">
                   <div className="space-y-3">
                     <div className="space-y-2">
                       <Label htmlFor="store-name">{t('system.name')}</Label>
@@ -267,44 +269,353 @@ const CustomerList = () => {
                         name="store-currency"
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="store-copyright-info">
+                        {t('system.copyright_info')}
+                      </Label>
+                      <Input
+                        type="text"
+                        id="store-copyright-info"
+                        name="store-copyright-info"
+                        value={form?.storeOtherInfo?.copyright}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeOtherInfo: {
+                              ...form.storeOtherInfo,
+                              copyright: e.target.value,
+                            } as OtherStoreConfigs,
+                          })
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full grid grid-cols-3 gap-10 mt-10">
+                  <div className="space-y-3">
+                    <p className="text-xl">{t('system.generative_ai')}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {t('system.generative_ai_hint')}
+                    </p>
+                    <div className="space-y-2 mt-3">
+                      <Label>{t('system.provider')}</Label>
+                      <Select value="openai">
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder={t('system.select')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="openai">OpenAI</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="ai-model">{t('system.model')}</Label>
+                      <Input type="text" id="ai-model" name="ai-model" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="ai-api-key">{t('system.api_key')}</Label>
+                      <Input type="text" id="ai-api-key" name="ai-api-key" />
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <p className="text-xl">{t('system.file_hosting')}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {t('system.file_hosting_hint')}
+                    </p>
+                    <div className="space-y-2 mt-3">
+                      <Label>{t('system.provider')}</Label>
+                      <Select value="cloudinary">
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder={t('system.select')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="cloudinary">Cloudinary</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="file-cloud-name">
+                        {t('system.cloud_name')} ({t('system.for_cloudinary')})
+                      </Label>
+                      <Input
+                        type="text"
+                        id="file-cloud-name"
+                        name="file-cloud-name"
+                        value={
+                          form.storeOtherInfo?.apis[ExternalApiType.File]
+                            ?.cloudName
+                        }
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeOtherInfo: {
+                              copyright: form.storeOtherInfo?.copyright || '',
+                              apis: {
+                                [ExternalApiType.File]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.File
+                                  ],
+                                  cloudName: e.target.value,
+                                },
+                                [ExternalApiType.GenAI]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.GenAI
+                                  ],
+                                },
+                                [ExternalApiType.Email]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.Email
+                                  ],
+                                },
+                              },
+                            },
+                          })
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="file-api-key">
+                        {t('system.api_key')}
+                      </Label>
+                      <Input
+                        type="text"
+                        id="file-api-key"
+                        name="file-api-key"
+                        value={
+                          form.storeOtherInfo?.apis[ExternalApiType.File]
+                            ?.apiKey
+                        }
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeOtherInfo: {
+                              copyright: form.storeOtherInfo?.copyright || '',
+                              apis: {
+                                [ExternalApiType.File]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.File
+                                  ],
+                                  apiKey: e.target.value,
+                                },
+                                [ExternalApiType.GenAI]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.GenAI
+                                  ],
+                                },
+                                [ExternalApiType.Email]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.Email
+                                  ],
+                                },
+                              },
+                            },
+                          })
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="file-api-secret">
+                        {t('system.api_secret')}
+                      </Label>
+                      <Input
+                        type="password"
+                        id="file-api-secret"
+                        name="file-api-secret"
+                        value={
+                          form.storeOtherInfo?.apis[ExternalApiType.File]
+                            ?.apiSecret
+                        }
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeOtherInfo: {
+                              copyright: form.storeOtherInfo?.copyright || '',
+                              apis: {
+                                [ExternalApiType.File]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.File
+                                  ],
+                                  apiSecret: e.target.value,
+                                },
+                                [ExternalApiType.GenAI]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.GenAI
+                                  ],
+                                },
+                                [ExternalApiType.Email]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.Email
+                                  ],
+                                },
+                              },
+                            },
+                          })
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <p className="text-xl">{t('system.email_service')}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {t('system.email_service_provider_hint')}
+                    </p>
+                    <div className="space-y-2 mt-3">
+                      <Label>{t('system.provider')}</Label>
+                      <Select value="mailtrap">
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder={t('system.select')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="mailtrap">Mailtrap</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email-service-provider-host">
+                        {t('system.api_endpoint')}
+                      </Label>
+                      <Input
+                        type="text"
+                        id="email-endpoint"
+                        name="email-endpoint"
+                        value={
+                          form.storeOtherInfo?.apis[ExternalApiType.Email]
+                            ?.endpoint
+                        }
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeOtherInfo: {
+                              copyright: form.storeOtherInfo?.copyright || '',
+                              apis: {
+                                [ExternalApiType.File]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.File
+                                  ],
+                                },
+                                [ExternalApiType.GenAI]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.GenAI
+                                  ],
+                                },
+                                [ExternalApiType.Email]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.Email
+                                  ],
+                                  endpoint: e.target.value,
+                                },
+                              },
+                            },
+                          })
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="email-service-provider-token">
+                        {t('system.api_token')}
+                      </Label>
+                      <Input
+                        type="password"
+                        id="email-token"
+                        name="email-token"
+                        value={
+                          form.storeOtherInfo?.apis[ExternalApiType.Email]
+                            ?.token
+                        }
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeOtherInfo: {
+                              copyright: form.storeOtherInfo?.copyright || '',
+                              apis: {
+                                [ExternalApiType.File]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.File
+                                  ],
+                                },
+                                [ExternalApiType.GenAI]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.GenAI
+                                  ],
+                                },
+                                [ExternalApiType.Email]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.Email
+                                  ],
+                                  token: e.target.value,
+                                },
+                              },
+                            },
+                          })
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
                 <p className="mt-10 text-xl">{t('system.banners')}</p>
-                <div className="grid grid-cols-3 gap-24">
+                <div className="grid grid-cols-3 gap-24 mt-3">
                   <div className="space-y-3">
                     <div className="space-y-2">
+                      <Checkbox
+                        checked={form.storeBanners?.autoplay}
+                        id="store-banner-autoplay"
+                        name="store-banner-autoplay"
+                        onCheckedChange={(checked) => {
+                          setForm({
+                            ...form,
+                            storeBanners: {
+                              autoplay: checked as boolean,
+                              speed: form.storeBanners?.speed || 0,
+                              items: form.storeBanners?.items || [],
+                            },
+                          })
+                        }}
+                      />{' '}
                       <Label htmlFor="store-banner-autoplay">
                         {t('system.banner_autoplay')}
                       </Label>
-                      <div>
-                        <Switch
-                          checked={storeSettings.banners?.autoplay}
-                          id="store-banner-autoplay"
-                          name="store-banner-autoplay"
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="store-banner-speed">
+                        {t('system.banner_autoplay_speed')}
+                      </Label>
+                      <Input
+                        type="number"
+                        id="store-banner-speed"
+                        name="store-banner-speed"
+                        value={form.storeBanners?.speed}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeBanners: {
+                              autoplay: form.storeBanners?.autoplay || false,
+                              speed: Number(e.target.value),
+                              items: form.storeBanners?.items || [],
+                            },
+                          })
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="store-banner-upload">
+                        {t('system.upload_banner_image')}
+                      </Label>
+                      <div className="flex justify-between">
+                        <Input
+                          type="file"
+                          id="store-banner-upload"
+                          name="store-banner-upload"
+                          accept="image/*"
                         />
+                        <Button
+                          type="submit"
+                          variant="link"
+                          name="intent"
+                          value="upload-banner"
+                        >
+                          {t('system.upload')}
+                        </Button>
                       </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="store-banner-speed">
-                        {t('system.banner_autoplay_speed')}
-                      </Label>
-                      <Input
-                        type="text"
-                        id="store-banner-speed"
-                        name="store-banner-speed"
-                        value={storeSettings.banners?.speed}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="store-banner-speed">
-                        {t('system.banner_autoplay_speed')}
-                      </Label>
-                      <Input
-                        type="text"
-                        id="store-banner-speed"
-                        name="store-banner-speed"
-                        value={storeSettings.banners?.speed}
-                      />
                     </div>
                   </div>
                   <div className="col-span-2 w-full space-y-3">
@@ -494,124 +805,6 @@ const CustomerList = () => {
               </TabsContent>
               <TabsContent value="payment">
                 Change your payment settings here.
-              </TabsContent>
-              <TabsContent value="third-party">
-                <div className="space-y-4 w-[480px]">
-                  <p className="text-xl pt-6">{t('system.generative_ai')}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {t('system.generative_ai_hint')}
-                  </p>
-                  <div className="space-y-2">
-                    <Label>{t('system.provider')}</Label>
-                    <Select value="openai">
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder={t('system.select')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="openai">OpenAI</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="ai-model">{t('system.model')}</Label>
-                    <Input type="text" id="ai-model" name="ai-model" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="ai-api-key">{t('system.api_key')}</Label>
-                    <Input type="text" id="ai-api-key" name="ai-api-key" />
-                  </div>
-                  <p className="text-xl pt-6">{t('system.file_hosting')}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {t('system.file_hosting_hint')}
-                  </p>
-                  <div className="space-y-2">
-                    <Label>{t('system.provider')}</Label>
-                    <Select value="cloudflare-r2">
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder={t('system.select')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="cloudflare-r2">
-                          Cloudflare R2
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="file-token">
-                      {t('system.api_token_or_key')} ({t('system.if_any')})
-                    </Label>
-                    <Input type="text" id="file-token" name="file-token" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="file-access-key-id">
-                      {t('system.access_key_id')}
-                    </Label>
-                    <Input
-                      type="text"
-                      id="file-access-key-id"
-                      name="file-access-key-id"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="file-secret-access-key">
-                      {t('system.secret_access_key')}
-                    </Label>
-                    <Input
-                      type="text"
-                      id="file-secret-access-key"
-                      name="file-secret-access-key"
-                    />
-                  </div>
-                  <p className="text-xl pt-6">{t('system.email_service')}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {t('system.email_service_provider_hint')}
-                  </p>
-                  <div className="space-y-2">
-                    <Label>{t('system.provider')}</Label>
-                    <Select value="mailtrap">
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder={t('system.select')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="mailtrap">Mailtrap</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email-service-provider-host">
-                      {t('system.api_endpoint')}
-                    </Label>
-                    <Input
-                      type="text"
-                      id="email-endpoint"
-                      name="email-endpoint"
-                      value={
-                        storeSettings.other?.apis.filter(
-                          (item) => item.type === ExternalAPIType.Email,
-                        )[0]?.config.host
-                      }
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="email-service-provider-token">
-                      {t('system.api_token_or_key')} ({t('system.if_any')})
-                    </Label>
-                    <Input
-                      type="password"
-                      id="email-token"
-                      name="email-token"
-                      value={
-                        storeSettings.other!.apis.filter(
-                          (item) => item.type === ExternalAPIType.Email,
-                        )[0]?.config.token
-                      }
-                    />
-                  </div>
-                  <Button type="submit" name="intent" value="api-info">
-                    {t('system.save')}
-                  </Button>
-                </div>
               </TabsContent>
             </Tabs>
           </fetcher.Form>

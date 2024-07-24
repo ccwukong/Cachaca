@@ -75,7 +75,7 @@ export type HomeBannerSettings = {
 
 export type OtherStoreConfigs = {
   copyright: string
-  apis: APIConfig[]
+  apis: APIConfig
 }
 
 export type PageLink = {
@@ -149,8 +149,7 @@ export type PublicPage = {
 }
 
 export type APIConfig = {
-  type: ExternalAPIType
-  config: { [key: string]: string | number }
+  [key in ExternalApiType]: { [key: string]: string | number }
 }
 
 export type AddressItem = {
@@ -228,7 +227,7 @@ export enum PaymentScheme {
   Other = 8,
 }
 
-export enum ExternalAPIType {
+export enum ExternalApiType {
   GenAI = 1,
   File = 2,
   Email = 3,

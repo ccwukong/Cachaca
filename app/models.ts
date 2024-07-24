@@ -816,8 +816,7 @@ export class StoreConfig {
     other: OtherStoreConfigs
     banners: HomeBannerSettings
   }): Promise<void> {
-    console.log(data)
-    const res = await db
+    await db
       .update(shop)
       .set({
         logo: data.logo,
@@ -825,11 +824,10 @@ export class StoreConfig {
         phone: data.phone,
         address: data.address,
         description: data.description,
-        // other: data.other,
-        // banners: data.banners,
+        other: data.other,
+        banners: data.banners,
       })
       .where(eq(shop.name, data.name))
-    console.log(res)
   }
 
   public static async getPublicPageByName(name: string): Promise<PublicPage> {
