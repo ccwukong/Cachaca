@@ -1,5 +1,5 @@
 import { useFetcher } from '@remix-run/react'
-import { MoreHorizontal } from 'lucide-react'
+import { AlertCircle, MoreHorizontal } from 'lucide-react'
 import { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AdminContext from '~/contexts/adminContext'
@@ -38,26 +38,28 @@ import {
 } from '~/themes/default/components/ui/tabs'
 import { Textarea } from '~/themes/default/components/ui/textarea'
 import { AddressItem, ExternalApiType, OtherStoreConfigs } from '~/types'
+import { Alert, AlertDescription, AlertTitle } from '../../components/ui/alert'
 import { Spinner } from '../../components/ui/spinner'
 
 const CustomerList = () => {
   const { t } = useTranslation()
+  const [isRemovingImage, setIsRemovingImage] = useState(false)
   const { account, storeSettings } = useContext(AdminContext)
   const fetcher = useFetcher()
   const [form, setForm] = useState({
-    storeName: storeSettings?.name,
-    storeDescription: storeSettings?.description,
-    storeLogo: storeSettings?.logo,
-    storeAddress: storeSettings?.address,
-    storePhone: storeSettings?.phone,
-    storeEmail: storeSettings?.email,
-    storeCurrency: storeSettings?.currency,
-    storeOtherInfo: storeSettings?.other,
-    storeBanners: storeSettings?.banners,
+    storeName: storeSettings!.name,
+    storeDescription: storeSettings!.description,
+    storeLogo: storeSettings!.logo,
+    storeAddress: storeSettings!.address,
+    storePhone: storeSettings!.phone,
+    storeEmail: storeSettings!.email,
+    storeCurrency: storeSettings!.currency,
+    storeOtherInfo: storeSettings!.other!,
+    storeBanners: storeSettings!.banners!,
   })
 
   useEffect(() => {
-    if (fetcher.data && fetcher.data.data.file) {
+    if (fetcher.data && !fetcher.data.error && fetcher.data.data.file) {
       const temp = form.storeBanners?.items || []
       const { id, caption, imageUrl } = fetcher.data.data.file as {
         id: string
@@ -84,19 +86,20 @@ const CustomerList = () => {
   }, [fetcher.data])
 
   useEffect(() => {
-    fetcher.submit(
-      {
-        'store-name': form.storeName || '',
-        'store-banner-autoplay': form.storeBanners?.autoplay || false,
-        'store-banner-speed': form.storeBanners?.speed || 0,
-        'store-banner-items': JSON.stringify(form.storeBanners?.items),
-        intent: 'remove-banner-image',
-      },
-      {
-        method: 'POST',
-      },
-    )
-  }, [form.storeBanners.items])
+    if (isRemovingImage) {
+      fetcher.submit(
+        {
+          'store-name': form.storeName,
+          'store-banner-items': JSON.stringify(form.storeBanners.items),
+          intent: 'remove-banner-image',
+        },
+        {
+          method: 'POST',
+        },
+      )
+      setIsRemovingImage(false)
+    }
+  }, [isRemovingImage])
 
   return (
     account &&
@@ -606,16 +609,15 @@ const CustomerList = () => {
                   <div className="space-y-3">
                     <div className="space-y-2">
                       <Checkbox
-                        checked={form.storeBanners?.autoplay}
+                        checked={form.storeBanners.autoplay}
                         id="store-banner-autoplay"
                         name="store-banner-autoplay"
                         onCheckedChange={(checked) => {
                           setForm({
                             ...form,
                             storeBanners: {
+                              ...form.storeBanners,
                               autoplay: checked as boolean,
-                              speed: form.storeBanners?.speed || 0,
-                              items: form.storeBanners?.items || [],
                             },
                           })
                         }}
@@ -632,19 +634,23 @@ const CustomerList = () => {
                         type="number"
                         id="store-banner-speed"
                         name="store-banner-speed"
-                        value={form.storeBanners?.speed}
+                        value={form.storeBanners.speed}
                         onChange={(e) => {
                           setForm({
                             ...form,
                             storeBanners: {
-                              autoplay: form.storeBanners?.autoplay || false,
+                              ...form.storeBanners,
                               speed: Number(e.target.value),
-                              items: form.storeBanners?.items || [],
                             },
                           })
                         }}
                       />
                     </div>
+                    <Input
+                      type="hidden"
+                      name="store-banner-items"
+                      value={JSON.stringify(form.storeBanners.items)}
+                    />
                     <Button
                       className="mt-4"
                       type="submit"
@@ -684,7 +690,7 @@ const CustomerList = () => {
                         )}
                       </Button>
                     </div>
-                    {form.storeBanners?.items
+                    {form.storeBanners.items
                       .sort((a, b) => {
                         return a.order - b.order
                       })
@@ -704,15 +710,13 @@ const CustomerList = () => {
                                 setForm({
                                   ...form,
                                   storeBanners: {
-                                    autoplay:
-                                      form.storeBanners?.autoplay || false,
-                                    speed: form.storeBanners?.speed || 0,
-                                    items:
-                                      form.storeBanners?.items.filter(
-                                        (i) => i.id !== item.id,
-                                      ) || [],
+                                    ...form.storeBanners,
+                                    items: form.storeBanners.items.filter(
+                                      (i) => i.id !== item.id,
+                                    ),
                                   },
                                 })
+                                setIsRemovingImage(true)
                               }}
                             >
                               {t('system.remove')}
@@ -797,7 +801,7 @@ const CustomerList = () => {
                           {t('system.new_password')}
                         </Label>
                         <Input
-                          type="text"
+                          type="password"
                           id="new-password"
                           name="new-password"
                         />
@@ -805,10 +809,25 @@ const CustomerList = () => {
                       <Button
                         type="submit"
                         name="intent"
-                        value="account-password"
+                        value="change-password"
                       >
-                        {t('system.save')}
+                        {fetcher.state !== 'idle' &&
+                        fetcher.formData?.get('intent') ===
+                          'change-password' ? (
+                          <Spinner size="small" className="text-white" />
+                        ) : (
+                          t('system.save')
+                        )}
                       </Button>
+                      {fetcher.state === 'idle' && fetcher.data?.error ? (
+                        <Alert variant="destructive" className="mt-3">
+                          <AlertCircle className="h-4 w-4" />
+                          <AlertTitle>{t('system.error')}</AlertTitle>
+                          <AlertDescription>
+                            {t('system.unmatched_password')}
+                          </AlertDescription>
+                        </Alert>
+                      ) : null}
                     </div>
                   </TabsContent>
                 </Tabs>

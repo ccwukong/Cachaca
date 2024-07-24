@@ -60,3 +60,9 @@ export class StoreNotInstalledError extends CustomException {
     super(message, status)
   }
 }
+
+export class UnmatchedPassword extends CustomException {
+  constructor(message: string = 'Unmatched password.', status: number = 406) {
+    super(message, status)
+  }
+}

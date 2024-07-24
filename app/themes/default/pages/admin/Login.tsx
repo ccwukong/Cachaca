@@ -24,7 +24,7 @@ import {
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
 
-const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
+const Login = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
 
@@ -67,7 +67,7 @@ const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
                       t('system.login')
                     )}
                   </Button>
-                  {!isLoginSuccessful && fetcher.state === 'idle' ? (
+                  {fetcher.state === 'idle' && fetcher.data?.error ? (
                     <Alert variant="destructive" className="mt-3">
                       <AlertCircle className="h-4 w-4" />
                       <AlertTitle>{t('system.error')}</AlertTitle>

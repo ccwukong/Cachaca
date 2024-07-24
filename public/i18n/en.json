@@ -121,5 +121,6 @@
   "system.api_endpoint": "API endpoint",
   "system.preview": "Preview",
   "system.upload": "Upload",
-  "system.copyright_info": "Copyright information"
+  "system.copyright_info": "Copyright information",
+  "system.unmatched_password": "Unmatched password"
 }

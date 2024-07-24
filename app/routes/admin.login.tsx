@@ -4,7 +4,6 @@ import type {
   MetaFunction,
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { useActionData, useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { adminCookie } from '~/cookie'
 import { AdminAuthtication, Installer } from '~/models'
@@ -91,12 +90,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 }
 
 export default function Index() {
-  const actionData = useActionData<typeof action>()
-  const loaderData = useLoaderData<typeof loader>()
-
   return (
     <Suspense fallback={<Skeleton />}>
-      <Login isLoginSuccessful={actionData === undefined} />
+      <Login />
     </Suspense>
   )
 }

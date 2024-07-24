@@ -30,6 +30,7 @@ import {
   NotFoundException,
   ServerInternalError,
   UnAuthenticatedException,
+  UnmatchedPassword,
 } from '~/utils/exception'
 import { makeStr } from '~/utils/string'
 import db from '../db/connection'
@@ -170,6 +171,47 @@ export class AdminAuthtication {
       role: userData.role,
       createdOn: userData.createdOn,
     }
+  }
+
+  public static async updatePassword({
+    email,
+    oldPwd,
+    newPwd,
+  }: {
+    email: string
+    oldPwd: string
+    newPwd: string
+  }): Promise<void> {
+    const res = await db
+      .select()
+      .from(user)
+      .where(
+        and(
+          eq(user.email, email),
+          eq(user.status, DatabaseRecordStatus.Active),
+        ),
+      )
+
+    if (!res.length) {
+      throw new UnAuthenticatedException()
+    }
+
+    const userData = res[0]
+
+    if (userData.password !== md5(oldPwd + userData.salt)) {
+      throw new UnmatchedPassword()
+    }
+
+    const newSalt = makeStr(8)
+    await db
+      .update(user)
+      .set({ password: md5(newPwd + newSalt), salt: newSalt })
+      .where(
+        and(
+          eq(user.email, email),
+          eq(user.status, DatabaseRecordStatus.Active),
+        ),
+      )
   }
 }
 
