@@ -20,7 +20,8 @@ export default async function fileUpload(
   const id = uuidv4()
   return await new Promise((resolve) => {
     cloudinary.uploader
-      .upload_stream({ public_id: id }, (error, uploadResult) => {
+      .upload_stream({ public_id: id }, (e, uploadResult) => {
+        console.log(e)
         return resolve(uploadResult)
       })
       .end(buffer)

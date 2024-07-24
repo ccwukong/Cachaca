@@ -814,7 +814,6 @@ export class StoreConfig {
     address: AddressItem
     description: string
     other: OtherStoreConfigs
-    banners: HomeBannerSettings
   }): Promise<void> {
     await db
       .update(shop)
@@ -825,6 +824,17 @@ export class StoreConfig {
         address: data.address,
         description: data.description,
         other: data.other,
+      })
+      .where(eq(shop.name, data.name))
+  }
+
+  public static async updateStoreBanners(data: {
+    name: string
+    banners: HomeBannerSettings
+  }): Promise<void> {
+    await db
+      .update(shop)
+      .set({
         banners: data.banners,
       })
       .where(eq(shop.name, data.name))

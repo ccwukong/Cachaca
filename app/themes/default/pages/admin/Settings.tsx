@@ -57,10 +57,9 @@ const CustomerList = () => {
   })
 
   useEffect(() => {
-    if (fetcher.data && 'file' in (fetcher.data as { data: object }).data) {
+    if (fetcher.data && fetcher.data.data.file) {
       const temp = form.storeBanners?.items || []
-      const { id, caption, imageUrl } = (fetcher.data as { data: object }).data
-        .file as {
+      const { id, caption, imageUrl } = fetcher.data.data.file as {
         id: string
         caption: string
         imageUrl: string
@@ -83,6 +82,21 @@ const CustomerList = () => {
       })
     }
   }, [fetcher.data])
+
+  useEffect(() => {
+    fetcher.submit(
+      {
+        'store-name': form.storeName || '',
+        'store-banner-autoplay': form.storeBanners?.autoplay || false,
+        'store-banner-speed': form.storeBanners?.speed || 0,
+        'store-banner-items': JSON.stringify(form.storeBanners?.items),
+        intent: 'remove-banner-image',
+      },
+      {
+        method: 'POST',
+      },
+    )
+  }, [form.storeBanners.items])
 
   return (
     account &&
@@ -574,6 +588,19 @@ const CustomerList = () => {
                     </div>
                   </div>
                 </div>
+                <Button
+                  className="mt-4"
+                  type="submit"
+                  name="intent"
+                  value="store-info"
+                >
+                  {fetcher.state !== 'idle' &&
+                  fetcher.formData?.get('intent') === 'store-info' ? (
+                    <Spinner size="small" className="text-white" />
+                  ) : (
+                    t('system.save')
+                  )}
+                </Button>
                 <p className="mt-10 text-xl">{t('system.banners')}</p>
                 <div className="grid grid-cols-3 gap-24 mt-3">
                   <div className="space-y-3">
@@ -618,35 +645,45 @@ const CustomerList = () => {
                         }}
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="store-banner-upload">
-                        {t('system.upload_banner_image')}
-                      </Label>
-                      <div className="flex justify-between">
-                        <Input
-                          type="file"
-                          id="store-banner-upload"
-                          name="store-banner-upload"
-                          accept="image/*"
-                        />
-                        <Input
-                          type="hidden"
-                          name="store-banner-items"
-                          value={JSON.stringify(form.storeBanners?.items)}
-                        />
-                        <Button
-                          type="submit"
-                          variant="link"
-                          name="intent"
-                          value="upload-banner"
-                        >
-                          {t('system.upload')}
-                        </Button>
-                      </div>
-                    </div>
+                    <Button
+                      className="mt-4"
+                      type="submit"
+                      name="intent"
+                      value="store-banners"
+                    >
+                      {fetcher.state !== 'idle' &&
+                      fetcher.formData?.get('intent') === 'store-banners' ? (
+                        <Spinner size="small" className="text-white" />
+                      ) : (
+                        t('system.save')
+                      )}
+                    </Button>
                   </div>
                   <div className="col-span-2 w-full space-y-3">
                     <p>{t('system.banner_images')}</p>
+                    <div className="flex">
+                      <Input
+                        type="file"
+                        id="store-banner-upload"
+                        name="store-banner-upload"
+                        className="w-[240px]"
+                        accept="image/*"
+                      />
+                      <Button
+                        type="submit"
+                        variant="secondary"
+                        name="intent"
+                        value="upload-banner"
+                        className="ml-2"
+                      >
+                        {fetcher.state !== 'idle' &&
+                        fetcher.formData?.get('intent') === 'upload-banner' ? (
+                          <Spinner size="small" className="text-white" />
+                        ) : (
+                          t('system.upload')
+                        )}
+                      </Button>
+                    </div>
                     {form.storeBanners?.items
                       .sort((a, b) => {
                         return a.order - b.order
@@ -661,6 +698,8 @@ const CustomerList = () => {
                             />
                             <Button
                               variant="link"
+                              name="intent"
+                              value="remove-banner-image"
                               onClick={() => {
                                 setForm({
                                   ...form,
@@ -683,18 +722,6 @@ const CustomerList = () => {
                       })}
                   </div>
                 </div>
-                <Button
-                  className="mt-4"
-                  type="submit"
-                  name="intent"
-                  value="store-info"
-                >
-                  {fetcher.state !== 'idle' ? (
-                    <Spinner size="small" className="text-white" />
-                  ) : (
-                    t('system.save')
-                  )}
-                </Button>
               </TabsContent>
               <TabsContent value="account-settings">
                 <Tabs defaultValue="account-settings" className="w-full">
