@@ -12,8 +12,16 @@ import * as mocks from '~/utils/mocks'
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
-    { title: data?.categoryName },
-    { name: 'description', content: data?.categoryName },
+    {
+      title: `${data?.data?.storeSettings.name} - ${data?.data?.categoryName}`,
+    },
+    { name: 'HandheldFriendly', content: 'true' },
+    { name: 'description', content: data?.data?.categoryName },
+    { name: 'og:title', content: data?.data?.categoryName },
+    { name: 'og:url', content: data?.data?.url },
+    { name: 'og:description', content: data?.data?.categoryName },
+    { name: 'og:site_name', content: data?.data?.storeSettings.name },
+    { name: 'og:type', content: 'website' },
   ]
 }
 
@@ -32,6 +40,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         categoryName: (await mocks.getCategories()).find(
           (item) => item.slug === (request.url.split('/').at(-1) || ''),
         )?.name,
+        url: new URL(request.url),
       },
     })
   } catch (e) {
@@ -59,7 +68,6 @@ export default function Index() {
       >
         <CategoryProductList
           products={loaderData!.data!.products}
-          publicPages={loaderData!.data!.publicPages}
           category={loaderData!.data!.categoryName}
         />
       </StoreContext.Provider>

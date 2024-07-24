@@ -1,4 +1,4 @@
-import type { MetaFunction } from '@remix-run/node'
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
@@ -13,11 +13,17 @@ import * as mocks from '~/utils/mocks'
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
     { title: data?.data?.storeSettings.name },
+    { name: 'HandheldFriendly', content: 'true' },
     { name: 'description', content: data?.data?.storeSettings.description },
+    { name: 'og:title', content: data?.data?.storeSettings.name },
+    { name: 'og:url', content: data?.data?.url },
+    { name: 'og:description', content: data?.data?.storeSettings.description },
+    { name: 'og:site_name', content: data?.data?.storeSettings.name },
+    { name: 'og:type', content: 'website' },
   ]
 }
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {
     if (!(await Installer.isInstalled())) {
       throw new StoreNotInstalledError()
@@ -29,6 +35,7 @@ export const loader = async () => {
         categories: await mocks.getCategories(),
         storeSettings: await StoreConfig.getStoreInfo(),
         products: await mocks.getMockProducts(),
+        url: new URL(request.url),
       },
     })
   } catch (e) {
