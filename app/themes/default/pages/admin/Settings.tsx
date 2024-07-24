@@ -1,6 +1,6 @@
 import { useFetcher } from '@remix-run/react'
 import { MoreHorizontal } from 'lucide-react'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AdminContext from '~/contexts/adminContext'
 import AdminHeader from '~/themes/default/components/ui/admin/Header'
@@ -38,13 +38,6 @@ import {
 } from '~/themes/default/components/ui/tabs'
 import { Textarea } from '~/themes/default/components/ui/textarea'
 import { AddressItem, ExternalApiType, OtherStoreConfigs } from '~/types'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '../../components/ui/carousel'
 import { Spinner } from '../../components/ui/spinner'
 
 const CustomerList = () => {
@@ -62,6 +55,35 @@ const CustomerList = () => {
     storeOtherInfo: storeSettings?.other,
     storeBanners: storeSettings?.banners,
   })
+
+  useEffect(() => {
+    if (fetcher.data && 'file' in (fetcher.data as { data: object }).data) {
+      const temp = form.storeBanners?.items || []
+      const { id, caption, imageUrl } = (fetcher.data as { data: object }).data
+        .file as {
+        id: string
+        caption: string
+        imageUrl: string
+      }
+      temp.push({
+        id,
+        imageUrl,
+        link: '',
+        caption,
+        order: -1,
+      })
+
+      setForm({
+        ...form,
+        storeBanners: {
+          autoplay: form.storeBanners?.autoplay || false,
+          speed: form.storeBanners?.speed || 0,
+          items: temp,
+        },
+      })
+    }
+  }, [fetcher.data])
+
   return (
     account &&
     storeSettings && (
@@ -607,6 +629,11 @@ const CustomerList = () => {
                           name="store-banner-upload"
                           accept="image/*"
                         />
+                        <Input
+                          type="hidden"
+                          name="store-banner-items"
+                          value={JSON.stringify(form.storeBanners?.items)}
+                        />
                         <Button
                           type="submit"
                           variant="link"
@@ -619,21 +646,41 @@ const CustomerList = () => {
                     </div>
                   </div>
                   <div className="col-span-2 w-full space-y-3">
-                    <p>{t('system.preview')}</p>
-                    <Carousel className="w-2/3 h-[200px]">
-                      <CarouselContent>
-                        {Array.from({ length: 5 }).map((_, index) => (
-                          <CarouselItem key={index}>
+                    <p>{t('system.banner_images')}</p>
+                    {form.storeBanners?.items
+                      .sort((a, b) => {
+                        return a.order - b.order
+                      })
+                      .map((item) => {
+                        return (
+                          <div className="w-full flex" key={item.id}>
                             <img
-                              src="https://images.unsplash.com/photo-1462927114214-6956d2fddd4e?q=80&w=3869&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                              className="w-full h-[200px] object-cover"
+                              src={item.imageUrl}
+                              alt={item.caption}
+                              className="w-[120px]"
                             />
-                          </CarouselItem>
-                        ))}
-                      </CarouselContent>
-                      <CarouselPrevious type="button" />
-                      <CarouselNext type="button" />
-                    </Carousel>
+                            <Button
+                              variant="link"
+                              onClick={() => {
+                                setForm({
+                                  ...form,
+                                  storeBanners: {
+                                    autoplay:
+                                      form.storeBanners?.autoplay || false,
+                                    speed: form.storeBanners?.speed || 0,
+                                    items:
+                                      form.storeBanners?.items.filter(
+                                        (i) => i.id !== item.id,
+                                      ) || [],
+                                  },
+                                })
+                              }}
+                            >
+                              {t('system.remove')}
+                            </Button>
+                          </div>
+                        )
+                      })}
                   </div>
                 </div>
                 <Button

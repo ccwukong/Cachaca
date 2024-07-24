@@ -102,7 +102,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         banners: {
           autoplay: String(body.get('store-banner-autoplay')) === 'on',
           speed: Number(body.get('store-banner-speed')),
-          items: [],
+          items: JSON.parse(String(body.get('store-banner-items'))),
         },
         other: {
           copyright: String(body.get('store-copyright-info')),
@@ -122,7 +122,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       })
     } else if (String(body.get('intent')) === 'upload-banner') {
       const storeSettings = await StoreConfig.getStoreInfo()
-      const res = await fileUpload(
+      const res = (await fileUpload(
         FileHostingProvider.Cloudinary,
         body.get('store-banner-upload') as File,
         {
@@ -133,7 +133,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           apiSecret: storeSettings.other?.apis[ExternalApiType.File]
             .apiSecret as string,
         },
-      )
+      )) as { [key: string]: string }
+
+      return json({
+        error: null,
+        data: {
+          file: res
+            ? {
+                id: res.public_id,
+                imageUrl: res.secure_url,
+                caption: res.original_filename,
+              }
+            : null,
+        },
+      })
     } else if (body.get('intent') === 'account-info') {
       await StoreConfig.updateStoreInfo({
         name: String(body.get('store-name')),

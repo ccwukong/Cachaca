@@ -18,16 +18,11 @@ export default async function fileUpload(
   const arrayBuffer = await file.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)
   const id = uuidv4()
-  await cloudinary.uploader
-    .upload_stream({
-      public_id: id,
-    })
-    .end(buffer)
-
-  const optimizeUrl = cloudinary.url(id, {
-    fetch_format: 'auto',
-    quality: 'auto',
+  return await new Promise((resolve) => {
+    cloudinary.uploader
+      .upload_stream({ public_id: id }, (error, uploadResult) => {
+        return resolve(uploadResult)
+      })
+      .end(buffer)
   })
-
-  return optimizeUrl
 }

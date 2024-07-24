@@ -61,6 +61,7 @@ export type CategoryItem = {
 }
 
 export type BannerItem = {
+  id: string
   imageUrl: string
   link: string
   caption: string

@@ -109,6 +109,7 @@
   "system.banners": "Banners",
   "system.banner_autoplay": "Banner autoplay",
   "system.upload_banner_image": "Upload banner image",
+  "system.banner_images": "Banner images",
   "system.banner_autoplay_speed": "Banner autoplay speed (in milliseconds)",
   "system.actions": "Actions",
   "system.edit": "Edit",
