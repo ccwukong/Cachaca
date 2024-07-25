@@ -882,6 +882,18 @@ export class StoreConfig {
       .where(eq(shop.name, data.name))
   }
 
+  public static async updateStoreLogo(data: {
+    name: string
+    logo: string
+  }): Promise<void> {
+    await db
+      .update(shop)
+      .set({
+        logo: data.logo,
+      })
+      .where(eq(shop.name, data.name))
+  }
+
   public static async getPublicPageByName(name: string): Promise<PublicPage> {
     const res = await db
       .select()

@@ -165,6 +165,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           },
         })
       } else if (body.get('intent') === 'upload-banner') {
+        // upload homepage banner image to Cloudinary by default, and update database
+        // TODO: make file uploader a plugin
         const storeSettings = await StoreConfig.getStoreInfo()
 
         const res = (await fileUpload(
@@ -201,10 +203,49 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           return json({
             error: null,
             data: {
+              intent: 'upload-banner',
               file: {
                 id: res.public_id,
                 imageUrl: res.secure_url,
                 caption: res.original_filename,
+              },
+            },
+          })
+        } else {
+          return json({
+            error: new ServerInternalError(),
+            data: null,
+          })
+        }
+      } else if (body.get('intent') === 'upload-logo') {
+        // store logo
+        const storeSettings = await StoreConfig.getStoreInfo()
+
+        const res = (await fileUpload(
+          FileHostingProvider.Cloudinary,
+          body.get('store-logo') as File,
+          {
+            cloudName: storeSettings.other?.apis[ExternalApiType.File]
+              .cloudName as string,
+            apiKey: storeSettings.other?.apis[ExternalApiType.File]
+              .apiKey as string,
+            apiSecret: storeSettings.other?.apis[ExternalApiType.File]
+              .apiSecret as string,
+          },
+        )) as { [key: string]: string }
+
+        if (res) {
+          await StoreConfig.updateStoreLogo({
+            name: String(body.get('store-name')),
+            logo: res.secure_url,
+          })
+
+          return json({
+            error: null,
+            data: {
+              intent: 'upload-logo',
+              file: {
+                imageUrl: res.secure_url,
               },
             },
           })

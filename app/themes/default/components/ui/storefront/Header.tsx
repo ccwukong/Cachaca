@@ -41,13 +41,13 @@ const Header = ({
   return (
     <nav className="left-0 bg-white w-full z-50 border-b border-slate-100 shadow-inner h-16 fixed p-0">
       <div className="items-center max-w-screen-xl mx-auto flex justify-between">
-        <div className="ml-6 flex items-center justify-between py-3 md:py-5">
+        <div className="ml-6 flex items-center justify-between py-3 md:py-3">
           <Link to="/">
             {storeSettings?.logo ? (
               <img
                 src={storeSettings.logo}
                 alt={storeSettings.name}
-                className="object-cover h-18 w-32"
+                className="object-cover max-h-12"
               />
             ) : (
               <h1 className="text-2xl font-bold">{storeSettings?.name}</h1>

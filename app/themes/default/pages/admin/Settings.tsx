@@ -60,28 +60,35 @@ const CustomerList = () => {
 
   useEffect(() => {
     if (fetcher.data && !fetcher.data.error && fetcher.data.data.file) {
-      const temp = form.storeBanners?.items || []
-      const { id, caption, imageUrl } = fetcher.data.data.file as {
-        id: string
-        caption: string
-        imageUrl: string
-      }
-      temp.push({
-        id,
-        imageUrl,
-        link: '',
-        caption,
-        order: -1,
-      })
+      if (fetcher.data.data.intent === 'upload-banner') {
+        const temp = form.storeBanners?.items || []
+        const { id, caption, imageUrl } = fetcher.data.data.file as {
+          id: string
+          caption: string
+          imageUrl: string
+        }
+        temp.push({
+          id,
+          imageUrl,
+          link: '',
+          caption,
+          order: -1,
+        })
 
-      setForm({
-        ...form,
-        storeBanners: {
-          autoplay: form.storeBanners?.autoplay || false,
-          speed: form.storeBanners?.speed || 0,
-          items: temp,
-        },
-      })
+        setForm({
+          ...form,
+          storeBanners: {
+            autoplay: form.storeBanners?.autoplay || false,
+            speed: form.storeBanners?.speed || 0,
+            items: temp,
+          },
+        })
+      } else if (fetcher.data.data.intent === 'upload-logo') {
+        setForm({
+          ...form,
+          storeLogo: fetcher.data.data.file.imageUrl,
+        })
+      }
     }
   }, [fetcher.data])
 
@@ -150,7 +157,36 @@ const CustomerList = () => {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="store-logo">{t('system.logo')}</Label>
-                      <Input type="file" id="store-logo" name="store-logo" />
+                      <div className="flex items-center">
+                        {form.storeLogo && (
+                          <img
+                            src={form.storeLogo}
+                            alt={form.storeName}
+                            className="h-24 w-24 rounded-full border mr-2 object-cover"
+                          />
+                        )}
+                        <Input
+                          type="file"
+                          id="store-logo"
+                          name="store-logo"
+                          accept="image/*"
+                          className="w-[220px]"
+                        />
+                        <Button
+                          type="submit"
+                          variant="secondary"
+                          name="intent"
+                          value="upload-logo"
+                          className="ml-2"
+                        >
+                          {fetcher.state !== 'idle' &&
+                          fetcher.formData?.get('intent') === 'upload-logo' ? (
+                            <Spinner size="small" className="text-white" />
+                          ) : (
+                            t('system.upload')
+                          )}
+                        </Button>
+                      </div>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="store-description">
