@@ -1,32 +1,57 @@
 import { useFetcher } from '@remix-run/react'
-import { useContext, useState } from 'react'
+import { AlertCircle } from 'lucide-react'
+import { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import CustomerContext from '~/contexts/customerContext'
 import Header from '~/themes/default/components/ui/account/Header'
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from '~/themes/default/components/ui/alert'
 import { Button } from '~/themes/default/components/ui/button'
-import { Checkbox } from '~/themes/default/components/ui/checkbox'
 import { Input } from '~/themes/default/components/ui/input'
 import { Label } from '~/themes/default/components/ui/label'
+import { Spinner } from '~/themes/default/components/ui/spinner'
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
-import { Spinner } from '../../components/ui/spinner'
-import { AlertCircle } from 'lucide-react'
-import { Alert, AlertTitle, AlertDescription } from '../../components/ui/alert'
+import { AddressItem, AddressType } from '~/types'
 
-const Settings = () => {
+const Settings = ({ addressItems }: { addressItems: AddressItem[] }) => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const { account } = useContext(CustomerContext)
+  const shippingAddress = addressItems.filter(
+    (item) => item.type === AddressType.Shipping,
+  )[0]
+  const billingAddress = addressItems.filter(
+    (item) => item.type === AddressType.Billing,
+  )[0]
   const [form, setForm] = useState({
     firstName: account?.firstName,
     lastName: account?.lastName,
     email: account?.email,
     phone: account?.phone,
+    shippingAddress: shippingAddress,
+    billingAddress: billingAddress,
   })
+
+  useEffect(() => {
+    if (fetcher.data && !fetcher.data.error) {
+      if (fetcher.data.data.intent === 'update-address') {
+        setForm({
+          ...form,
+          shippingAddress: fetcher.data.data.shippingAddress,
+          billingAddress: fetcher.data.data.billingAddress,
+        })
+      }
+    }
+  }, [fetcher.data])
+
   return (
     account && (
       <div className="mx-6 overflow-hidden">
@@ -53,7 +78,7 @@ const Settings = () => {
               <TabsContent value="account-settings">
                 <div className="space-y-4 w-[480px]">
                   <div className="space-y-2">
-                    <Label htmlFor="first-name">{t('system.firstname')}</Label>
+                    <Label htmlFor="firstname">{t('system.firstname')}</Label>
                     <Input
                       type="text"
                       id="firstname"
@@ -127,100 +152,238 @@ const Settings = () => {
                 </div>
               </TabsContent>
               <TabsContent value="addresses">
-                <div className="space-y-4 w-[480px]">
-                  <p className="text-xl pt-6">{t('system.shipping_address')}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {t('system.shipping_address_hint')}
-                  </p>
-                  <div className="space-y-2">
-                    <Label htmlFor="shipping-address">
-                      {t('system.address')}
-                    </Label>
-                    <Input
-                      type="text"
-                      id="shipping-address"
-                      name="shipping-address"
-                    />
+                <div className="grid grid-cols-3 gap-10">
+                  <div className="space-y-3">
+                    <p className="text-xl">{t('system.shipping_address')}</p>
+                    <div className="space-y-2">
+                      <Label htmlFor="shipping-address">
+                        {t('system.address')}
+                      </Label>
+                      <Input
+                        type="text"
+                        id="shipping-address"
+                        name="shipping-address"
+                        value={form.shippingAddress?.address || ''}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            shippingAddress: {
+                              ...(form.shippingAddress || {}),
+                              address: e.target.value,
+                            },
+                          })
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="shipping-address-city">
+                        {t('system.city')}
+                      </Label>
+                      <Input
+                        type="text"
+                        id="shipping-address-city"
+                        name="shipping-address-city"
+                        value={form.shippingAddress?.city || ''}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            shippingAddress: {
+                              ...(form.shippingAddress || {}),
+                              city: e.target.value,
+                            },
+                          })
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="shipping-address-state">
+                        {t('system.state')}
+                      </Label>
+                      <Input
+                        type="text"
+                        id="shipping-address-state"
+                        name="shipping-address-state"
+                        value={form.shippingAddress?.state || ''}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            shippingAddress: {
+                              ...(form.shippingAddress || {}),
+                              state: e.target.value,
+                            },
+                          })
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="shipping-address-country">
+                        {t('system.country')}
+                      </Label>
+                      <Input
+                        type="text"
+                        id="shipping-address-country"
+                        name="shipping-address-country"
+                        value={form.shippingAddress?.country || ''}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            shippingAddress: {
+                              ...(form.shippingAddress || {}),
+                              country: e.target.value,
+                            },
+                          })
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="shipping-address-zipcode">
+                        {t('system.zipcode')}
+                      </Label>
+                      <Input
+                        type="text"
+                        id="shipping-address-zipcode"
+                        name="shipping-address-zipcode"
+                        value={form.shippingAddress?.zipcode || ''}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            shippingAddress: {
+                              ...(form.shippingAddress || {}),
+                              zipcode: e.target.value,
+                            },
+                          })
+                        }}
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="shipping-address-city">
-                      {t('system.city')}
-                    </Label>
-                    <Input
-                      type="text"
-                      id="shipping-address-city"
-                      name="shipping-address-city"
-                    />
+                  <div className="space-y-3">
+                    <p className="text-xl">{t('system.billing_address')}</p>
+                    <div className="space-y-2">
+                      <Label htmlFor="billing-address">
+                        {t('system.address')}
+                      </Label>
+                      <Input
+                        type="text"
+                        id="billing-address"
+                        name="billing-address"
+                        value={form.billingAddress?.address || ''}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            billingAddress: {
+                              ...(form.billingAddress || {}),
+                              address: e.target.value,
+                            },
+                          })
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="billing-address-city">
+                        {t('system.city')}
+                      </Label>
+                      <Input
+                        type="text"
+                        id="billing-address-city"
+                        name="billing-address-city"
+                        value={form.billingAddress?.city || ''}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            billingAddress: {
+                              ...(form.billingAddress || {}),
+                              city: e.target.value,
+                            },
+                          })
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="billing-address-state">
+                        {t('system.state')}
+                      </Label>
+                      <Input
+                        type="text"
+                        id="billing-address-state"
+                        name="billing-address-state"
+                        value={form.billingAddress?.state || ''}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            billingAddress: {
+                              ...(form.billingAddress || {}),
+                              state: e.target.value,
+                            },
+                          })
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="billing-address-country">
+                        {t('system.country')}
+                      </Label>
+                      <Input
+                        type="text"
+                        id="billing-address-country"
+                        name="billing-address-country"
+                        value={form.billingAddress?.country || ''}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            billingAddress: {
+                              ...(form.billingAddress || {}),
+                              country: e.target.value,
+                            },
+                          })
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="billing-address-zipcode">
+                        {t('system.zipcode')}
+                      </Label>
+                      <Input
+                        type="text"
+                        id="billing-address-zipcode"
+                        name="billing-address-zipcode"
+                        value={form.billingAddress?.zipcode || ''}
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            billingAddress: {
+                              ...(form.billingAddress || {}),
+                              zipcode: e.target.value,
+                            },
+                          })
+                        }}
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="shipping-address-state">
-                      {t('system.state')}
-                    </Label>
-                    <Input
-                      type="text"
-                      id="shipping-address-state"
-                      name="shipping-address-state"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="shipping-address-country">
-                      {t('system.country')}
-                    </Label>
-                    <Input
-                      type="text"
-                      id="shipping-address-country"
-                      name="shipping-address-country"
-                    />
-                  </div>
-                  <p className="text-xl pt-6">{t('system.billing_address')}</p>
-                  <div>
-                    <Checkbox />{' '}
-                    <span className="text-sm text-muted-foreground">
-                      {t('system.billing_address_same_shipping_address')}
-                    </span>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="billing-address">
-                      {t('system.address')}
-                    </Label>
-                    <Input
-                      type="text"
-                      id="billing-address"
-                      name="billing-address"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="billing-address-city">
-                      {t('system.city')}
-                    </Label>
-                    <Input
-                      type="text"
-                      id="billing-address-city"
-                      name="billing-address-city"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="billing-address-state">
-                      {t('system.state')}
-                    </Label>
-                    <Input
-                      type="text"
-                      id="billing-address-state"
-                      name="billing-address-state"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="billing-address-country">
-                      {t('system.country')}
-                    </Label>
-                    <Input
-                      type="text"
-                      id="billing-address-country"
-                      name="billing-address-country"
-                    />
-                  </div>
-                  <Button>{t('system.save')}</Button>
+                  <div></div>
                 </div>
+                <Input
+                  type="hidden"
+                  name="shipping-address-id"
+                  value={form.shippingAddress?.id || ''}
+                />
+                <Input
+                  type="hidden"
+                  name="billing-address-id"
+                  value={form.billingAddress?.id || ''}
+                />
+                <Button
+                  type="submit"
+                  name="intent"
+                  value="update-address"
+                  className="mt-4"
+                >
+                  {fetcher.state !== 'idle' &&
+                  fetcher.formData?.get('intent') === 'update-address' ? (
+                    <Spinner size="small" className="text-white" />
+                  ) : (
+                    t('system.save')
+                  )}
+                </Button>
               </TabsContent>
               <TabsContent value="change-password">
                 <div className="space-y-4 w-[480px]">

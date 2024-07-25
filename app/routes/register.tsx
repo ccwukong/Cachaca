@@ -7,6 +7,7 @@ import {
 import { useActionData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
+import { v4 as uuidv4 } from 'uuid'
 import { cookie } from '~/cookie'
 import { CustomerAuthentication, Installer } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
@@ -55,6 +56,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const body = await request.formData()
 
     const result = await CustomerAuthentication.register({
+      id: uuidv4(),
       firstName: String(body.get('firstName')),
       lastName: String(body.get('lastName')),
       email: String(body.get('email')),

@@ -4,7 +4,6 @@
 
 import { and, asc, desc, eq, ne, or } from 'drizzle-orm'
 import md5 from 'md5'
-import { v4 as uuidv4 } from 'uuid'
 import {
   AddressItem,
   AddressType,
@@ -69,6 +68,7 @@ export class Installer {
 
   public static async create(data: {
     adminUser: {
+      id: string
       firstName: string
       lastName: string
       email: string
@@ -81,18 +81,16 @@ export class Installer {
     }
   }): Promise<UserPublicInfo> {
     const salt = makeStr(8)
-    const adminId = uuidv4()
     const createdOn = Math.floor(Date.now() / 1000)
     const check = await db.select().from(shop)
     if (check.length) {
       throw new ServerInternalError('Store has already been created.')
     }
+    const { adminUser, store } = data
 
     await db.transaction(async (tx) => {
-      const { adminUser, store } = data
-
       await tx.insert(user).values({
-        id: adminId,
+        id: adminUser.id,
         firstName: adminUser.firstName,
         lastName: adminUser.lastName,
         email: adminUser.email,
@@ -115,7 +113,7 @@ export class Installer {
           copyright: `${store.name} ©${new Date().getFullYear()}`,
           apis: {},
         } as OtherStoreConfigs,
-        createdBy: adminId,
+        createdBy: adminUser.id,
         createdOn,
         status: DatabaseRecordStatus.Active,
       }
@@ -124,7 +122,7 @@ export class Installer {
     })
 
     return {
-      id: adminId,
+      id: adminUser.id,
       email: data.adminUser.email,
       firstName: data.adminUser.firstName,
       lastName: data.adminUser.lastName,
@@ -221,11 +219,13 @@ export class AdminAuthtication {
 
 export class CustomerAuthentication {
   public static async register({
+    id,
     email,
     password,
     firstName,
     lastName,
   }: {
+    id: string
     email: string
     password: string
     firstName: string
@@ -245,7 +245,6 @@ export class CustomerAuthentication {
       throw new AccountExistsException()
     }
 
-    const id = uuidv4()
     const salt = makeStr(8)
     await db.insert(customer).values({
       id,
@@ -1271,7 +1270,6 @@ export class AddressModel implements CRUDModel<AddressItem> {
         state: data.state,
         country: data.country,
         zipcode: data.zipcode,
-        type: data.type,
       })
       .where(eq(customerAddress.id, data.id))
   }

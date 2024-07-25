@@ -8,12 +8,18 @@ import {
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
+import { v4 as uuidv4 } from 'uuid'
 import CustomerContext from '~/contexts/customerContext'
 import { cookie } from '~/cookie'
-import { CustomerAuthentication, CustomerModel, StoreConfig } from '~/models'
+import {
+  AddressModel,
+  CustomerAuthentication,
+  CustomerModel,
+  StoreConfig,
+} from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Settings from '~/themes/default/pages/account/Settings'
-import { FatalErrorTypes } from '~/types'
+import { AddressItem, AddressType, FatalErrorTypes } from '~/types'
 import {
   JWTTokenSecretNotFoundException,
   UnAuthenticatedException,
@@ -56,6 +62,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         data: {
           account,
           storeSettings: await StoreConfig.getStoreInfo(),
+          AddressItems: await new AddressModel().findManyByCustomerId(
+            payload.id,
+          ),
         },
       })
     }
@@ -105,7 +114,58 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           phone: String(body.get('phone')),
           avatar: String(body.get('avatar')),
         })
-      } else if (body.get('intent') === 'account-address') {
+      } else if (body.get('intent') === 'update-address') {
+        const address = new AddressModel()
+        const res = await address.findManyByCustomerId(payload.id)
+
+        if (!res.length) {
+          const shipping = await address.create({
+            id: uuidv4(),
+            customerId: payload.id,
+            address: String(body.get('shipping-address')),
+            city: String(body.get('shipping-address-city')),
+            state: String(body.get('shipping-address-state')),
+            country: String(body.get('shipping-address-country')),
+            zipcode: String(body.get('shipping-address-zipcode')),
+            type: AddressType.Shipping,
+          })
+
+          const billing = await address.create({
+            id: uuidv4(),
+            customerId: payload.id,
+            address: String(body.get('billing-address')),
+            city: String(body.get('billing-address-city')),
+            state: String(body.get('billing-address-state')),
+            country: String(body.get('billing-address-country')),
+            zipcode: String(body.get('billing-address-zipcode')),
+            type: AddressType.Billing,
+          })
+
+          return json({
+            error: null,
+            data: { shippingAddress: shipping, billingAddress: billing },
+          })
+        } else {
+          await address.update({
+            id: String(body.get('shipping-address-id')),
+            address: String(body.get('shipping-address')),
+            city: String(body.get('shipping-address-city')),
+            state: String(body.get('shipping-address-state')),
+            country: String(body.get('shipping-address-country')),
+            zipcode: String(body.get('shipping-address-zipcode')),
+            type: AddressType.Shipping,
+          })
+
+          await address.update({
+            id: String(body.get('billing-address-id')),
+            address: String(body.get('billing-address')),
+            city: String(body.get('billing-address-city')),
+            state: String(body.get('billing-address-state')),
+            country: String(body.get('billing-address-country')),
+            zipcode: String(body.get('billing-address-zipcode')),
+            type: AddressType.Billing,
+          })
+        }
       } else if (body.get('intent') === 'change-password') {
         await CustomerAuthentication.updatePassword({
           email: payload.email,
@@ -132,6 +192,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Index() {
   const loaderData = useLoaderData<typeof loader>()
+
   return (
     <Suspense fallback={<Skeleton />}>
       <CustomerContext.Provider
@@ -140,7 +201,9 @@ export default function Index() {
           storeSettings: loaderData!.data!.storeSettings,
         }}
       >
-        <Settings />
+        <Settings
+          addressItems={loaderData!.data!.AddressItems as AddressItem[]}
+        />
       </CustomerContext.Provider>
     </Suspense>
   )

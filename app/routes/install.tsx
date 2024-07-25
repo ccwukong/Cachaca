@@ -3,6 +3,7 @@ import { json, redirect } from '@remix-run/node'
 import { useActionData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
+import { v4 as uuidv4 } from 'uuid'
 import { adminCookie } from '~/cookie'
 import { Installer } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
@@ -47,6 +48,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const result = await Installer.create({
       adminUser: {
+        id: uuidv4(),
         firstName: String(body.get('firstName')),
         lastName: String(body.get('lastName')),
         email: String(body.get('email')),
