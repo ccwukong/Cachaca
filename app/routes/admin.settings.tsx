@@ -61,7 +61,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
       return json({
         error: null,
-        data: { storeSettings: await StoreConfig.getStoreInfo(), account },
+        data: {
+          storeSettings: await StoreConfig.getStoreInfo(),
+          currencies: await StoreConfig.getCurrencies(),
+          account,
+        },
       })
     }
   } catch (e) {
@@ -130,6 +134,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           phone: String(body.get('store-phone')),
           email: String(body.get('store-email')),
           logo: String(body.get('store-logo')),
+          baseCurrencyId: Number(body.get('store-currency')),
           other: {
             copyright: String(body.get('store-copyright-info')),
             apis: {
@@ -138,7 +143,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
                 apiKey: String(body.get('file-api-key')),
                 apiSecret: String(body.get('file-api-secret')),
               },
-              [ExternalApiType.GenAI]: {},
+              [ExternalApiType.GenAI]: {
+                model: String(body.get('genai-model')),
+                apiKey: String(body.get('genai-api-key')),
+              },
               [ExternalApiType.Email]: {
                 endpoint: String(body.get('email-endpoint')),
                 token: String(body.get('email-token')),
@@ -304,7 +312,7 @@ export default function Index() {
           storeSettings: loaderData!.data!.storeSettings,
         }}
       >
-        <Settings />
+        <Settings currencies={loaderData!.data!.currencies} />
       </AdminContext.Provider>
     </Suspense>
   )

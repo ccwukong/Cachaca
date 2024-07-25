@@ -37,11 +37,16 @@ import {
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
 import { Textarea } from '~/themes/default/components/ui/textarea'
-import { AddressItem, ExternalApiType, OtherStoreConfigs } from '~/types'
+import {
+  AddressItem,
+  Currency,
+  ExternalApiType,
+  OtherStoreConfigs,
+} from '~/types'
 import { Alert, AlertDescription, AlertTitle } from '../../components/ui/alert'
 import { Spinner } from '../../components/ui/spinner'
 
-const Settings = () => {
+const Settings = ({ currencies }: { currencies: Currency[] }) => {
   const { t } = useTranslation()
   const [isRemovingImage, setIsRemovingImage] = useState(false)
   const { account, storeSettings } = useContext(AdminContext)
@@ -146,16 +151,6 @@ const Settings = () => {
                 <div className="w-full grid grid-cols-3 gap-10">
                   <div className="space-y-3">
                     <div className="space-y-2">
-                      <Label htmlFor="store-name">{t('system.name')}</Label>
-                      <Input
-                        type="text"
-                        id="store-name"
-                        name="store-name"
-                        value={form.storeName}
-                        readOnly
-                      />
-                    </div>
-                    <div className="space-y-2">
                       <Label htmlFor="store-logo">{t('system.logo')}</Label>
                       <div className="flex items-center">
                         {form.storeLogo && (
@@ -187,6 +182,16 @@ const Settings = () => {
                           )}
                         </Button>
                       </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="store-name">{t('system.name')}</Label>
+                      <Input
+                        type="text"
+                        id="store-name"
+                        name="store-name"
+                        value={form.storeName}
+                        readOnly
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="store-description">
@@ -339,10 +344,32 @@ const Settings = () => {
                         {t('system.base_currency')}
                       </Label>
                       <Input
-                        type="text"
-                        id="store-currency"
+                        type="hidden"
                         name="store-currency"
+                        value={form.storeCurrency.id}
                       />
+                      <Select
+                        value={String(form.storeCurrency.id)}
+                        onValueChange={(value) =>
+                          setForm({
+                            ...form,
+                            storeCurrency: currencies.find(
+                              (item) => item.id === Number(value),
+                            )!,
+                          })
+                        }
+                      >
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder={t('system.select')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {currencies.map((item) => (
+                            <SelectItem key={item.id} value={String(item.id)}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="store-copyright-info">
@@ -384,12 +411,82 @@ const Settings = () => {
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="ai-model">{t('system.model')}</Label>
-                      <Input type="text" id="ai-model" name="ai-model" />
+                      <Label htmlFor="genai-model">{t('system.model')}</Label>
+                      <Input
+                        type="text"
+                        id="genai-model"
+                        name="genai-model"
+                        value={
+                          form.storeOtherInfo?.apis[ExternalApiType.GenAI]
+                            ?.model
+                        }
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeOtherInfo: {
+                              copyright: form.storeOtherInfo?.copyright || '',
+                              apis: {
+                                [ExternalApiType.File]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.File
+                                  ],
+                                },
+                                [ExternalApiType.GenAI]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.GenAI
+                                  ],
+                                  model: e.target.value,
+                                },
+                                [ExternalApiType.Email]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.Email
+                                  ],
+                                },
+                              },
+                            },
+                          })
+                        }}
+                      />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="ai-api-key">{t('system.api_key')}</Label>
-                      <Input type="text" id="ai-api-key" name="ai-api-key" />
+                      <Label htmlFor="genai-api-key">
+                        {t('system.api_key')}
+                      </Label>
+                      <Input
+                        type="password"
+                        id="genai-api-key"
+                        name="genai-api-key"
+                        value={
+                          form.storeOtherInfo?.apis[ExternalApiType.GenAI]
+                            ?.apiKey
+                        }
+                        onChange={(e) => {
+                          setForm({
+                            ...form,
+                            storeOtherInfo: {
+                              copyright: form.storeOtherInfo?.copyright || '',
+                              apis: {
+                                [ExternalApiType.File]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.File
+                                  ],
+                                },
+                                [ExternalApiType.GenAI]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.GenAI
+                                  ],
+                                  apiKey: e.target.value,
+                                },
+                                [ExternalApiType.Email]: {
+                                  ...form.storeOtherInfo?.apis[
+                                    ExternalApiType.Email
+                                  ],
+                                },
+                              },
+                            },
+                          })
+                        }}
+                      />
                     </div>
                   </div>
                   <div className="space-y-3">

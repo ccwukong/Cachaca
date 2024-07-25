@@ -8,6 +8,7 @@ import {
   AddressItem,
   AddressType,
   CategoryItem,
+  Currency,
   DatabaseRecordStatus,
   HomeBannerSettings,
   OrderItem,
@@ -903,6 +904,15 @@ export class StoreConfig {
     }
   }
 
+  public static async getCurrencies(): Promise<Currency[]> {
+    const data = await db.select().from(currency)
+    if (!data.length) {
+      throw new NotFoundException()
+    }
+
+    return data
+  }
+
   public static async updateStoreInfo(data: {
     name: string
     logo: string
@@ -910,16 +920,17 @@ export class StoreConfig {
     phone: string
     address: AddressItem
     description: string
+    baseCurrencyId: number
     other: OtherStoreConfigs
   }): Promise<void> {
     await db
       .update(shop)
       .set({
-        logo: data.logo,
         email: data.email,
         phone: data.phone,
         address: data.address,
         description: data.description,
+        baseCurrencyId: data.baseCurrencyId,
         other: data.other,
       })
       .where(eq(shop.name, data.name))

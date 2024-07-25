@@ -112,7 +112,7 @@ Please use the issue template to file an issue report, and try to provide the de
   - [x] Store banners
   - [ ] Public pages
   - [x] Store public info, such as logo, store name etc.
-  - [ ] Third party API credentials
+  - [x] Third party API credentials
 - [ ] Payment integration
   - [ ] Stripe integration
   - [ ] Cash on delivery
@@ -131,9 +131,11 @@ Please use the issue template to file an issue report, and try to provide the de
 - [ ] Checkout page and Payment page (currently, the cart items are stored in indexedDB at frontent, need to sync this to server later)
 - [x] Customer account login
 - [x] Customer account registration
-- [ ] Customer account reset password
+- [x] Customer account reset password
+- [ ] Customer account forgot password
 - [ ] Customer order management
-- [ ] Customer account management
+- [x] Customer address management
+- [x] Customer account management
 
 ## How to contribute
 
