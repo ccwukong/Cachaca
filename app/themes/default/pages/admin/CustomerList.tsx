@@ -2,6 +2,7 @@ import { MoreHorizontal } from 'lucide-react'
 import moment from 'moment'
 import { useTranslation } from 'react-i18next'
 import AdminHeader from '~/themes/default/components/ui/admin/Header'
+import { Badge } from '~/themes/default/components/ui/badge'
 import { Button } from '~/themes/default/components/ui/button'
 import { CardFooter } from '~/themes/default/components/ui/card'
 import {
@@ -20,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from '~/themes/default/components/ui/table'
-import { UserPublicInfo } from '~/types'
+import { DatabaseRecordStatus, UserPublicInfo } from '~/types'
 
 const CustomerList = ({ customers }: { customers: UserPublicInfo[] }) => {
   const { t } = useTranslation()
@@ -43,9 +44,10 @@ const CustomerList = ({ customers }: { customers: UserPublicInfo[] }) => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
+                  <TableHead>{t('system.name')}</TableHead>
+                  <TableHead>{t('system.email')}</TableHead>
                   <TableHead>Registered On</TableHead>
+                  <TableHead>{t('system.status')}</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
@@ -56,7 +58,26 @@ const CustomerList = ({ customers }: { customers: UserPublicInfo[] }) => {
                       <TableCell>{`${item.firstName} ${item.lastName}`}</TableCell>
                       <TableCell>{item.email}</TableCell>
                       <TableCell>
-                        {moment.unix(item.createdOn).format('DD MMM, YYYY')}
+                        {moment
+                          .unix(item.createdOn as number)
+                          .format('DD MMM, YYYY')}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={
+                            item.status === DatabaseRecordStatus.Active
+                              ? 'outline'
+                              : 'destructive'
+                          }
+                        >
+                          {
+                            Object.keys(DatabaseRecordStatus)[
+                              Object.values(DatabaseRecordStatus).indexOf(
+                                item.status as DatabaseRecordStatus,
+                              )
+                            ]
+                          }
+                        </Badge>
                       </TableCell>
                       <TableCell>
                         <DropdownMenu>

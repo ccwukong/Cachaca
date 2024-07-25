@@ -8,7 +8,7 @@ import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import AdminContext from '~/contexts/adminContext'
 import { adminCookie } from '~/cookie'
-import { UserModel } from '~/models'
+import { StoreConfig, UserModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import MemberList from '~/themes/default/pages/admin/MemberList'
 import { FatalErrorTypes } from '~/types'
@@ -38,6 +38,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     if (!(await isValid(accessToken, process.env.JWT_TOKEN_SECRET))) {
       throw new UnAuthenticatedException()
     } else {
+      const page = new URL(request.url).searchParams.get('page') || '1'
+      const size = new URL(request.url).searchParams.get('size') || '20'
+      const users = await new UserModel().findMany(
+        Number(page) < 1 ? 0 : Number(page) - 1,
+        Number(size) < 1 ? 1 : Number(size),
+      )
+
       const payload = (await decode(
         accessToken,
         process.env.JWT_TOKEN_SECRET,
@@ -50,7 +57,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
       const account = await new UserModel().find(payload.id)
 
-      return json({ error: null, data: { account } })
+      return json({
+        error: null,
+        data: {
+          storeSettings: await StoreConfig.getStoreInfo(),
+          users,
+          account,
+        },
+      })
     }
   } catch (e) {
     console.error(e) // TODO: replace this with a proper logger
@@ -77,13 +91,14 @@ export default function Index() {
             { title: 'Customers', url: '/admin/customers', order: 2 },
             { title: 'Orders', url: '/admin/orders', order: 3 },
             { title: 'Products', url: '/admin/products', order: 4 },
-            { title: 'Settings', url: '/admin/settings', order: 5 },
+            { title: 'Store members', url: '/admin/members', order: 5 },
+            { title: 'Settings', url: '/admin/settings', order: 6 },
           ],
           account: loaderData!.data!.account,
           storeSettings: loaderData!.data!.storeSettings,
         }}
       >
-        <MemberList />
+        <MemberList users={loaderData?.data?.users || []} />
       </AdminContext.Provider>
     </Suspense>
   )

@@ -85,7 +85,7 @@ Please use the issue template to file an issue report, and try to provide the de
 
 - [x] Store installation
 - [x] DB connection check, promps error message if DB connection isn't estabilished
-- [ ] Integration with Cloudinary for image hosting
+- [x] Integration with Cloudinary for image hosting
 - [x] Email service provider integration for transactional emails
 - [ ] Email service provider integration for marketing emails
 - [ ] OpenAI integration

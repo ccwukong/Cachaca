@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { useContext } from 'react'
+import { DatabaseRecordStatus } from '~/types'
 import CustomerContext from '../customerContext'
 
 describe('CustomerContext', () => {
@@ -30,6 +31,8 @@ describe('CustomerContext', () => {
             phone: '+1',
             avatar: 'https//',
             createdOn: 1,
+            updatedOn: null,
+            status: DatabaseRecordStatus.Active,
           },
           storeSettings: {
             name: 'test store',

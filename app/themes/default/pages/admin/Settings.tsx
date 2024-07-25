@@ -1,5 +1,5 @@
 import { useFetcher } from '@remix-run/react'
-import { AlertCircle, MoreHorizontal } from 'lucide-react'
+import { AlertCircle, MoreHorizontal, Settings } from 'lucide-react'
 import { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AdminContext from '~/contexts/adminContext'
@@ -41,7 +41,7 @@ import { AddressItem, ExternalApiType, OtherStoreConfigs } from '~/types'
 import { Alert, AlertDescription, AlertTitle } from '../../components/ui/alert'
 import { Spinner } from '../../components/ui/spinner'
 
-const CustomerList = () => {
+const Settings = () => {
   const { t } = useTranslation()
   const [isRemovingImage, setIsRemovingImage] = useState(false)
   const { account, storeSettings } = useContext(AdminContext)
@@ -869,10 +869,120 @@ const CustomerList = () => {
                 </Tabs>
               </TabsContent>
               <TabsContent value="product-categories">
-                {t('system.product_categories')}
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>{t('system.title')}</TableHead>
+                      <TableHead>{t('system.url')}</TableHead>
+                      <TableHead>{t('system.order')}</TableHead>
+                      <TableHead>
+                        <span className="sr-only">{t('system.actions')}</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  {storeSettings.publicPages.length ? (
+                    <TableBody>
+                      {storeSettings.publicPages.map((item) => (
+                        <TableRow key={item.name}>
+                          <TableCell className="font-medium">
+                            {item.name}
+                          </TableCell>
+                          <TableCell>/{item.slug}</TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            {item.order}
+                          </TableCell>
+                          <TableCell>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  aria-haspopup="true"
+                                  size="icon"
+                                  variant="ghost"
+                                >
+                                  <MoreHorizontal className="h-4 w-4" />
+                                  <span className="sr-only">Toggle menu</span>
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>
+                                  {t('system.actions')}
+                                </DropdownMenuLabel>
+                                <DropdownMenuItem>
+                                  {t('system.edit')}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  {t('system.disable')}
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  ) : (
+                    <div className="text-center">
+                      {t('system.no_records_found')}
+                    </div>
+                  )}
+                </Table>
               </TabsContent>
               <TabsContent value="product-variants">
-                {t('system.product_variants')}
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>{t('system.title')}</TableHead>
+                      <TableHead>{t('system.url')}</TableHead>
+                      <TableHead>{t('system.order')}</TableHead>
+                      <TableHead>
+                        <span className="sr-only">{t('system.actions')}</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  {storeSettings.publicPages.length ? (
+                    <TableBody>
+                      {storeSettings.publicPages.map((item) => (
+                        <TableRow key={item.name}>
+                          <TableCell className="font-medium">
+                            {item.name}
+                          </TableCell>
+                          <TableCell>/{item.slug}</TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            {item.order}
+                          </TableCell>
+                          <TableCell>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  aria-haspopup="true"
+                                  size="icon"
+                                  variant="ghost"
+                                >
+                                  <MoreHorizontal className="h-4 w-4" />
+                                  <span className="sr-only">Toggle menu</span>
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>
+                                  {t('system.actions')}
+                                </DropdownMenuLabel>
+                                <DropdownMenuItem>
+                                  {t('system.edit')}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  {t('system.disable')}
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  ) : (
+                    <div className="text-center">
+                      {t('system.no_records_found')}
+                    </div>
+                  )}
+                </Table>
               </TabsContent>
               <TabsContent value="public-pages">
                 <Table>
@@ -943,4 +1053,4 @@ const CustomerList = () => {
   )
 }
 
-export default CustomerList
+export default Settings

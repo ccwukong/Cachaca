@@ -113,8 +113,8 @@ export class Installer {
         description: store.description,
         other: {
           copyright: `${store.name} ©${new Date().getFullYear()}`,
-          apis: [],
-        },
+          apis: {},
+        } as OtherStoreConfigs,
         createdBy: adminId,
         createdOn,
         status: DatabaseRecordStatus.Active,
@@ -132,6 +132,8 @@ export class Installer {
       avatar: '',
       role: Role.Admin,
       createdOn,
+      updatedOn: null,
+      status: DatabaseRecordStatus.Active,
     }
   }
 }
@@ -152,13 +154,13 @@ export class AdminAuthtication {
       )
 
     if (!res.length) {
-      throw new UnAuthenticatedException('User not found.')
+      throw new UnAuthenticatedException()
     }
 
     const userData = res[0]
 
     if (userData.password !== md5(password + userData.salt)) {
-      throw new UnAuthenticatedException('Password is incorrect.')
+      throw new UnAuthenticatedException()
     }
 
     return {
@@ -170,6 +172,8 @@ export class AdminAuthtication {
       avatar: userData.avatar,
       role: userData.role,
       createdOn: userData.createdOn,
+      updatedOn: userData.updatedOn,
+      status: userData.status,
     }
   }
 
@@ -296,6 +300,8 @@ export class CustomerAuthentication {
       lastName: userData.lastName,
       avatar: userData.avatar,
       createdOn: userData.createdOn,
+      updatedOn: userData.updatedOn,
+      status: userData.status,
     }
   }
 }
@@ -360,7 +366,8 @@ export class UserModel implements CRUDModel<UserPublicInfo> {
       avatar: res[0].avatar,
       role: res[0].role,
       createdOn: res[0].createdOn,
-      updatedOn: res[0].updatedOn || undefined,
+      updatedOn: res[0].updatedOn,
+      status: res[0].status,
     }
 
     return data
@@ -385,7 +392,8 @@ export class UserModel implements CRUDModel<UserPublicInfo> {
         avatar: item.avatar,
         role: item.role,
         createdOn: item.createdOn,
-        updatedOn: item.updatedOn || undefined,
+        updatedOn: item.updatedOn,
+        status: item.status,
       }
     })
   }
@@ -470,7 +478,7 @@ export class CustomerModel implements CRUDModel<UserPublicInfo> {
       lastName: res[0].lastName,
       avatar: res[0].avatar,
       createdOn: res[0].createdOn,
-      updatedOn: res[0].updatedOn || undefined,
+      updatedOn: res[0].updatedOn,
       status: res[0].status,
     }
 
@@ -495,13 +503,19 @@ export class CustomerModel implements CRUDModel<UserPublicInfo> {
         lastName: item.lastName,
         avatar: item.avatar,
         createdOn: item.createdOn,
-        updatedOn: item.updatedOn || undefined,
+        updatedOn: item.updatedOn,
         status: item.status,
       }
     })
   }
 
-  async update(data: UserPublicInfo): Promise<void> {
+  async update(data: {
+    id: string
+    phone: string
+    firstName: string
+    lastName: string
+    avatar: string
+  }): Promise<void> {
     await db
       .update(customer)
       .set({

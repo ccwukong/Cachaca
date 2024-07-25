@@ -40,8 +40,8 @@ export type UserPublicInfo = {
   avatar: string
   role?: number
   createdOn?: number
-  updatedOn?: number
-  status?: number
+  updatedOn: number | null
+  status: number
 }
 
 export type CartItem = {

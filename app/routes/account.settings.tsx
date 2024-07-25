@@ -13,7 +13,7 @@ import { cookie } from '~/cookie'
 import { CustomerModel, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Settings from '~/themes/default/pages/account/Settings'
-import { AddressType, FatalErrorTypes } from '~/types'
+import { FatalErrorTypes } from '~/types'
 import {
   JWTTokenSecretNotFoundException,
   UnAuthenticatedException,
@@ -103,47 +103,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           firstName: String(body.get('firstname')),
           lastName: String(body.get('lastname')),
           phone: String(body.get('phone')),
-          email: String(body.get('email')),
           avatar: String(body.get('avatar')),
         })
       } else if (body.get('intent') === 'account-address') {
-        await StoreConfig.updateStoreInfo({
-          name: String(body.get('store-name')),
-          description: String(body.get('store-description')),
-          address: {
-            id: '',
-            address: String(body.get('store-address')),
-            city: String(body.get('store-city')),
-            state: String(body.get('store-state')),
-            zipcode: String(body.get('store-zipcode')),
-            country: String(body.get('store-country')),
-            type: AddressType.Store,
-          },
-          phone: String(body.get('store-phone')),
-          email: String(body.get('store-email')),
-          logo: String(body.get('store-logo')),
-          banners: JSON.parse(String(body.get('banners'))),
-          other: JSON.parse(String(body.get('other'))),
-        })
       } else if (body.get('intent') === 'account-password') {
-        await StoreConfig.updateStoreInfo({
-          name: String(body.get('store-name')),
-          description: String(body.get('store-description')),
-          address: {
-            id: '',
-            address: String(body.get('store-address')),
-            city: String(body.get('store-city')),
-            state: String(body.get('store-state')),
-            zipcode: String(body.get('store-zipcode')),
-            country: String(body.get('store-country')),
-            type: AddressType.Store,
-          },
-          phone: String(body.get('store-phone')),
-          email: String(body.get('store-email')),
-          logo: String(body.get('store-logo')),
-          banners: JSON.parse(String(body.get('banners'))),
-          other: JSON.parse(String(body.get('other'))),
-        })
       }
     }
     return json({ error: null, data: {} })

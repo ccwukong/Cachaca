@@ -9,7 +9,7 @@ import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import AdminContext from '~/contexts/adminContext'
 import { adminCookie } from '~/cookie'
-import { CustomerModel, UserModel } from '~/models'
+import { CustomerModel, StoreConfig, UserModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import CustomerList from '~/themes/default/pages/admin/CustomerList'
 import { FatalErrorTypes } from '~/types'
@@ -60,7 +60,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
       const account = await new UserModel().find(payload.id)
 
-      return json({ error: null, data: { customers, account } })
+      return json({
+        error: null,
+        data: {
+          storeSettings: await StoreConfig.getStoreInfo(),
+          customers,
+          account,
+        },
+      })
     }
   } catch (e) {
     console.error(e) // TODO: replace this with a proper logger
@@ -88,7 +95,8 @@ export default function Index() {
             { title: 'Customers', url: '/admin/customers', order: 2 },
             { title: 'Orders', url: '/admin/orders', order: 3 },
             { title: 'Products', url: '/admin/products', order: 4 },
-            { title: 'Settings', url: '/admin/settings', order: 5 },
+            { title: 'Store members', url: '/admin/members', order: 5 },
+            { title: 'Settings', url: '/admin/settings', order: 6 },
           ],
           account: loaderData!.data!.account,
           storeSettings: loaderData!.data!.storeSettings,
