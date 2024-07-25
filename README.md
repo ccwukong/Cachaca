@@ -68,7 +68,7 @@ If you start fresh, you will see the **Installation** screen below. Please ensur
 
 [Store admin dashboard](https://main--roaring-gnome-50b6e1.netlify.app/admin)
 
-📣 **The Admin demo account is no longer accessiable by public due to account credentials, a seperate user account with access control will be provided soon**
+📣 **The Admin demo account is no longer accessible by public due to account credentials, a seperate user account with access control will be provided soon**
 
 ~~- Email: admin@test.com~~
 ~~- Password: 123456~~
@@ -99,7 +99,7 @@ Please use the issue template to file an issue report, and try to provide the de
   - [ ] Role-based permission management
 - [ ] Customer management
 - [ ] Product management
-  - [ ] Product category and sub-category management
+  - [ ] Product category management
   - [ ] Product variant management
   - [ ] Product collection management, such as editor's pick etc.
   - [ ] Product discount
@@ -109,9 +109,9 @@ Please use the issue template to file an issue report, and try to provide the de
   - [ ] Refund and partial refund management
   - [ ] Voucher management
 - [ ] Store management
-  - [ ] Store banners
+  - [x] Store banners
   - [ ] Public pages
-  - [ ] Store public info, such as logo, store name etc.
+  - [x] Store public info, such as logo, store name etc.
   - [ ] Third party API credentials
 - [ ] Payment integration
   - [ ] Stripe integration
