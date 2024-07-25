@@ -265,6 +265,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           })
         }
       } else if (body.get('intent') === 'account-info') {
+        await new UserModel().update({
+          id: payload.id,
+          firstName: String(body.get('firstname')),
+          lastName: String(body.get('lastname')),
+          phone: String(body.get('phone')),
+          avatar: String(body.get('avatar')),
+        })
       } else if (body.get('intent') === 'change-password') {
         await AdminAuthtication.updatePassword({
           email: payload.email,

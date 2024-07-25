@@ -1,5 +1,5 @@
 import { useFetcher } from '@remix-run/react'
-import { AlertCircle, MoreHorizontal, Settings } from 'lucide-react'
+import { AlertCircle, MoreHorizontal } from 'lucide-react'
 import { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AdminContext from '~/contexts/adminContext'
@@ -61,6 +61,7 @@ const Settings = ({ currencies }: { currencies: Currency[] }) => {
     storeCurrency: storeSettings!.currency,
     storeOtherInfo: storeSettings!.other!,
     storeBanners: storeSettings!.banners!,
+    account: account!,
   })
 
   useEffect(() => {
@@ -157,7 +158,7 @@ const Settings = ({ currencies }: { currencies: Currency[] }) => {
                           <img
                             src={form.storeLogo}
                             alt={form.storeName}
-                            className="h-24 w-24 rounded-full border mr-2 object-cover"
+                            className="h-24 w-24 rounded-full border mr-2 object-contain"
                           />
                         )}
                         <Input
@@ -873,47 +874,79 @@ const Settings = ({ currencies }: { currencies: Currency[] }) => {
                   <TabsContent value="account-settings">
                     <div className="space-y-4 w-[480px]">
                       <div className="space-y-2">
-                        <Label htmlFor="first-name">
-                          {t('system.firstname')}
-                        </Label>
-                        <Input
-                          type="text"
-                          id="first-name"
-                          name="first-name"
-                          value={account.firstName}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="store-email">
-                          {t('system.lastname')}
-                        </Label>
-                        <Input
-                          type="text"
-                          id="last-name"
-                          name="last-name"
-                          value={account.lastName}
-                        />
-                      </div>
-                      <div className="space-y-2">
                         <Label htmlFor="email">{t('system.email')}</Label>
                         <Input
                           type="text"
                           id="email"
                           name="email"
-                          value={account.email}
+                          value={form.account.email}
+                          disabled
                         />
                       </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="firstname">
+                          {t('system.firstname')}
+                        </Label>
+                        <Input
+                          type="text"
+                          id="firstname"
+                          name="firstname"
+                          value={form.account.firstName}
+                          onChange={(e) => {
+                            setForm({
+                              ...form,
+                              account: {
+                                ...form.account,
+                                firstName: e.target.value,
+                              },
+                            })
+                          }}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="lastname">{t('system.lastname')}</Label>
+                        <Input
+                          type="text"
+                          id="lastname"
+                          name="lastname"
+                          value={form.account.lastName}
+                          onChange={(e) => {
+                            setForm({
+                              ...form,
+                              account: {
+                                ...form.account,
+                                lastName: e.target.value,
+                              },
+                            })
+                          }}
+                        />
+                      </div>
+
                       <div className="space-y-2">
                         <Label htmlFor="phone">{t('system.phone')}</Label>
                         <Input
                           type="text"
                           id="phone"
                           name="phone"
-                          value={account.phone}
+                          value={form.account.phone}
+                          onChange={(e) => {
+                            setForm({
+                              ...form,
+                              account: {
+                                ...form.account,
+                                phone: e.target.value,
+                              },
+                            })
+                          }}
                         />
                       </div>
                       <Button type="submit" name="intent" value="account-info">
-                        {t('system.save')}
+                        {fetcher.state !== 'idle' &&
+                        fetcher.formData?.get('intent') === 'account-info' ? (
+                          <Spinner size="small" className="text-white" />
+                        ) : (
+                          t('system.save')
+                        )}
                       </Button>
                     </div>
                   </TabsContent>

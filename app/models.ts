@@ -440,7 +440,13 @@ export class UserModel implements CRUDModel<UserPublicInfo> {
     })
   }
 
-  async update(data: UserPublicInfo): Promise<void> {
+  async update(data: {
+    id: string
+    phone: string
+    firstName: string
+    lastName: string
+    avatar: string
+  }): Promise<void> {
     await db
       .update(user)
       .set({
@@ -448,7 +454,6 @@ export class UserModel implements CRUDModel<UserPublicInfo> {
         firstName: data.firstName,
         lastName: data.lastName,
         avatar: data.avatar,
-        role: data.role,
         updatedOn: Math.floor(Date.now() / 1000),
       })
       .where(eq(user.id, data.id))

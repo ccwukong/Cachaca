@@ -78,6 +78,22 @@ const Settings = ({ addressItems }: { addressItems: AddressItem[] }) => {
               <TabsContent value="account-settings">
                 <div className="space-y-4 w-[480px]">
                   <div className="space-y-2">
+                    <Label htmlFor="email">{t('system.email')}</Label>
+                    <Input
+                      type="text"
+                      id="email"
+                      name="email"
+                      value={form.email}
+                      onChange={(e) => {
+                        setForm({
+                          ...form,
+                          email: e.target.value,
+                        })
+                      }}
+                      disabled
+                    />
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="firstname">{t('system.firstname')}</Label>
                     <Input
                       type="text"
@@ -108,21 +124,6 @@ const Settings = ({ addressItems }: { addressItems: AddressItem[] }) => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">{t('system.email')}</Label>
-                    <Input
-                      type="text"
-                      id="email"
-                      name="email"
-                      value={form.email}
-                      onChange={(e) => {
-                        setForm({
-                          ...form,
-                          email: e.target.value,
-                        })
-                      }}
-                    />
-                  </div>
-                  <div className="space-y-2">
                     <Label htmlFor="phone">{t('system.phone')}</Label>
                     <Input
                       type="text"
@@ -143,7 +144,8 @@ const Settings = ({ addressItems }: { addressItems: AddressItem[] }) => {
                     name="intent"
                     value="account-info"
                   >
-                    {fetcher.state !== 'idle' ? (
+                    {fetcher.state !== 'idle' &&
+                    fetcher.formData?.get('intent') === 'account-info' ? (
                       <Spinner size="small" className="text-white" />
                     ) : (
                       t('system.save')
