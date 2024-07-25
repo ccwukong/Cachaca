@@ -14,6 +14,8 @@ import {
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
 import { Spinner } from '../../components/ui/spinner'
+import { AlertCircle } from 'lucide-react'
+import { Alert, AlertTitle, AlertDescription } from '../../components/ui/alert'
 
 const Settings = () => {
   const { t } = useTranslation()
@@ -236,9 +238,29 @@ const Settings = () => {
                     <Label htmlFor="new-password">
                       {t('system.new_password')}
                     </Label>
-                    <Input type="text" id="new-password" name="new-password" />
+                    <Input
+                      type="password"
+                      id="new-password"
+                      name="new-password"
+                    />
                   </div>
-                  <Button>{t('system.save')}</Button>
+                  <Button type="submit" name="intent" value="change-password">
+                    {fetcher.state !== 'idle' &&
+                    fetcher.formData?.get('intent') === 'change-password' ? (
+                      <Spinner size="small" className="text-white" />
+                    ) : (
+                      t('system.save')
+                    )}
+                  </Button>
+                  {fetcher.state === 'idle' && fetcher.data?.error ? (
+                    <Alert variant="destructive" className="mt-3">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertTitle>{t('system.error')}</AlertTitle>
+                      <AlertDescription>
+                        {t('system.unmatched_password')}
+                      </AlertDescription>
+                    </Alert>
+                  ) : null}
                 </div>
               </TabsContent>
             </Tabs>

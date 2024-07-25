@@ -6,6 +6,7 @@ import {
 } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
+import { useTranslation } from 'react-i18next'
 import AdminContext from '~/contexts/adminContext'
 import { adminCookie } from '~/cookie'
 import { StoreConfig, UserModel } from '~/models'
@@ -82,17 +83,23 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function Index() {
   const loaderData = useLoaderData<typeof loader>()
+  const { t } = useTranslation()
+
   return (
     <Suspense fallback={<Skeleton />}>
       <AdminContext.Provider
         value={{
           navItems: [
-            { title: 'Overview', url: '/admin', order: 1 },
-            { title: 'Customers', url: '/admin/customers', order: 2 },
-            { title: 'Orders', url: '/admin/orders', order: 3 },
-            { title: 'Products', url: '/admin/products', order: 4 },
-            { title: 'Store members', url: '/admin/members', order: 5 },
-            { title: 'Settings', url: '/admin/settings', order: 6 },
+            { title: t('system.overview'), url: '/admin', order: 1 },
+            { title: t('system.customers'), url: '/admin/customers', order: 2 },
+            { title: t('system.orders'), url: '/admin/orders', order: 3 },
+            { title: t('system.products'), url: '/admin/products', order: 4 },
+            {
+              title: t('system.store_members'),
+              url: '/admin/members',
+              order: 5,
+            },
+            { title: t('system.settings'), url: '/admin/settings', order: 6 },
           ],
           account: loaderData!.data!.account,
           storeSettings: loaderData!.data!.storeSettings,

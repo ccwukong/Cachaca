@@ -122,5 +122,7 @@
   "system.preview": "Preview",
   "system.upload": "Upload",
   "system.copyright_info": "Copyright information",
-  "system.unmatched_password": "Unmatched password"
+  "system.unmatched_password": "Unmatched password",
+  "system.store_members": "Store members",
+  "system.overview": "Overview"
 }

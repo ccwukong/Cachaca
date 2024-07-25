@@ -304,6 +304,48 @@ export class CustomerAuthentication {
       status: userData.status,
     }
   }
+
+  public static async updatePassword({
+    email,
+    oldPwd,
+    newPwd,
+  }: {
+    email: string
+    oldPwd: string
+    newPwd: string
+  }): Promise<void> {
+    const res = await db
+      .select()
+      .from(customer)
+      .where(
+        and(
+          eq(customer.email, email),
+          eq(customer.status, DatabaseRecordStatus.Active),
+        ),
+      )
+
+    if (!res.length) {
+      throw new UnAuthenticatedException()
+    }
+
+    const userData = res[0]
+
+    if (userData.password !== md5(oldPwd + userData.salt)) {
+      throw new UnmatchedPassword()
+    }
+
+    const newSalt = makeStr(8)
+
+    await db
+      .update(customer)
+      .set({ password: md5(newPwd + newSalt), salt: newSalt })
+      .where(
+        and(
+          eq(customer.email, email),
+          eq(customer.status, DatabaseRecordStatus.Active),
+        ),
+      )
+  }
 }
 
 export class UserModel implements CRUDModel<UserPublicInfo> {

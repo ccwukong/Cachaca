@@ -1,6 +1,5 @@
 import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { useActionData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { cookie } from '~/cookie'
 import { CustomerAuthentication, Installer } from '~/models'
@@ -75,17 +74,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
   } catch (e) {
     console.error(e) // TODO: replace this with a proper logger
-
-    return json({ error: e, data: {} })
+    if (e?.code === FatalErrorTypes.DatabaseConnection) {
+      return redirect('/error')
+    }
+    return json({ error: e, data: null })
   }
 }
 
 export default function Index() {
-  const actionData = useActionData<typeof action>()
-
   return (
     <Suspense fallback={<Skeleton />}>
-      <Login isLoginSuccessful={actionData === undefined} />
+      <Login />
     </Suspense>
   )
 }

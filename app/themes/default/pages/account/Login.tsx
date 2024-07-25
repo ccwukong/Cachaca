@@ -1,4 +1,4 @@
-import { Form, Link, useFetcher } from '@remix-run/react'
+import { Link, useFetcher } from '@remix-run/react'
 import { AlertCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -17,7 +17,7 @@ import { Input } from '~/themes/default/components/ui/input'
 import { Label } from '~/themes/default/components/ui/label'
 import { Spinner } from '~/themes/default/components/ui/spinner'
 
-const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
+const Login = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
 
@@ -28,7 +28,7 @@ const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
           <CardTitle className="text-2xl">{t('system.login')}</CardTitle>
         </CardHeader>
         <CardContent>
-          <Form method="POST" className="grid gap-4">
+          <fetcher.Form method="POST" className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">{t('system.email')}</Label>
               <Input id="email" name="email" type="email" required />
@@ -52,14 +52,14 @@ const Login = ({ isLoginSuccessful }: { isLoginSuccessful: boolean }) => {
                 t('system.login')
               )}
             </Button>
-            {!isLoginSuccessful && fetcher.state === 'idle' ? (
+            {fetcher.state === 'idle' && fetcher.data?.error ? (
               <Alert variant="destructive" className="mt-3">
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>{t('system.error')}</AlertTitle>
                 <AlertDescription>{t('system.login_failed')}</AlertDescription>
               </Alert>
             ) : null}
-          </Form>
+          </fetcher.Form>
 
           <div className="mt-4 text-center text-sm">
             {t('system.do_not_have_account_hint')}{' '}

@@ -10,7 +10,7 @@ import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import CustomerContext from '~/contexts/customerContext'
 import { cookie } from '~/cookie'
-import { CustomerModel, StoreConfig } from '~/models'
+import { CustomerAuthentication, CustomerModel, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Settings from '~/themes/default/pages/account/Settings'
 import { FatalErrorTypes } from '~/types'
@@ -106,7 +106,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           avatar: String(body.get('avatar')),
         })
       } else if (body.get('intent') === 'account-address') {
-      } else if (body.get('intent') === 'account-password') {
+      } else if (body.get('intent') === 'change-password') {
+        await CustomerAuthentication.updatePassword({
+          email: payload.email,
+          oldPwd: String(body.get('old-password')),
+          newPwd: String(body.get('new-password')),
+        })
       }
     }
     return json({ error: null, data: {} })
