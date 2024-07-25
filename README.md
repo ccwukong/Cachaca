@@ -68,8 +68,10 @@ If you start fresh, you will see the **Installation** screen below. Please ensur
 
 [Store admin dashboard](https://main--roaring-gnome-50b6e1.netlify.app/admin)
 
-- Email: admin@test.com
-- Password: 123456
+📣 **The Admin demo account is no longer accessiable by public due to account credentials, a seperate user account with access control will be provided soon**
+
+~~- Email: admin@test.com~~
+~~- Password: 123456~~
 
 ## Report an issue
 
