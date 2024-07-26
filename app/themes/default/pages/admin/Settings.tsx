@@ -149,11 +149,10 @@ const Settings = ({ currencies }: { currencies: Currency[] }) => {
                 <p className="text-xl space-y-3 mt-3">
                   {t('system.store_information')}
                 </p>
-                <div className="w-full grid grid-cols-3 gap-10">
+                <div className="w-full grid grid-cols-3 mt-3 gap-10">
                   <div className="space-y-3">
                     <div className="space-y-2">
-                      <Label htmlFor="store-logo">{t('system.logo')}</Label>
-                      <div className="flex items-center">
+                      <div className="lg:flex lg:items-center">
                         {form.storeLogo && (
                           <img
                             src={form.storeLogo}
@@ -161,27 +160,30 @@ const Settings = ({ currencies }: { currencies: Currency[] }) => {
                             className="h-24 w-24 rounded-full border mr-2 object-contain"
                           />
                         )}
-                        <Input
-                          type="file"
-                          id="store-logo"
-                          name="store-logo"
-                          accept="image/*"
-                          className="w-[220px]"
-                        />
-                        <Button
-                          type="submit"
-                          variant="secondary"
-                          name="intent"
-                          value="upload-logo"
-                          className="ml-2"
-                        >
-                          {fetcher.state !== 'idle' &&
-                          fetcher.formData?.get('intent') === 'upload-logo' ? (
-                            <Spinner size="small" className="text-white" />
-                          ) : (
-                            t('system.upload')
-                          )}
-                        </Button>
+                        <div className="inline-flex md:mt-2">
+                          <Input
+                            type="file"
+                            id="store-logo"
+                            name="store-logo"
+                            accept="image/*"
+                            className="max-w-[220px]"
+                          />
+                          <Button
+                            type="submit"
+                            variant="secondary"
+                            name="intent"
+                            value="upload-logo"
+                            className="ml-2"
+                          >
+                            {fetcher.state !== 'idle' &&
+                            fetcher.formData?.get('intent') ===
+                              'upload-logo' ? (
+                              <Spinner size="small" className="text-white" />
+                            ) : (
+                              t('system.upload')
+                            )}
+                          </Button>
+                        </div>
                       </div>
                     </div>
                     <div className="space-y-2">
