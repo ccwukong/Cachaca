@@ -1,18 +1,24 @@
-import { useFetcher } from '@remix-run/react'
-import { AlertCircle, MoreHorizontal } from 'lucide-react'
+import { Form, useFetcher } from '@remix-run/react'
+import { AlertCircle } from 'lucide-react'
 import { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AdminContext from '~/contexts/adminContext'
+import Editor from '~/themes/default/components/ui/admin/Editor'
 import AdminHeader from '~/themes/default/components/ui/admin/Header'
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from '~/themes/default/components/ui/alert'
 import { Button } from '~/themes/default/components/ui/button'
 import { Checkbox } from '~/themes/default/components/ui/checkbox'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from '~/themes/default/components/ui/dropdown-menu'
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '~/themes/default/components/ui/dialog'
 import { Input } from '~/themes/default/components/ui/input'
 import { Label } from '~/themes/default/components/ui/label'
 import {
@@ -22,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/themes/default/components/ui/select'
+import { Spinner } from '~/themes/default/components/ui/spinner'
 import {
   Table,
   TableBody,
@@ -43,12 +50,11 @@ import {
   ExternalApiType,
   OtherStoreConfigs,
 } from '~/types'
-import { Alert, AlertDescription, AlertTitle } from '../../components/ui/alert'
-import { Spinner } from '../../components/ui/spinner'
 
 const Settings = ({ currencies }: { currencies: Currency[] }) => {
   const { t } = useTranslation()
   const [isRemovingImage, setIsRemovingImage] = useState(false)
+  const [pageEditOpen, setPageEditOpen] = useState(false)
   const { account, storeSettings } = useContext(AdminContext)
   const fetcher = useFetcher()
   const [form, setForm] = useState({
@@ -1024,29 +1030,13 @@ const Settings = ({ currencies }: { currencies: Currency[] }) => {
                             {item.order}
                           </TableCell>
                           <TableCell>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button
-                                  aria-haspopup="true"
-                                  size="icon"
-                                  variant="ghost"
-                                >
-                                  <MoreHorizontal className="h-4 w-4" />
-                                  <span className="sr-only">Toggle menu</span>
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>
-                                  {t('system.actions')}
-                                </DropdownMenuLabel>
-                                <DropdownMenuItem>
-                                  {t('system.edit')}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  {t('system.disable')}
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
+                            <Button
+                              type="button"
+                              variant="link"
+                              onClick={(e) => setPageEditOpen(true)}
+                            >
+                              {t('system.edit')}
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -1082,29 +1072,13 @@ const Settings = ({ currencies }: { currencies: Currency[] }) => {
                             {item.order}
                           </TableCell>
                           <TableCell>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button
-                                  aria-haspopup="true"
-                                  size="icon"
-                                  variant="ghost"
-                                >
-                                  <MoreHorizontal className="h-4 w-4" />
-                                  <span className="sr-only">Toggle menu</span>
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>
-                                  {t('system.actions')}
-                                </DropdownMenuLabel>
-                                <DropdownMenuItem>
-                                  {t('system.edit')}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  {t('system.disable')}
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
+                            <Button
+                              type="button"
+                              variant="link"
+                              onClick={(e) => setPageEditOpen(true)}
+                            >
+                              {t('system.edit')}
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -1140,29 +1114,13 @@ const Settings = ({ currencies }: { currencies: Currency[] }) => {
                             {item.order}
                           </TableCell>
                           <TableCell>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button
-                                  aria-haspopup="true"
-                                  size="icon"
-                                  variant="ghost"
-                                >
-                                  <MoreHorizontal className="h-4 w-4" />
-                                  <span className="sr-only">Toggle menu</span>
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>
-                                  {t('system.actions')}
-                                </DropdownMenuLabel>
-                                <DropdownMenuItem>
-                                  {t('system.edit')}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  {t('system.disable')}
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
+                            <Button
+                              type="button"
+                              variant="link"
+                              onClick={(e) => setPageEditOpen(true)}
+                            >
+                              {t('system.edit')}
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -1179,6 +1137,52 @@ const Settings = ({ currencies }: { currencies: Currency[] }) => {
               </TabsContent>
             </Tabs>
           </fetcher.Form>
+
+          <Dialog
+            open={pageEditOpen}
+            onOpenChange={() => {
+              setPageEditOpen(!pageEditOpen)
+            }}
+          >
+            <DialogContent className="max-w-screen-md">
+              <DialogHeader>
+                <DialogTitle>{t('system.edit_page')}</DialogTitle>
+              </DialogHeader>
+              <Form method="POST" className="space-y-4">
+                <div className="space-y-2">
+                  <Label className="text-right">{t('system.title')}</Label>
+                  <Input
+                    id="page-title"
+                    name="page-title"
+                    className="col-span-3"
+                    required
+                    value=""
+                    onChange={(e) => {}}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-right">{t('system.slug')}</Label>
+                  <Input
+                    id="page-slug"
+                    name="page-slug"
+                    className="col-span-3"
+                    required
+                    value=""
+                    onChange={(e) => {}}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-right">
+                    {t('system.description')}
+                  </Label>
+                  <Editor content={'Type content here...'} />
+                </div>
+              </Form>
+              <DialogFooter>
+                <Button type="submit">{t('system.save')}</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     )
