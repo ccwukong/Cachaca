@@ -137,7 +137,9 @@ const Header = ({
                             onChange={(e) => {
                               updateCartItemHandler!(
                                 item.id as string,
-                                Number(e.target.value),
+                                isNaN(parseInt(e.target.value, 10))
+                                  ? 1
+                                  : Math.ceil(Number(e.target.value)),
                               )
                             }}
                           />

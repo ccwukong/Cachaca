@@ -40,7 +40,14 @@ const CartItem = ({
             type="number"
             value={quantity}
             className="px-2 py-1 h-auto w-14"
-            onChange={(e) => updateCartItemHandler(id, Number(e.target.value))}
+            onChange={(e) => {
+              updateCartItemHandler(
+                id,
+                isNaN(parseInt(e.target.value, 10))
+                  ? 1
+                  : Math.ceil(Number(e.target.value)),
+              )
+            }}
           />
         </div>
       </div>
