@@ -6,7 +6,7 @@ import StoreContext from '~/contexts/storeContext'
 import { Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import CategoryProductList from '~/themes/default/pages/storefront/CategoryProductList'
-import { CategoryItem, FatalErrorTypes } from '~/types'
+import { CategoryItem, FatalErrorTypes, ProductPublicInfo } from '~/types'
 import { StoreNotInstalledError } from '~/utils/exception'
 import * as mocks from '~/utils/mocks'
 
@@ -25,7 +25,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ]
 }
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   try {
     if (!(await Installer.isInstalled())) {
       throw new StoreNotInstalledError()
@@ -36,9 +36,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       data: {
         categories: await mocks.getCategories(),
         storeSettings: await StoreConfig.getStoreInfo(),
-        products: await mocks.getMockProducts(),
+        products: (await mocks.getMockProducts()) as ProductPublicInfo[],
         categoryName: (await mocks.getCategories()).find(
-          (item) => item.slug === (request.url.split('/').at(-1) || ''),
+          (item) => item.slug === params.slug,
         )?.name,
         url: new URL(request.url),
       },

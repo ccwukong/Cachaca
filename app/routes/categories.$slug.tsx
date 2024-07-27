@@ -29,7 +29,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ]
 }
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   try {
     if (!(await Installer.isInstalled())) {
       throw new StoreNotInstalledError()
@@ -42,7 +42,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         storeSettings: await StoreConfig.getStoreInfo(),
         products: await mocks.getMockProducts(),
         categoryName: (await mocks.getCategories()).find(
-          (item) => item.slug === (request.url.split('/').at(-1) || ''),
+          (item) => item.slug === params.slug,
         )?.name,
         url: new URL(request.url),
       },

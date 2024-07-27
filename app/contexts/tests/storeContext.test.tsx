@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { useContext } from 'react'
 import StoreContext from '../storeContext'
+import { DatabaseRecordStatus } from '~/types'
 
 describe('StoreContext', () => {
   it('should be defined', () => {
@@ -33,6 +34,16 @@ describe('StoreContext', () => {
             publicPages: [],
             other: null,
             banners: null,
+          },
+          account: {
+            id: '123',
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'test@test.com',
+            phone: '1234567890',
+            avatar: 'https://',
+            updatedOn: null,
+            status: DatabaseRecordStatus.Active,
           },
         }}
       >
