@@ -1,19 +1,21 @@
-import { useTranslation } from 'react-i18next'
 import { Link } from '@remix-run/react'
+import { useTranslation } from 'react-i18next'
+import { Button } from '~/themes/default/components/ui/button'
 import {
   Card,
   CardContent,
   CardFooter,
 } from '~/themes/default/components/ui/card'
-import { Button } from '~/themes/default/components/ui/button'
 
 const ProductCard = ({
+  id,
   coverImage,
   title,
   link,
   price,
   onClick,
 }: {
+  id: string
   coverImage: string
   title: string
   link: string
