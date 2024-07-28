@@ -52,11 +52,12 @@ const CartItem = ({
         </div>
       </div>
       <div className="p-3 md:p-0 flex mt-3 md:mt-0 md:flex-col justify-between items-end">
-        <div className="text-xl text-black ">{`${currency} ${
+        <div className="text-xl text-black ">{`${currency}${
           Number(price) * Number(quantity)
         }`}</div>
         <Trash2
           className="cursor-pointer"
+          data-testid={`delete-${id}`}
           onClick={(e) => updateCartItemHandler(id, 0)}
         />
       </div>

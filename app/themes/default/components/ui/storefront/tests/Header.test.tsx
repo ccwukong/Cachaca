@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import StoreContext from '~/contexts/storeContext'
 import { CategoryItem, StoreSettings } from '~/types'
@@ -8,8 +7,6 @@ import Header from '../Header'
 
 describe('Testing storefront Header component', () => {
   test('Testing storefront Header without logo image', async () => {
-    const user = userEvent.setup()
-
     const mockCategories: CategoryItem[] = (
       (await mocks.getCategories()) as CategoryItem[]
     ).map((item) => {
