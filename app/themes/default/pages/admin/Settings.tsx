@@ -4,6 +4,9 @@ import AdminContext from '~/contexts/adminContext'
 import AccountForm from '~/themes/default/components/ui/admin/AccountForm'
 import ChangePasswordForm from '~/themes/default/components/ui/admin/ChangePasswordForm'
 import AdminHeader from '~/themes/default/components/ui/admin/Header'
+import ProductCategoryList from '~/themes/default/components/ui/admin/ProductCategoryList'
+import ProductVariantList from '~/themes/default/components/ui/admin/ProductVariantList'
+import PublicPageList from '~/themes/default/components/ui/admin/PublicPageList'
 import StoreInfoForm from '~/themes/default/components/ui/admin/StoreInfoForm'
 import {
   Tabs,
@@ -12,9 +15,6 @@ import {
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
 import { Currency } from '~/types'
-import ProductCategoryList from '../../components/ui/admin/ProductCategoryList'
-import ProductVariantList from '../../components/ui/admin/ProductVariantList'
-import PublicPageList from '../../components/ui/admin/PublicPageList'
 
 const Settings = ({ currencies }: { currencies: Currency[] }) => {
   const { t } = useTranslation()
