@@ -1042,10 +1042,6 @@ export class StoreConfig {
       .from(emailTemplate)
       .orderBy(asc(emailTemplate.name))
 
-    if (!data.length) {
-      throw new NotFoundException()
-    }
-
     return data
   }
 

@@ -13,6 +13,7 @@ const MenuBar = () => {
       <div className="editor-control-group">
         <Button
           variant="secondary"
+          type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
           disabled={!editor.can().chain().focus().toggleBold().run()}
           className={editor.isActive('bold') ? 'is-active' : ''}
@@ -21,6 +22,7 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
           disabled={!editor.can().chain().focus().toggleItalic().run()}
           className={editor.isActive('italic') ? 'is-active' : ''}
@@ -29,6 +31,7 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() => editor.chain().focus().toggleStrike().run()}
           disabled={!editor.can().chain().focus().toggleStrike().run()}
           className={editor.isActive('strike') ? 'is-active' : ''}
@@ -37,12 +40,14 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() => editor.chain().focus().clearNodes().run()}
         >
           Clear style
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() => editor.chain().focus().setParagraph().run()}
           className={editor.isActive('paragraph') ? 'is-active' : ''}
         >
@@ -50,6 +55,7 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 1 }).run()
           }
@@ -61,6 +67,7 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 2 }).run()
           }
@@ -72,6 +79,7 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 3 }).run()
           }
@@ -83,6 +91,7 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 4 }).run()
           }
@@ -94,6 +103,7 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 5 }).run()
           }
@@ -105,6 +115,7 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 6 }).run()
           }
@@ -116,6 +127,7 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={editor.isActive('bulletList') ? 'is-active' : ''}
         >
@@ -123,6 +135,7 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           className={editor.isActive('orderedList') ? 'is-active' : ''}
         >
@@ -130,6 +143,7 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           className={editor.isActive('blockquote') ? 'is-active' : ''}
         >
@@ -137,12 +151,14 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
         >
           Horizontal rule
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().chain().focus().undo().run()}
         >
@@ -150,6 +166,7 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
+          type="button"
           onClick={() => editor.chain().focus().redo().run()}
           disabled={!editor.can().chain().focus().redo().run()}
         >

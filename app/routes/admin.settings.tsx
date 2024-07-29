@@ -65,6 +65,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
           storeSettings: await StoreConfig.getStoreInfo(),
           currencies: await StoreConfig.getCurrencies(),
           publicPages: await StoreConfig.getPublicPages(),
+          emailTemplates: await StoreConfig.getEmailTemplates(),
           account,
         },
       })
@@ -297,6 +298,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       } else if (body.get('intent') === 'delete-page') {
         await StoreConfig.deletePublicPageByName(String(body.get('name')))
         return json({ error: null, data: {} }) //for modal dismissal
+      } else if (body.get('intent') === 'create-email-template') {
+        await StoreConfig.createEmailTemplate({
+          name: String(body.get('name')),
+          content: String(body.get('content')),
+        })
+      } else if (body.get('intent') === 'update-email-template') {
+        await StoreConfig.updateEmailTemplateByName({
+          name: String(body.get('name')),
+          content: String(body.get('content')),
+        })
+        return json({ error: null, data: {} }) //for modal dismissal
+      } else if (body.get('intent') === 'delete-email-template') {
+        await StoreConfig.deleteEmailTemplateByName(String(body.get('name')))
+        return json({ error: null, data: {} }) //for modal dismissal
       }
 
       return json({ error: null, data: {} })
@@ -338,6 +353,7 @@ export default function Index() {
           account: loaderData.data.account,
           storeSettings: loaderData.data.storeSettings,
           publicPages: loaderData.data.publicPages,
+          emailTemplates: loaderData.data.emailTemplates,
         }}
       >
         <Settings currencies={loaderData.data.currencies} />

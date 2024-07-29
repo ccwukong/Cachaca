@@ -27,9 +27,9 @@ const EmailTemplateList = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const submit = useSubmit()
-  const [pageEditOpen, setPageEditOpen] = useState(false)
+  const [editOpen, setEditOpen] = useState(false)
   const [isCreate, setIsCreate] = useState(false)
-  const [pageData, setPageData] = useState<{
+  const [formData, setFormData] = useState<{
     [key: string]: string | number
   }>({
     name: '',
@@ -38,80 +38,73 @@ const EmailTemplateList = () => {
     order: 99,
     intent: '',
   })
-  const { storeSettings } = useContext(AdminContext)
+  const { emailTemplates } = useContext(AdminContext)
   const [isFormCompleted, setIsFormCompleted] = useState(false)
 
   const onEditorContentUpdate = (content: string) => {
-    setPageData({
-      ...pageData!,
+    setFormData({
+      ...formData!,
       content,
     })
   }
 
   useEffect(() => {
     if (fetcher.data && !fetcher.data.error) {
-      setPageEditOpen(false)
+      setEditOpen(false)
     }
   }, [fetcher.data])
 
   useEffect(() => {
     let formCompleted = true
 
-    for (const key in pageData) {
-      if (!pageData[key]) {
+    for (const key in formData) {
+      if (!formData[key]) {
         formCompleted = false
         break
       }
     }
     setIsFormCompleted(formCompleted)
-  }, [pageData])
+  }, [formData])
 
   return (
     <>
       <Button
         className="bg-green-600 hover:bg-green-600 float-right"
         onClick={() => {
-          setPageData({
+          setFormData({
             name: '',
-            slug: '',
             content: '',
-            order: 99,
-            intent: 'create-page',
+            intent: 'create-email-template',
           })
           setIsCreate(true)
-          setPageEditOpen(true)
+          setEditOpen(true)
         }}
       >
         {t('system.add')}
       </Button>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>{t('system.name')}</TableHead>
-            <TableHead>{t('system.url')}</TableHead>
-            <TableHead>{t('system.order')}</TableHead>
-            <TableHead>
-              <span className="sr-only">{t('system.actions')}</span>
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        {storeSettings!.publicPages.length ? (
+      {emailTemplates && emailTemplates.length ? (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('system.name')}</TableHead>
+              <TableHead>
+                <span className="sr-only">{t('system.actions')}</span>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+
           <TableBody>
-            {storeSettings!.publicPages.map((item) => (
+            {emailTemplates.map((item) => (
               <TableRow key={item.name}>
                 <TableCell className="font-medium">{item.name}</TableCell>
-                <TableCell>/{item.slug}</TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {item.order}
-                </TableCell>
                 <TableCell>
                   <Button
                     type="button"
                     variant="link"
                     onClick={(e) => {
-                      setPageData({ ...item, intent: 'update-page' })
+                      setFormData({ ...item, intent: 'update-email-template' })
                       setIsCreate(false)
-                      setPageEditOpen(true)
+                      setEditOpen(true)
                     }}
                   >
                     {t('system.edit')}
@@ -120,14 +113,14 @@ const EmailTemplateList = () => {
               </TableRow>
             ))}
           </TableBody>
-        ) : (
-          <div className="text-center">{t('system.no_records_found')}</div>
-        )}
-      </Table>
+        </Table>
+      ) : (
+        <div className="text-center pt-32">{t('system.no_records_found')}</div>
+      )}
       <Dialog
-        open={pageEditOpen}
+        open={editOpen}
         onOpenChange={() => {
-          setPageEditOpen(!pageEditOpen)
+          setEditOpen(!editOpen)
         }}
       >
         <DialogContent className="max-w-screen-md">
@@ -138,7 +131,7 @@ const EmailTemplateList = () => {
           </DialogHeader>
           <fetcher.Form
             onSubmit={(e) => {
-              submit(pageData, { method: 'POST' })
+              submit(formData, { method: 'POST' })
             }}
             encType="application/x-www-form-urlencoded"
             className="space-y-4"
@@ -146,14 +139,14 @@ const EmailTemplateList = () => {
             <div className="space-y-2">
               <Label className="text-right">{t('system.name')}</Label>
               <Input
-                id="page-name"
-                name="page-name"
+                id="email-template-name"
+                name="email-template-name"
                 className="col-span-3"
                 required
-                value={pageData.name || ''}
+                value={formData.name || ''}
                 onChange={(e) => {
-                  setPageData({
-                    ...pageData!,
+                  setFormData({
+                    ...formData!,
                     name: e.target.value,
                   })
                 }}
@@ -161,42 +154,9 @@ const EmailTemplateList = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-right">{t('system.slug')}</Label>
-              <Input
-                id="page-slug"
-                name="page-slug"
-                className="col-span-3"
-                required
-                value={pageData.slug || ''}
-                onChange={(e) => {
-                  setPageData({
-                    ...pageData!,
-                    slug: e.target.value,
-                  })
-                }}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-right">{t('system.order')}</Label>
-              <Input
-                id="page-order"
-                name="page-order"
-                className="col-span-3"
-                type="number"
-                required
-                value={pageData.order || ''}
-                onChange={(e) => {
-                  setPageData({
-                    ...pageData!,
-                    order: Number(e.target.value),
-                  })
-                }}
-              />
-            </div>
-            <div className="space-y-2">
               <Label className="text-right">{t('system.description')}</Label>
               <Editor
-                content={pageData.content as string}
+                content={formData.content as string}
                 onChange={onEditorContentUpdate}
               />
             </div>
@@ -209,12 +169,15 @@ const EmailTemplateList = () => {
                   value="delete-page"
                   className="text-red-600 hover:text-red-600 mr-6"
                   onClick={() => {
-                    setPageData({ ...pageData!, intent: 'delete-page' })
+                    setFormData({
+                      ...formData!,
+                      intent: 'delete-email-template',
+                    })
                   }}
                 >
                   {fetcher.state !== 'idle' &&
-                  (pageData.intent === 'delete-page' ||
-                    pageData.intent === 'delete-page') ? (
+                  (formData.intent === 'delete-email-template' ||
+                    formData.intent === 'delete-email-template') ? (
                     <Spinner size="small" className="text-white" />
                   ) : (
                     t('system.delete')
@@ -224,12 +187,14 @@ const EmailTemplateList = () => {
               <Button
                 type="submit"
                 name="intent"
-                value={isCreate ? 'create-page' : 'update-page'}
+                value={
+                  isCreate ? 'create-email-template' : 'update-email-template'
+                }
                 disabled={!isFormCompleted}
               >
                 {fetcher.state !== 'idle' &&
-                (pageData.intent === 'create-page' ||
-                  pageData.intent === 'update-page') ? (
+                (formData.intent === 'create-email-template' ||
+                  formData.intent === 'update-email-template') ? (
                   <Spinner size="small" className="text-white" />
                 ) : (
                   t('system.save')

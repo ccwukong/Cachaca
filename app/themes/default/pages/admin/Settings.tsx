@@ -15,6 +15,7 @@ import {
   TabsTrigger,
 } from '~/themes/default/components/ui/tabs'
 import { Currency } from '~/types'
+import EmailTemplateList from '../../components/ui/admin/EmailTemplateList'
 
 const Settings = ({ currencies }: { currencies: Currency[] }) => {
   const { t } = useTranslation()
@@ -49,6 +50,9 @@ const Settings = ({ currencies }: { currencies: Currency[] }) => {
               <TabsTrigger value="public-pages">
                 {t('system.public_pages')}
               </TabsTrigger>
+              <TabsTrigger value="email-templates">
+                {t('system.email_templates')}
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="store-settings">
               <StoreInfoForm currencies={currencies} />
@@ -79,6 +83,9 @@ const Settings = ({ currencies }: { currencies: Currency[] }) => {
             </TabsContent>
             <TabsContent value="public-pages">
               <PublicPageList />
+            </TabsContent>
+            <TabsContent value="email-templates">
+              <EmailTemplateList />
             </TabsContent>
           </Tabs>
         </div>

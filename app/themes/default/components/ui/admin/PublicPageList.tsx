@@ -27,9 +27,9 @@ const PublicPageList = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const submit = useSubmit()
-  const [pageEditOpen, setPageEditOpen] = useState(false)
+  const [editOpen, setEditOpen] = useState(false)
   const [isCreate, setIsCreate] = useState(false)
-  const [pageData, setPageData] = useState<{
+  const [formData, setFormData] = useState<{
     [key: string]: string | number
   }>({
     name: '',
@@ -38,40 +38,40 @@ const PublicPageList = () => {
     order: 99,
     intent: '',
   })
-  const { storeSettings, publicPages } = useContext(AdminContext)
+  const { publicPages } = useContext(AdminContext)
   const [isFormCompleted, setIsFormCompleted] = useState(false)
 
   const onEditorContentUpdate = (content: string) => {
-    setPageData({
-      ...pageData!,
+    setFormData({
+      ...formData!,
       content,
     })
   }
 
   useEffect(() => {
     if (fetcher.data && !fetcher.data.error) {
-      setPageEditOpen(false)
+      setEditOpen(false)
     }
   }, [fetcher.data])
 
   useEffect(() => {
     let formCompleted = true
 
-    for (const key in pageData) {
-      if (!pageData[key]) {
+    for (const key in formData) {
+      if (!formData[key]) {
         formCompleted = false
         break
       }
     }
     setIsFormCompleted(formCompleted)
-  }, [pageData])
+  }, [formData])
 
   return (
     <>
       <Button
         className="bg-green-600 hover:bg-green-600 float-right"
         onClick={() => {
-          setPageData({
+          setFormData({
             name: '',
             slug: '',
             content: '',
@@ -79,23 +79,24 @@ const PublicPageList = () => {
             intent: 'create-page',
           })
           setIsCreate(true)
-          setPageEditOpen(true)
+          setEditOpen(true)
         }}
       >
         {t('system.add')}
       </Button>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>{t('system.name')}</TableHead>
-            <TableHead>{t('system.url')}</TableHead>
-            <TableHead>{t('system.order')}</TableHead>
-            <TableHead>
-              <span className="sr-only">{t('system.actions')}</span>
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        {publicPages.length ? (
+      {publicPages && publicPages.length ? (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('system.name')}</TableHead>
+              <TableHead>{t('system.url')}</TableHead>
+              <TableHead>{t('system.order')}</TableHead>
+              <TableHead>
+                <span className="sr-only">{t('system.actions')}</span>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+
           <TableBody>
             {publicPages.map((item) => (
               <TableRow key={item.name}>
@@ -109,9 +110,9 @@ const PublicPageList = () => {
                     type="button"
                     variant="link"
                     onClick={(e) => {
-                      setPageData({ ...item, intent: 'update-page' })
+                      setFormData({ ...item, intent: 'update-page' })
                       setIsCreate(false)
-                      setPageEditOpen(true)
+                      setEditOpen(true)
                     }}
                   >
                     {t('system.edit')}
@@ -120,14 +121,14 @@ const PublicPageList = () => {
               </TableRow>
             ))}
           </TableBody>
-        ) : (
-          <div className="text-center">{t('system.no_records_found')}</div>
-        )}
-      </Table>
+        </Table>
+      ) : (
+        <div className="text-center pt-32">{t('system.no_records_found')}</div>
+      )}
       <Dialog
-        open={pageEditOpen}
+        open={editOpen}
         onOpenChange={() => {
-          setPageEditOpen(!pageEditOpen)
+          setEditOpen(!editOpen)
         }}
       >
         <DialogContent className="max-w-screen-md">
@@ -138,7 +139,7 @@ const PublicPageList = () => {
           </DialogHeader>
           <fetcher.Form
             onSubmit={(e) => {
-              submit(pageData, { method: 'POST' })
+              submit(formData, { method: 'POST' })
             }}
             encType="application/x-www-form-urlencoded"
             className="space-y-4"
@@ -150,10 +151,10 @@ const PublicPageList = () => {
                 name="page-name"
                 className="col-span-3"
                 required
-                value={pageData.name || ''}
+                value={formData.name || ''}
                 onChange={(e) => {
-                  setPageData({
-                    ...pageData!,
+                  setFormData({
+                    ...formData!,
                     name: e.target.value,
                   })
                 }}
@@ -167,10 +168,10 @@ const PublicPageList = () => {
                 name="page-slug"
                 className="col-span-3"
                 required
-                value={pageData.slug || ''}
+                value={formData.slug || ''}
                 onChange={(e) => {
-                  setPageData({
-                    ...pageData!,
+                  setFormData({
+                    ...formData!,
                     slug: e.target.value,
                   })
                 }}
@@ -184,10 +185,10 @@ const PublicPageList = () => {
                 className="col-span-3"
                 type="number"
                 required
-                value={pageData.order || ''}
+                value={formData.order || ''}
                 onChange={(e) => {
-                  setPageData({
-                    ...pageData!,
+                  setFormData({
+                    ...formData!,
                     order: Number(e.target.value),
                   })
                 }}
@@ -196,7 +197,7 @@ const PublicPageList = () => {
             <div className="space-y-2">
               <Label className="text-right">{t('system.description')}</Label>
               <Editor
-                content={pageData.content as string}
+                content={formData.content as string}
                 onChange={onEditorContentUpdate}
               />
             </div>
@@ -209,12 +210,12 @@ const PublicPageList = () => {
                   value="delete-page"
                   className="text-red-600 hover:text-red-600 mr-6"
                   onClick={() => {
-                    setPageData({ ...pageData!, intent: 'delete-page' })
+                    setFormData({ ...formData!, intent: 'delete-page' })
                   }}
                 >
                   {fetcher.state !== 'idle' &&
-                  (pageData.intent === 'delete-page' ||
-                    pageData.intent === 'delete-page') ? (
+                  (formData.intent === 'delete-page' ||
+                    formData.intent === 'delete-page') ? (
                     <Spinner size="small" className="text-white" />
                   ) : (
                     t('system.delete')
@@ -228,8 +229,8 @@ const PublicPageList = () => {
                 disabled={!isFormCompleted}
               >
                 {fetcher.state !== 'idle' &&
-                (pageData.intent === 'create-page' ||
-                  pageData.intent === 'update-page') ? (
+                (formData.intent === 'create-page' ||
+                  formData.intent === 'update-page') ? (
                   <Spinner size="small" className="text-white" />
                 ) : (
                   t('system.save')
