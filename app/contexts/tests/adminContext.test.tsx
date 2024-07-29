@@ -34,6 +34,7 @@ describe('AdminContext', () => {
             other: null,
             banners: null,
           },
+          publicPages: [],
         }}
       >
         <TestingComponent />

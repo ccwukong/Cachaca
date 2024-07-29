@@ -193,18 +193,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function Index() {
   const loaderData = useLoaderData<typeof loader>()
 
-  return (
+  return loaderData.data ? (
     <Suspense fallback={<Skeleton />}>
       <CustomerContext.Provider
         value={{
-          account: loaderData!.data!.account,
-          storeSettings: loaderData!.data!.storeSettings,
+          account: loaderData.data.account,
+          storeSettings: loaderData.data.storeSettings,
         }}
       >
         <Settings
-          addressItems={loaderData!.data!.AddressItems as AddressItem[]}
+          addressItems={loaderData.data.AddressItems as AddressItem[]}
         />
       </CustomerContext.Provider>
     </Suspense>
+  ) : (
+    <Skeleton />
   )
 }

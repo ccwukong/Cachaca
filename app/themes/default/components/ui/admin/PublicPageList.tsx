@@ -38,7 +38,7 @@ const PublicPageList = () => {
     order: 99,
     intent: '',
   })
-  const { storeSettings } = useContext(AdminContext)
+  const { storeSettings, publicPages } = useContext(AdminContext)
   const [isFormCompleted, setIsFormCompleted] = useState(false)
 
   const onEditorContentUpdate = (content: string) => {
@@ -95,9 +95,9 @@ const PublicPageList = () => {
             </TableHead>
           </TableRow>
         </TableHeader>
-        {storeSettings!.publicPages.length ? (
+        {publicPages.length ? (
           <TableBody>
-            {storeSettings!.publicPages.map((item) => (
+            {publicPages.map((item) => (
               <TableRow key={item.name}>
                 <TableCell className="font-medium">{item.name}</TableCell>
                 <TableCell>/{item.slug}</TableCell>

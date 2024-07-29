@@ -64,6 +64,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         data: {
           storeSettings: await StoreConfig.getStoreInfo(),
           currencies: await StoreConfig.getCurrencies(),
+          publicPages: await StoreConfig.getPublicPages(),
           account,
         },
       })
@@ -318,7 +319,7 @@ export default function Index() {
   const loaderData = useLoaderData<typeof loader>()
   const { t } = useTranslation()
 
-  return (
+  return loaderData.data ? (
     <Suspense fallback={<Skeleton />}>
       <AdminContext.Provider
         value={{
@@ -334,12 +335,15 @@ export default function Index() {
             },
             { title: t('system.settings'), url: '/admin/settings', order: 6 },
           ],
-          account: loaderData!.data!.account,
-          storeSettings: loaderData!.data!.storeSettings,
+          account: loaderData.data.account,
+          storeSettings: loaderData.data.storeSettings,
+          publicPages: loaderData.data.publicPages,
         }}
       >
-        <Settings currencies={loaderData!.data!.currencies} />
+        <Settings currencies={loaderData.data.currencies} />
       </AdminContext.Provider>
     </Suspense>
+  ) : (
+    <Skeleton />
   )
 }

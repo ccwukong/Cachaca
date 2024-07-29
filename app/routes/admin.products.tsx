@@ -8,7 +8,7 @@ import { adminCookie } from '~/cookie'
 import { StoreConfig, UserModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import ProductList from '~/themes/default/pages/admin/ProductList'
-import { FatalErrorTypes } from '~/types'
+import { FatalErrorTypes, ProductPublicInfo } from '~/types'
 import {
   JWTTokenSecretNotFoundException,
   UnAuthenticatedException,
@@ -54,7 +54,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
           categories: await mocks.getCategories(),
           storeSettings: await StoreConfig.getStoreInfo(),
           items: await mocks.getCart(),
-          suggestedProducts: await mocks.getMockProducts(),
+          suggestedProducts:
+            (await mocks.getMockProducts()) as ProductPublicInfo[],
           shippingFee: '9.9',
           account,
         },
@@ -78,7 +79,7 @@ export default function Index() {
   const loaderData = useLoaderData<typeof loader>()
   const { t } = useTranslation()
 
-  return (
+  return loaderData.data ? (
     <Suspense fallback={<Skeleton />}>
       <AdminContext.Provider
         value={{
@@ -94,12 +95,14 @@ export default function Index() {
             },
             { title: t('system.settings'), url: '/admin/settings', order: 6 },
           ],
-          account: loaderData!.data!.account,
-          storeSettings: loaderData!.data!.storeSettings,
+          account: loaderData.data.account,
+          storeSettings: loaderData.data.storeSettings,
         }}
       >
-        <ProductList products={loaderData!.data!.suggestedProducts} />
+        <ProductList products={loaderData.data.suggestedProducts} />
       </AdminContext.Provider>
     </Suspense>
+  ) : (
+    <Skeleton />
   )
 }

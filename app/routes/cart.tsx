@@ -8,7 +8,12 @@ import { cookie } from '~/cookie'
 import { AddressModel, Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Cart from '~/themes/default/pages/storefront/Cart'
-import { AddressItem, CategoryItem, FatalErrorTypes } from '~/types'
+import {
+  AddressItem,
+  CategoryItem,
+  FatalErrorTypes,
+  ProductPublicInfo,
+} from '~/types'
 import {
   JWTTokenSecretNotFoundException,
   StoreNotInstalledError,
@@ -61,7 +66,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         categories: await mocks.getCategories(),
         storeSettings: await StoreConfig.getStoreInfo(),
         publicPages: await StoreConfig.getPublicPages(),
-        suggestedProducts: await mocks.getMockProducts(),
+        suggestedProducts:
+          (await mocks.getMockProducts()) as ProductPublicInfo[],
         addresses,
         shippingFee: '9.9',
         account,
@@ -77,7 +83,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       return redirect('/error')
     }
 
-    return json({ error: e, data: {} })
+    return json({ error: e, data: null })
   }
 }
 
