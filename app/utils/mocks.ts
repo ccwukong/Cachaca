@@ -61,7 +61,7 @@ export function getStoreInfo(): Promise<object> {
       logo: settings.logo,
       description: settings.description,
       currency: settings.currency,
-      copyright: settings.copyright,
+      other: { copyright: settings.other.copyright },
     }),
   )
 }
