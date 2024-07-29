@@ -125,5 +125,7 @@
   "system.unmatched_password": "Unmatched password",
   "system.store_members": "Store members",
   "system.overview": "Overview",
-  "system.delete": "Delete"
+  "system.delete": "Delete",
+  "system.create_new_page": "Create a new page",
+  "system.edit_page": "Edit page"
 }

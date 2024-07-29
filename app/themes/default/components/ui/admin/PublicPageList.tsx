@@ -212,7 +212,13 @@ const PublicPageList = () => {
                     setPageData({ ...pageData!, intent: 'delete-page' })
                   }}
                 >
-                  {t('system.delete')}
+                  {fetcher.state !== 'idle' &&
+                  (pageData.intent === 'delete-page' ||
+                    pageData.intent === 'delete-page') ? (
+                    <Spinner size="small" className="text-white" />
+                  ) : (
+                    t('system.delete')
+                  )}
                 </Button>
               ) : null}
               <Button
