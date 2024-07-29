@@ -124,5 +124,6 @@
   "system.copyright_info": "Copyright information",
   "system.unmatched_password": "Unmatched password",
   "system.store_members": "Store members",
-  "system.overview": "Overview"
+  "system.overview": "Overview",
+  "system.delete": "Delete"
 }

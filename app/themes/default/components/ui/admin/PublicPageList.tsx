@@ -201,6 +201,20 @@ const PublicPageList = () => {
               />
             </div>
             <DialogFooter>
+              {!isCreate ? (
+                <Button
+                  type="submit"
+                  name="intent"
+                  variant="link"
+                  value="delete-page"
+                  className="text-red-600 hover:text-red-600 mr-6"
+                  onClick={() => {
+                    setPageData({ ...pageData!, intent: 'delete-page' })
+                  }}
+                >
+                  {t('system.delete')}
+                </Button>
+              ) : null}
               <Button
                 type="submit"
                 name="intent"
@@ -215,19 +229,6 @@ const PublicPageList = () => {
                   t('system.save')
                 )}
               </Button>
-              {!isCreate ? (
-                <Button
-                  type="submit"
-                  name="intent"
-                  variant="destructive"
-                  value="delete-page"
-                  onClick={() => {
-                    setPageData({ ...pageData!, intent: 'delete-page' })
-                  }}
-                >
-                  {t('system.delete')}
-                </Button>
-              ) : null}
             </DialogFooter>
           </fetcher.Form>
         </DialogContent>
