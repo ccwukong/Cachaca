@@ -278,7 +278,26 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           oldPwd: String(body.get('old-password')),
           newPwd: String(body.get('new-password')),
         })
+      } else if (body.get('intent') === 'create-page') {
+        await StoreConfig.createPublicPage({
+          name: String(body.get('name')),
+          slug: String(body.get('slug')),
+          content: String(body.get('content')),
+          order: Number(body.get('order')),
+        })
+      } else if (body.get('intent') === 'update-page') {
+        await StoreConfig.updatePublicPageByName({
+          name: String(body.get('name')),
+          slug: String(body.get('slug')),
+          content: String(body.get('content')),
+          order: Number(body.get('order')),
+        })
+        return json({ error: null, data: {} }) //for modal dismissal
+      } else if (body.get('intent') === 'delete-page') {
+        await StoreConfig.deletePublicPageByName(String(body.get('name')))
+        return json({ error: null, data: {} }) //for modal dismissal
       }
+
       return json({ error: null, data: {} })
     }
   } catch (e) {

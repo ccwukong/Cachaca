@@ -44,7 +44,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     }
     const storeSettings = await StoreConfig.getStoreInfo()
     const page = storeSettings.publicPages.filter(
-      (item) => item.name.toLowerCase() === (params.slug || '').toLowerCase(),
+      (item) => item.slug.toLowerCase() === (params.slug || '').toLowerCase(),
     )
     if (!page.length) {
       throw new NotFoundException()

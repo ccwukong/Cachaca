@@ -108,9 +108,9 @@ Please use the issue template to file an issue report, and try to provide the de
   - [ ] Shipping module integration (need more research)
   - [ ] Refund and partial refund management
   - [ ] Voucher management
-- [ ] Store management
+- [x] Store info config
   - [x] Store banners
-  - [ ] Public pages
+  - [x] Public pages
   - [x] Store public info, such as logo, store name etc.
   - [x] Third party API credentials
 - [ ] Payment integration

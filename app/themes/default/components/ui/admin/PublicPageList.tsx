@@ -1,5 +1,5 @@
-import { Form } from '@remix-run/react'
-import { useContext, useState } from 'react'
+import { useFetcher, useSubmit } from '@remix-run/react'
+import { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AdminContext from '~/contexts/adminContext'
 import Editor from '~/themes/default/components/ui/admin/Editor'
@@ -21,18 +21,73 @@ import {
   TableHeader,
   TableRow,
 } from '~/themes/default/components/ui/table'
+import { Spinner } from '../spinner'
 
 const PublicPageList = () => {
   const { t } = useTranslation()
+  const fetcher = useFetcher()
+  const submit = useSubmit()
   const [pageEditOpen, setPageEditOpen] = useState(false)
+  const [isCreate, setIsCreate] = useState(false)
+  const [pageData, setPageData] = useState<{
+    [key: string]: string | number
+  }>({
+    name: '',
+    slug: '',
+    content: '',
+    order: 99,
+    intent: '',
+  })
   const { storeSettings } = useContext(AdminContext)
+  const [isFormCompleted, setIsFormCompleted] = useState(false)
+
+  const onEditorContentUpdate = (content: string) => {
+    setPageData({
+      ...pageData!,
+      content,
+    })
+  }
+
+  useEffect(() => {
+    if (fetcher.data && !fetcher.data.error) {
+      setPageEditOpen(false)
+    }
+  }, [fetcher.data])
+
+  useEffect(() => {
+    let formCompleted = true
+
+    for (const key in pageData) {
+      if (!pageData[key]) {
+        formCompleted = false
+        break
+      }
+    }
+    setIsFormCompleted(formCompleted)
+  }, [pageData])
 
   return (
     <>
+      <Button
+        className="bg-green-600 hover:bg-green-600 float-right"
+        onClick={() => {
+          setPageData({
+            name: '',
+            slug: '',
+            content: '',
+            order: 99,
+            intent: 'create-page',
+          })
+          setIsCreate(true)
+          setPageEditOpen(true)
+        }}
+      >
+        {t('system.add')}
+      </Button>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>{t('system.title')}</TableHead>
+            <TableHead>{t('system.name')}</TableHead>
             <TableHead>{t('system.url')}</TableHead>
             <TableHead>{t('system.order')}</TableHead>
             <TableHead>
@@ -53,7 +108,11 @@ const PublicPageList = () => {
                   <Button
                     type="button"
                     variant="link"
-                    onClick={(e) => setPageEditOpen(true)}
+                    onClick={(e) => {
+                      setPageData({ ...item, intent: 'update-page' })
+                      setIsCreate(false)
+                      setPageEditOpen(true)
+                    }}
                   >
                     {t('system.edit')}
                   </Button>
@@ -73,18 +132,32 @@ const PublicPageList = () => {
       >
         <DialogContent className="max-w-screen-md">
           <DialogHeader>
-            <DialogTitle>{t('system.edit_page')}</DialogTitle>
+            <DialogTitle>
+              {isCreate ? t('system.create_new_page') : t('system.edit_page')}
+            </DialogTitle>
           </DialogHeader>
-          <Form method="POST" className="space-y-4">
+          <fetcher.Form
+            onSubmit={(e) => {
+              submit(pageData, { method: 'POST' })
+            }}
+            encType="application/x-www-form-urlencoded"
+            className="space-y-4"
+          >
             <div className="space-y-2">
-              <Label className="text-right">{t('system.title')}</Label>
+              <Label className="text-right">{t('system.name')}</Label>
               <Input
-                id="page-title"
-                name="page-title"
+                id="page-name"
+                name="page-name"
                 className="col-span-3"
                 required
-                value=""
-                onChange={(e) => {}}
+                value={pageData.name || ''}
+                onChange={(e) => {
+                  setPageData({
+                    ...pageData!,
+                    name: e.target.value,
+                  })
+                }}
+                readOnly={!isCreate}
               />
             </div>
             <div className="space-y-2">
@@ -94,18 +167,69 @@ const PublicPageList = () => {
                 name="page-slug"
                 className="col-span-3"
                 required
-                value=""
-                onChange={(e) => {}}
+                value={pageData.slug || ''}
+                onChange={(e) => {
+                  setPageData({
+                    ...pageData!,
+                    slug: e.target.value,
+                  })
+                }}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-right">{t('system.order')}</Label>
+              <Input
+                id="page-order"
+                name="page-order"
+                className="col-span-3"
+                type="number"
+                required
+                value={pageData.order || ''}
+                onChange={(e) => {
+                  setPageData({
+                    ...pageData!,
+                    order: Number(e.target.value),
+                  })
+                }}
               />
             </div>
             <div className="space-y-2">
               <Label className="text-right">{t('system.description')}</Label>
-              <Editor content={'Type content here...'} />
+              <Editor
+                content={pageData.content as string}
+                onChange={onEditorContentUpdate}
+              />
             </div>
-          </Form>
-          <DialogFooter>
-            <Button type="submit">{t('system.save')}</Button>
-          </DialogFooter>
+            <DialogFooter>
+              <Button
+                type="submit"
+                name="intent"
+                value={isCreate ? 'create-page' : 'update-page'}
+                disabled={!isFormCompleted}
+              >
+                {fetcher.state !== 'idle' &&
+                (pageData.intent === 'create-page' ||
+                  pageData.intent === 'update-page') ? (
+                  <Spinner size="small" className="text-white" />
+                ) : (
+                  t('system.save')
+                )}
+              </Button>
+              {!isCreate ? (
+                <Button
+                  type="submit"
+                  name="intent"
+                  variant="destructive"
+                  value="delete-page"
+                  onClick={() => {
+                    setPageData({ ...pageData!, intent: 'delete-page' })
+                  }}
+                >
+                  {t('system.delete')}
+                </Button>
+              ) : null}
+            </DialogFooter>
+          </fetcher.Form>
         </DialogContent>
       </Dialog>
     </>

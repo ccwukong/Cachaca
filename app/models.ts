@@ -882,7 +882,12 @@ export class StoreConfig {
       throw new NotFoundException()
     }
 
-    const pdata = await db.select().from(page).orderBy(asc(page.order))
+    const pdata = await db
+      .select()
+      .from(page)
+      .where(eq(page.status, DatabaseRecordStatus.Active))
+      .orderBy(asc(page.order))
+
     return {
       name: sdata[0].shop.name,
       logo: sdata[0].shop.logo,
@@ -969,7 +974,9 @@ export class StoreConfig {
     const res = await db
       .select()
       .from(page)
-      .where(and(eq(page.name, name), eq(page.status, 1)))
+      .where(
+        and(eq(page.name, name), eq(page.status, DatabaseRecordStatus.Active)),
+      )
 
     if (!res.length) {
       throw new NotFoundException()
@@ -981,6 +988,44 @@ export class StoreConfig {
       content: res[0].content,
       order: res[0].order,
     }
+  }
+
+  public static async createPublicPage(data: {
+    name: string
+    slug: string
+    content: string
+    order: number
+  }): Promise<string> {
+    const result = await db.insert(page).values({
+      ...data,
+      status: DatabaseRecordStatus.Active,
+    })
+
+    if (!result[0].affectedRows) {
+      throw new ServerInternalError()
+    }
+
+    return data.name
+  }
+
+  public static async updatePublicPageByName(data: {
+    name: string
+    slug: string
+    content: string
+    order: number
+  }): Promise<void> {
+    await db
+      .update(page)
+      .set({
+        slug: data.slug,
+        content: data.content,
+        order: data.order,
+      })
+      .where(eq(page.name, data.name))
+  }
+
+  public static async deletePublicPageByName(name: string): Promise<void> {
+    await db.delete(page).where(eq(page.name, name))
   }
 }
 

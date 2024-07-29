@@ -37,23 +37,9 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
-          onClick={() => editor.chain().focus().toggleCode().run()}
-          disabled={!editor.can().chain().focus().toggleCode().run()}
-          className={editor.isActive('code') ? 'is-active' : ''}
-        >
-          Code
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={() => editor.chain().focus().unsetAllMarks().run()}
-        >
-          Clear marks
-        </Button>
-        <Button
-          variant="secondary"
           onClick={() => editor.chain().focus().clearNodes().run()}
         >
-          Clear nodes
+          Clear style
         </Button>
         <Button
           variant="secondary"
@@ -144,13 +130,6 @@ const MenuBar = () => {
         </Button>
         <Button
           variant="secondary"
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={editor.isActive('codeBlock') ? 'is-active' : ''}
-        >
-          Code block
-        </Button>
-        <Button
-          variant="secondary"
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           className={editor.isActive('blockquote') ? 'is-active' : ''}
         >
@@ -161,12 +140,6 @@ const MenuBar = () => {
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
         >
           Horizontal rule
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={() => editor.chain().focus().setHardBreak().run()}
-        >
-          Hard break
         </Button>
         <Button
           variant="secondary"
@@ -202,7 +175,13 @@ const extensions = [
   }),
 ]
 
-const Editor = ({ content }: { content: string }) => {
+const Editor = ({
+  content,
+  onChange,
+}: {
+  content: string
+  onChange: (content: string) => void
+}) => {
   return (
     <EditorProvider
       slotBefore={<MenuBar />}
@@ -211,9 +190,10 @@ const Editor = ({ content }: { content: string }) => {
       editorProps={{
         attributes: {
           class:
-            'h-[200px] prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none',
+            'h-[280px] prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none overflow-y-scroll',
         },
       }}
+      onUpdate={({ editor }) => onChange(editor.getHTML())}
     ></EditorProvider>
   )
 }
