@@ -54,17 +54,19 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Index() {
   const loaderData = useLoaderData<typeof loader>()
 
-  return (
+  return loaderData.data ? (
     <Suspense fallback={<Skeleton />}>
       <StoreContext.Provider
         value={{
-          storeSettings: loaderData!.data!.storeSettings,
-          categories: loaderData!.data!.categories as CategoryItem[],
-          publicPages: loaderData!.data!.publicPages,
+          storeSettings: loaderData.data.storeSettings,
+          categories: loaderData.data.categories as CategoryItem[],
+          publicPages: loaderData.data.publicPages,
         }}
       >
-        <Home products={loaderData!.data!.products as ProductPublicInfo[]} />
+        <Home products={loaderData.data.products as ProductPublicInfo[]} />
       </StoreContext.Provider>
     </Suspense>
+  ) : (
+    <Skeleton />
   )
 }

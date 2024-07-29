@@ -18,7 +18,7 @@ import { idb } from '~/utils/indexedDB'
 
 const ProductDetail = ({ product }: { product: ProductPublicInfo | null }) => {
   const { t } = useTranslation()
-  const { storeSettings } = useContext(StoreContext)
+  const { storeSettings, publicPages } = useContext(StoreContext)
   const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
     {},
   )
@@ -137,7 +137,7 @@ const ProductDetail = ({ product }: { product: ProductPublicInfo | null }) => {
         )}
       </div>
       <Footer
-        publicPages={storeSettings!.publicPages}
+        publicPages={publicPages}
         copyright={storeSettings!.other!.copyright}
       />
     </div>

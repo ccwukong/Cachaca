@@ -17,7 +17,7 @@ const CategoryProductList = ({
   category: string
 }) => {
   const { t } = useTranslation()
-  const { storeSettings } = useContext(StoreContext)
+  const { storeSettings, publicPages } = useContext(StoreContext)
   const [cartItem, setCartItem] = useState<{ [key: string]: string | number }>(
     {},
   )
@@ -58,6 +58,7 @@ const CategoryProductList = ({
             return (
               <ProductCard
                 key={item.id}
+                id={item.id}
                 coverImage={item.coverImage}
                 title={item.name}
                 link={`/products/${item.slug}`}
@@ -80,7 +81,7 @@ const CategoryProductList = ({
         </div>
       </div>
       <Footer
-        publicPages={storeSettings!.publicPages}
+        publicPages={publicPages}
         copyright={storeSettings!.other!.copyright}
       />
     </div>
