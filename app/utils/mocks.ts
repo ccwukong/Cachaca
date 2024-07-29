@@ -61,10 +61,13 @@ export function getStoreInfo(): Promise<object> {
       logo: settings.logo,
       description: settings.description,
       currency: settings.currency,
-      publicPages: settings.publicPages,
       copyright: settings.copyright,
     }),
   )
+}
+
+export function getPulbicPages(): Promise<object[]> {
+  return new Promise((resolve) => resolve(settings.publicPages))
 }
 
 export function getCart(): Promise<object[]> {

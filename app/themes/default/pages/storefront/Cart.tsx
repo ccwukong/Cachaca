@@ -33,7 +33,7 @@ const Cart = ({
   } | null
 }) => {
   const { t } = useTranslation()
-  const { storeSettings } = useContext(StoreContext)
+  const { storeSettings, publicPages } = useContext(StoreContext)
   const navigate = useNavigate()
   const [cartItem, setCartItem] = useState<{
     [key: string]: string | number
@@ -261,6 +261,7 @@ const Cart = ({
                 return (
                   <ProductCard
                     key={item.id}
+                    id={item.id}
                     coverImage={item.coverImage}
                     title={item.name}
                     link={`/products/${item.slug}`}
@@ -285,7 +286,7 @@ const Cart = ({
         )}
       </div>
       <Footer
-        publicPages={storeSettings!.publicPages}
+        publicPages={publicPages}
         copyright={storeSettings!.other!.copyright}
       />
     </div>

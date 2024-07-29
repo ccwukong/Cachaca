@@ -42,8 +42,8 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     if (!(await Installer.isInstalled())) {
       throw new StoreNotInstalledError()
     }
-    const storeSettings = await StoreConfig.getStoreInfo()
-    const page = storeSettings.publicPages.filter(
+    const publicPages = await StoreConfig.getPublicPages()
+    const page = publicPages.filter(
       (item) => item.slug.toLowerCase() === (params.slug || '').toLowerCase(),
     )
     if (!page.length) {
@@ -54,7 +54,8 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
       error: null,
       data: {
         categories: await mocks.getCategories(),
-        storeSettings,
+        storeSettings: await StoreConfig.getStoreInfo(),
+        publicPages: await StoreConfig.getPublicPages(),
         page: page[0],
       },
     })
@@ -78,16 +79,19 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 export default function Index() {
   const loaderData = useLoaderData<typeof loader>()
 
-  return (
+  return loaderData.data ? (
     <Suspense fallback={<Skeleton />}>
       <StoreContext.Provider
         value={{
-          storeSettings: loaderData!.data!.storeSettings,
-          categories: loaderData!.data!.categories as CategoryItem[],
+          storeSettings: loaderData.data.storeSettings,
+          categories: loaderData.data.categories as CategoryItem[],
+          publicPages: loaderData.data.publicPages,
         }}
       >
-        <Page content={loaderData!.data!.page} />
+        <Page content={loaderData.data.page} />
       </StoreContext.Provider>
     </Suspense>
+  ) : (
+    <Skeleton />
   )
 }

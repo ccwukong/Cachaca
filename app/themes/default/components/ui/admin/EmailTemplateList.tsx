@@ -23,7 +23,7 @@ import {
 } from '~/themes/default/components/ui/table'
 import { Spinner } from '../spinner'
 
-const PublicPageList = () => {
+const EmailTemplateList = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const submit = useSubmit()
@@ -38,7 +38,7 @@ const PublicPageList = () => {
     order: 99,
     intent: '',
   })
-  const { publicPages } = useContext(AdminContext)
+  const { emailTemplates } = useContext(AdminContext)
   const [isFormCompleted, setIsFormCompleted] = useState(false)
 
   const onEditorContentUpdate = (content: string) => {
@@ -73,10 +73,8 @@ const PublicPageList = () => {
         onClick={() => {
           setFormData({
             name: '',
-            slug: '',
             content: '',
-            order: 99,
-            intent: 'create-page',
+            intent: 'create-email-template',
           })
           setIsCreate(true)
           setEditOpen(true)
@@ -84,13 +82,11 @@ const PublicPageList = () => {
       >
         {t('system.add')}
       </Button>
-      {publicPages && publicPages.length ? (
+      {emailTemplates && emailTemplates.length ? (
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>{t('system.name')}</TableHead>
-              <TableHead>{t('system.url')}</TableHead>
-              <TableHead>{t('system.order')}</TableHead>
               <TableHead>
                 <span className="sr-only">{t('system.actions')}</span>
               </TableHead>
@@ -98,19 +94,15 @@ const PublicPageList = () => {
           </TableHeader>
 
           <TableBody>
-            {publicPages.map((item) => (
+            {emailTemplates.map((item) => (
               <TableRow key={item.name}>
                 <TableCell className="font-medium">{item.name}</TableCell>
-                <TableCell>/{item.slug}</TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {item.order}
-                </TableCell>
                 <TableCell>
                   <Button
                     type="button"
                     variant="link"
                     onClick={(e) => {
-                      setFormData({ ...item, intent: 'update-page' })
+                      setFormData({ ...item, intent: 'update-email-template' })
                       setIsCreate(false)
                       setEditOpen(true)
                     }}
@@ -147,8 +139,8 @@ const PublicPageList = () => {
             <div className="space-y-2">
               <Label className="text-right">{t('system.name')}</Label>
               <Input
-                id="page-name"
-                name="page-name"
+                id="email-template-name"
+                name="email-template-name"
                 className="col-span-3"
                 required
                 value={formData.name || ''}
@@ -159,39 +151,6 @@ const PublicPageList = () => {
                   })
                 }}
                 readOnly={!isCreate}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-right">{t('system.slug')}</Label>
-              <Input
-                id="page-slug"
-                name="page-slug"
-                className="col-span-3"
-                required
-                value={formData.slug || ''}
-                onChange={(e) => {
-                  setFormData({
-                    ...formData!,
-                    slug: e.target.value,
-                  })
-                }}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-right">{t('system.order')}</Label>
-              <Input
-                id="page-order"
-                name="page-order"
-                className="col-span-3"
-                type="number"
-                required
-                value={formData.order || ''}
-                onChange={(e) => {
-                  setFormData({
-                    ...formData!,
-                    order: Number(e.target.value),
-                  })
-                }}
               />
             </div>
             <div className="space-y-2">
@@ -210,12 +169,15 @@ const PublicPageList = () => {
                   value="delete-page"
                   className="text-red-600 hover:text-red-600 mr-6"
                   onClick={() => {
-                    setFormData({ ...formData!, intent: 'delete-page' })
+                    setFormData({
+                      ...formData!,
+                      intent: 'delete-email-template',
+                    })
                   }}
                 >
                   {fetcher.state !== 'idle' &&
-                  (formData.intent === 'delete-page' ||
-                    formData.intent === 'delete-page') ? (
+                  (formData.intent === 'delete-email-template' ||
+                    formData.intent === 'delete-email-template') ? (
                     <Spinner size="small" className="text-white" />
                   ) : (
                     t('system.delete')
@@ -225,12 +187,14 @@ const PublicPageList = () => {
               <Button
                 type="submit"
                 name="intent"
-                value={isCreate ? 'create-page' : 'update-page'}
+                value={
+                  isCreate ? 'create-email-template' : 'update-email-template'
+                }
                 disabled={!isFormCompleted}
               >
                 {fetcher.state !== 'idle' &&
-                (formData.intent === 'create-page' ||
-                  formData.intent === 'update-page') ? (
+                (formData.intent === 'create-email-template' ||
+                  formData.intent === 'update-email-template') ? (
                   <Spinner size="small" className="text-white" />
                 ) : (
                   t('system.save')
@@ -244,4 +208,4 @@ const PublicPageList = () => {
   )
 }
 
-export default PublicPageList
+export default EmailTemplateList

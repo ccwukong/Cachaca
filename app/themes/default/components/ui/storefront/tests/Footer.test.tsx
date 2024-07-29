@@ -1,14 +1,14 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { PublicPage, StoreSettings } from '~/types'
+import { PublicPage } from '~/types'
 import * as mocks from '~/utils/mocks'
 import Footer from '../Footer'
 
 describe('Testing storefront Footer component', () => {
   test('Testing storefront Footer with links', async () => {
     const mockdata: PublicPage[] = (
-      (await mocks.getStoreInfo()) as StoreSettings
-    ).publicPages.map((item) => {
+      (await mocks.getPulbicPages()) as PublicPage[]
+    ).map((item) => {
       return {
         name: item.name,
         slug: item.slug,

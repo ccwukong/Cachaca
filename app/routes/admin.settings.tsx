@@ -64,6 +64,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         data: {
           storeSettings: await StoreConfig.getStoreInfo(),
           currencies: await StoreConfig.getCurrencies(),
+          publicPages: await StoreConfig.getPublicPages(),
+          emailTemplates: await StoreConfig.getEmailTemplates(),
           account,
         },
       })
@@ -296,6 +298,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       } else if (body.get('intent') === 'delete-page') {
         await StoreConfig.deletePublicPageByName(String(body.get('name')))
         return json({ error: null, data: {} }) //for modal dismissal
+      } else if (body.get('intent') === 'create-email-template') {
+        await StoreConfig.createEmailTemplate({
+          name: String(body.get('name')),
+          content: String(body.get('content')),
+        })
+      } else if (body.get('intent') === 'update-email-template') {
+        await StoreConfig.updateEmailTemplateByName({
+          name: String(body.get('name')),
+          content: String(body.get('content')),
+        })
+        return json({ error: null, data: {} }) //for modal dismissal
+      } else if (body.get('intent') === 'delete-email-template') {
+        await StoreConfig.deleteEmailTemplateByName(String(body.get('name')))
+        return json({ error: null, data: {} }) //for modal dismissal
       }
 
       return json({ error: null, data: {} })
@@ -318,7 +334,7 @@ export default function Index() {
   const loaderData = useLoaderData<typeof loader>()
   const { t } = useTranslation()
 
-  return (
+  return loaderData.data ? (
     <Suspense fallback={<Skeleton />}>
       <AdminContext.Provider
         value={{
@@ -334,12 +350,16 @@ export default function Index() {
             },
             { title: t('system.settings'), url: '/admin/settings', order: 6 },
           ],
-          account: loaderData!.data!.account,
-          storeSettings: loaderData!.data!.storeSettings,
+          account: loaderData.data.account,
+          storeSettings: loaderData.data.storeSettings,
+          publicPages: loaderData.data.publicPages,
+          emailTemplates: loaderData.data.emailTemplates,
         }}
       >
-        <Settings currencies={loaderData!.data!.currencies} />
+        <Settings currencies={loaderData.data.currencies} />
       </AdminContext.Provider>
     </Suspense>
+  ) : (
+    <Skeleton />
   )
 }

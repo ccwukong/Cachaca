@@ -22,6 +22,7 @@ describe('Testing storefront Header component', () => {
         value={{
           storeSettings: (await mocks.getStoreInfo()) as StoreSettings,
           categories: mockCategories,
+          publicPages: [],
         }}
       >
         <Header />

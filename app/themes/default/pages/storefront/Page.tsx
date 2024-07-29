@@ -9,7 +9,7 @@ import { idb } from '~/utils/indexedDB'
 
 const Page = ({ content }: { content: PublicPage }) => {
   const { t } = useTranslation()
-  const { storeSettings } = useContext(StoreContext)
+  const { storeSettings, publicPages } = useContext(StoreContext)
   return (
     <div className="mx-6 overflow-hidden">
       <Header cartItems={useLiveQuery(() => idb.cart.toArray()) || []} />
@@ -19,7 +19,7 @@ const Page = ({ content }: { content: PublicPage }) => {
         <div dangerouslySetInnerHTML={{ __html: content.content }} />
       </div>
       <Footer
-        publicPages={storeSettings!.publicPages}
+        publicPages={publicPages}
         copyright={storeSettings!.other!.copyright}
       />
     </div>
