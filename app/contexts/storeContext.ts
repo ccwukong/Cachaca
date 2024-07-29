@@ -1,12 +1,14 @@
 import { createContext } from 'react'
-import { CategoryItem, StoreSettings } from '~/types'
+import { CategoryItem, PublicPage, StoreSettings } from '~/types'
 
 const initialValue: {
   storeSettings: StoreSettings | null
   categories: CategoryItem[]
+  publicPages: PublicPage[]
 } = {
   storeSettings: null,
   categories: [],
+  publicPages: [],
 }
 
 const StoreContext = createContext(initialValue)

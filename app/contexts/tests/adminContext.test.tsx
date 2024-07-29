@@ -31,7 +31,6 @@ describe('AdminContext', () => {
             address: null,
             description: 'test store',
             currency: { id: 1, name: 'US Dollar', code: 'USD', symbol: '$' },
-            publicPages: [],
             other: null,
             banners: null,
           },

@@ -39,11 +39,19 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     if (cookieStr) {
       const { accessToken } = (await cookie.parse(cookieStr)) || {}
 
+      const payload = (await decode(
+        accessToken,
+        process.env.JWT_TOKEN_SECRET,
+      )) as {
+        id: string
+        firstName: string
+        lastName: string
+        email: string
+      }
+
       if (await isValid(accessToken, process.env.JWT_TOKEN_SECRET)) {
         account = await decode(accessToken, process.env.JWT_TOKEN_SECRET)
-        addresses = await new AddressModel().findByCustomerId(
-          account.id as string,
-        )
+        addresses = await new AddressModel().findManyByCustomerId(payload.id)
       }
     }
 
@@ -52,6 +60,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       data: {
         categories: await mocks.getCategories(),
         storeSettings: await StoreConfig.getStoreInfo(),
+        publicPages: await StoreConfig.getPublicPages(),
         suggestedProducts: await mocks.getMockProducts(),
         addresses,
         shippingFee: '9.9',
@@ -81,6 +90,7 @@ export default function Index() {
         value={{
           storeSettings: loaderData!.data!.storeSettings,
           categories: loaderData!.data!.categories as CategoryItem[],
+          publicPages: loaderData!.data!.publicPages,
         }}
       >
         <Cart

@@ -289,3 +289,9 @@ export const page = mysqlTable('page', {
   order: tinyint('order').notNull(),
   status: tinyint('status').notNull(),
 })
+
+export const emailTemplate = mysqlTable('email_template', {
+  name: varchar('name', { length: 50 }).primaryKey(),
+  content: text('content').notNull(),
+  status: tinyint('status').notNull(),
+})

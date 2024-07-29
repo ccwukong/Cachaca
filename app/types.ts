@@ -93,7 +93,6 @@ export type StoreSettings = {
   address: AddressItem | null
   description: string
   currency: Currency
-  publicPages: PublicPage[]
   other: OtherStoreConfigs | null
   banners: HomeBannerSettings | null
 }
@@ -161,6 +160,11 @@ export type AddressItem = {
   country: string
   zipcode: string
   type: AddressType
+}
+
+export type EmailTemplateItem = {
+  name: string
+  content: string
 }
 
 export enum AddressType {

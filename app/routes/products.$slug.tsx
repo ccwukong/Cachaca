@@ -47,6 +47,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       data: {
         categories: await mocks.getCategories(),
         storeSettings: await StoreConfig.getStoreInfo(),
+        publicPages: await StoreConfig.getPublicPages(),
         product: await mocks.getMockProductById(
           request.url.split('/').at(-1) as string,
         ),
@@ -76,6 +77,7 @@ export default function Index() {
         value={{
           storeSettings: loaderData!.data!.storeSettings,
           categories: loaderData!.data!.categories as CategoryItem[],
+          publicPages: loaderData!.data!.publicPages,
         }}
       >
         <ProductDetail product={loaderData!.data!.product} />

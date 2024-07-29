@@ -10,6 +10,7 @@ import {
   CategoryItem,
   Currency,
   DatabaseRecordStatus,
+  EmailTemplateItem,
   HomeBannerSettings,
   OrderItem,
   OrderStatus,
@@ -39,6 +40,7 @@ import {
   currency,
   customer,
   customerAddress,
+  emailTemplate,
   order,
   page,
   product,
@@ -882,12 +884,6 @@ export class StoreConfig {
       throw new NotFoundException()
     }
 
-    const pdata = await db
-      .select()
-      .from(page)
-      .where(eq(page.status, DatabaseRecordStatus.Active))
-      .orderBy(asc(page.order))
-
     return {
       name: sdata[0].shop.name,
       logo: sdata[0].shop.logo,
@@ -901,14 +897,6 @@ export class StoreConfig {
         code: sdata[0]?.currency?.code || '',
         symbol: sdata[0]?.currency?.symbol || '',
       },
-      publicPages: pdata.map((item) => {
-        return {
-          name: item.name,
-          slug: item.slug,
-          content: item.content,
-          order: item.order,
-        }
-      }),
       other: sdata[0].shop.other,
       banners: sdata[0].shop.banners,
     }
@@ -970,6 +958,23 @@ export class StoreConfig {
       .where(eq(shop.name, data.name))
   }
 
+  public static async getPublicPages(): Promise<PublicPage[]> {
+    const res = await db
+      .select()
+      .from(page)
+      .where(eq(page.status, DatabaseRecordStatus.Active))
+      .orderBy(asc(page.order))
+
+    return res.map((item) => {
+      return {
+        name: item.name,
+        slug: item.slug,
+        content: item.content,
+        order: item.order,
+      }
+    })
+  }
+
   public static async getPublicPageByName(name: string): Promise<PublicPage> {
     const res = await db
       .select()
@@ -1026,6 +1031,73 @@ export class StoreConfig {
 
   public static async deletePublicPageByName(name: string): Promise<void> {
     await db.delete(page).where(eq(page.name, name))
+  }
+
+  public static async getEmailTemplates(): Promise<EmailTemplateItem[]> {
+    const data = await db
+      .select({
+        name: emailTemplate.name,
+        content: emailTemplate.content,
+      })
+      .from(emailTemplate)
+      .orderBy(asc(emailTemplate.name))
+
+    if (!data.length) {
+      throw new NotFoundException()
+    }
+
+    return data
+  }
+
+  public static async getEmailTemplateByName(
+    name: string,
+  ): Promise<EmailTemplateItem> {
+    const data = await db
+      .select({
+        name: emailTemplate.name,
+        content: emailTemplate.content,
+      })
+      .from(emailTemplate)
+      .where(eq(emailTemplate.name, name))
+
+    if (!data.length) {
+      throw new NotFoundException()
+    }
+
+    return data[0]
+  }
+
+  public static async createEmailTemplate(data: {
+    name: string
+    content: string
+  }): Promise<string> {
+    const result = await db.insert(emailTemplate).values({
+      name: data.name,
+      content: data.content,
+      status: DatabaseRecordStatus.Active,
+    })
+
+    if (!result[0].affectedRows) {
+      throw new ServerInternalError()
+    }
+
+    return data.name
+  }
+
+  public static async updateEmailTemplateByName(data: {
+    name: string
+    content: string
+  }): Promise<void> {
+    await db
+      .update(emailTemplate)
+      .set({
+        content: data.content,
+      })
+      .where(eq(emailTemplate.name, data.name))
+  }
+
+  public static async deleteEmailTemplateByName(name: string): Promise<void> {
+    await db.delete(emailTemplate).where(eq(emailTemplate.name, name))
   }
 }
 
