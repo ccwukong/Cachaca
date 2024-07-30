@@ -38,7 +38,12 @@ const ProductCard = ({
           <p className="mt-3 text-lg">{price}</p>
         </CardFooter>
       </Link>
-      <Button variant="secondary" className="w-full" onClick={onClick}>
+      <Button
+        variant="secondary"
+        className="w-full"
+        onClick={onClick}
+        data-testid={id}
+      >
         {t('system.add_cart')}
       </Button>
     </Card>
