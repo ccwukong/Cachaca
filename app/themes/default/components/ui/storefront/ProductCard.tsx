@@ -1,19 +1,21 @@
-import { useTranslation } from 'react-i18next'
 import { Link } from '@remix-run/react'
+import { useTranslation } from 'react-i18next'
+import { Button } from '~/themes/default/components/ui/button'
 import {
   Card,
   CardContent,
   CardFooter,
 } from '~/themes/default/components/ui/card'
-import { Button } from '~/themes/default/components/ui/button'
 
 const ProductCard = ({
+  id,
   coverImage,
   title,
   link,
   price,
   onClick,
 }: {
+  id: string
   coverImage: string
   title: string
   link: string
@@ -36,7 +38,12 @@ const ProductCard = ({
           <p className="mt-3 text-lg">{price}</p>
         </CardFooter>
       </Link>
-      <Button variant="secondary" className="w-full" onClick={onClick}>
+      <Button
+        variant="secondary"
+        className="w-full"
+        onClick={onClick}
+        data-testid={id}
+      >
         {t('system.add_cart')}
       </Button>
     </Card>

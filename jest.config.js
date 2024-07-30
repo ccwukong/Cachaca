@@ -31,4 +31,5 @@ export default {
     '~/(.*)': '<rootDir>/app/$1',
   },
   transformIgnorePatterns: ['node_modules/(?!(@web3-storage)/)'],
+  setupFilesAfterEnv: ['<rootDir>/setupTests.js'],
 }

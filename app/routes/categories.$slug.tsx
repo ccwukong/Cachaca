@@ -10,7 +10,7 @@ import StoreContext from '~/contexts/storeContext'
 import { Installer, ProductModel, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import CategoryProductList from '~/themes/default/pages/storefront/CategoryProductList'
-import { CategoryItem, FatalErrorTypes } from '~/types'
+import { CategoryItem, FatalErrorTypes, ProductPublicInfo } from '~/types'
 import { StoreNotInstalledError } from '~/utils/exception'
 import * as mocks from '~/utils/mocks'
 
@@ -40,7 +40,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       data: {
         categories: await mocks.getCategories(),
         storeSettings: await StoreConfig.getStoreInfo(),
-        products: await mocks.getMockProducts(),
+        publicPages: await StoreConfig.getPublicPages(),
+        products: (await mocks.getMockProducts()) as ProductPublicInfo[],
         categoryName: (await mocks.getCategories()).find(
           (item) => item.slug === params.slug,
         )?.name,
@@ -62,19 +63,22 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 export default function Index() {
   const loaderData = useLoaderData<typeof loader>()
 
-  return (
+  return loaderData.data ? (
     <Suspense fallback={<Skeleton />}>
       <StoreContext.Provider
         value={{
-          storeSettings: loaderData!.data!.storeSettings,
-          categories: loaderData!.data!.categories as CategoryItem[],
+          storeSettings: loaderData.data.storeSettings,
+          categories: loaderData.data.categories as CategoryItem[],
+          publicPages: loaderData.data.publicPages,
         }}
       >
         <CategoryProductList
-          products={loaderData!.data!.products}
-          category={loaderData!.data!.categoryName}
+          products={loaderData.data.products}
+          category={loaderData.data.categoryName}
         />
       </StoreContext.Provider>
     </Suspense>
+  ) : (
+    <Skeleton />
   )
 }

@@ -10,7 +10,13 @@
   "exclude": ["**/tests/*.test.(ts|tsx)"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": ["@remix-run/node", "vite/client", "jest", "node"],
+    "types": [
+      "@remix-run/node",
+      "vite/client",
+      "jest",
+      "node",
+      "@testing-library/jest-dom"
+    ],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",

@@ -35,6 +35,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         categories: await mocks.getCategories(),
         storeSettings: await StoreConfig.getStoreInfo(),
         products: await mocks.getMockProducts(),
+        publicPages: await StoreConfig.getPublicPages(),
         url: new URL(request.url),
       },
     })
@@ -53,16 +54,19 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Index() {
   const loaderData = useLoaderData<typeof loader>()
 
-  return (
+  return loaderData.data ? (
     <Suspense fallback={<Skeleton />}>
       <StoreContext.Provider
         value={{
-          storeSettings: loaderData!.data!.storeSettings,
-          categories: loaderData!.data!.categories as CategoryItem[],
+          storeSettings: loaderData.data.storeSettings,
+          categories: loaderData.data.categories as CategoryItem[],
+          publicPages: loaderData.data.publicPages,
         }}
       >
-        <Home products={loaderData!.data!.products as ProductPublicInfo[]} />
+        <Home products={loaderData.data.products as ProductPublicInfo[]} />
       </StoreContext.Provider>
     </Suspense>
+  ) : (
+    <Skeleton />
   )
 }

@@ -1,3 +1,4 @@
+import addresses from '../../mockdata/addresses.json'
 import banners from '../../mockdata/banners.json'
 import cart from '../../mockdata/cart.json'
 import categories from '../../mockdata/categories.json'
@@ -44,6 +45,12 @@ export function getMockProducts(): Promise<object[]> {
   })
 }
 
+export function getMockAddresses(): Promise<object[]> {
+  return new Promise((resolve) => {
+    resolve(addresses)
+  })
+}
+
 export function getHomeBanners(): Promise<object> {
   return new Promise((resolve) =>
     resolve({
@@ -61,10 +68,13 @@ export function getStoreInfo(): Promise<object> {
       logo: settings.logo,
       description: settings.description,
       currency: settings.currency,
-      publicPages: settings.publicPages,
-      copyright: settings.copyright,
+      other: { copyright: settings.other.copyright },
     }),
   )
+}
+
+export function getPulbicPages(): Promise<object[]> {
+  return new Promise((resolve) => resolve(settings.publicPages))
 }
 
 export function getCart(): Promise<object[]> {

@@ -128,16 +128,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Index() {
   const loaderData = useLoaderData<typeof loader>()
 
-  return (
+  return loaderData.data ? (
     <Suspense fallback={<Skeleton />}>
       <CustomerContext.Provider
         value={{
-          account: loaderData!.data!.account,
-          storeSettings: loaderData!.data!.storeSettings,
+          account: loaderData.data.account,
+          storeSettings: loaderData.data.storeSettings,
         }}
       >
-        <Home orders={loaderData!.data!.orders} />
+        <Home orders={loaderData.data.orders} />
       </CustomerContext.Provider>
     </Suspense>
+  ) : (
+    <Skeleton />
   )
 }

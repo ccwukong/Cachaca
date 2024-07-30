@@ -10,10 +10,15 @@ import { useTranslation } from 'react-i18next'
 import { Stripe } from 'stripe'
 import StoreContext from '~/contexts/storeContext'
 import { cookie } from '~/cookie'
-import { AddressModel, CustomerModel, Installer, StoreConfig } from '~/models'
+import { AddressModel, Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Cart from '~/themes/default/pages/storefront/Cart'
-import { AddressItem, CategoryItem, FatalErrorTypes } from '~/types'
+import {
+  AddressItem,
+  CategoryItem,
+  FatalErrorTypes,
+  ProductPublicInfo,
+} from '~/types'
 import {
   JWTTokenSecretNotFoundException,
   StoreNotInstalledError,
@@ -58,8 +63,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
           lastName: string
           email: string
         }
-        account = await new CustomerModel().find(payload.id)
-        addresses = await new AddressModel().findManyByCustomerId(payload.id)
+
+        if (await isValid(accessToken, process.env.JWT_TOKEN_SECRET)) {
+          account = await decode(accessToken, process.env.JWT_TOKEN_SECRET)
+          addresses = await new AddressModel().findManyByCustomerId(payload.id)
+        }
       }
     }
 
@@ -68,7 +76,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       data: {
         categories: await mocks.getCategories(),
         storeSettings: await StoreConfig.getStoreInfo(),
-        suggestedProducts: await mocks.getMockProducts(),
+        publicPages: await StoreConfig.getPublicPages(),
+        suggestedProducts:
+          (await mocks.getMockProducts()) as ProductPublicInfo[],
         addresses,
         shippingFee: '9.9',
         account,
@@ -84,7 +94,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       return redirect('/error')
     }
 
-    return json({ error: e, data: {} })
+    return json({ error: e, data: null })
   }
 }
 
@@ -94,7 +104,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     // when store admin creating a new product, not here
     // The Stripe api key should be stored in database instead hardcoding here
     const body = await request.formData()
-    const cart = JSON.parse(body.get('cart'))
+    const cart = JSON.parse(String(body.get('cart')))
 
     const res = cart.map(async (item) => {
       return {
@@ -141,25 +151,27 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Index() {
   const loaderData = useLoaderData<typeof loader>()
-  console.log(loaderData!.data!.storeSettings)
-  return (
+
+  return loaderData.data ? (
     <Suspense fallback={<Skeleton />}>
       <StoreContext.Provider
         value={{
-          account: loaderData!.data!.account,
-          storeSettings: loaderData!.data!.storeSettings,
-          categories: loaderData!.data!.categories as CategoryItem[],
+          storeSettings: loaderData.data.storeSettings,
+          categories: loaderData.data.categories as CategoryItem[],
+          publicPages: loaderData.data.publicPages,
         }}
       >
         <Cart
-          suggestedProducts={loaderData!.data!.suggestedProducts}
-          shippingFee={loaderData!.data!.shippingFee}
-          addresses={loaderData!.data!.addresses}
+          suggestedProducts={loaderData.data.suggestedProducts}
+          shippingFee={loaderData.data.shippingFee}
+          addresses={loaderData.data.addresses}
           allowVoucher={true}
           allowGuestCheckout={true}
-          account={loaderData!.data!.account}
+          account={loaderData.data.account}
         />
       </StoreContext.Provider>
     </Suspense>
+  ) : (
+    <Skeleton />
   )
 }

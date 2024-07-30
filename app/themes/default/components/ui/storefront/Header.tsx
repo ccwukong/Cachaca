@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Link } from '@remix-run/react'
 import { Menu, ShoppingCart, UserRound } from 'lucide-react'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import StoreContext from '~/contexts/storeContext'
 import {
@@ -29,8 +29,6 @@ const Header = ({
 }) => {
   const { t } = useTranslation()
   const { storeSettings, categories } = useContext(StoreContext)
-  const [subOpen, setSubOpen] = useState(false)
-  const [subCategories, setSubCategories] = useState([])
   const subtotal =
     cartItems && cartItems.length
       ? cartItems.reduce(
@@ -103,7 +101,9 @@ const Header = ({
                   <ShoppingCart className="mt-5 md:mt-0" />
                 </Link>
                 {cartItems && cartItems.length ? (
-                  <Badge variant="destructive">{cartItems.length}</Badge>
+                  <Badge variant="destructive" data-testid="cart-badge">
+                    {cartItems.length}
+                  </Badge>
                 ) : null}
               </HoverCardTrigger>
               <HoverCardContent className="w-[400px]">

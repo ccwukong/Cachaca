@@ -79,7 +79,7 @@ export default function Index() {
   const loaderData = useLoaderData<typeof loader>()
   const { t } = useTranslation()
 
-  return (
+  return loaderData.data ? (
     <Suspense fallback={<Skeleton />}>
       <AdminContext.Provider
         value={{
@@ -95,12 +95,14 @@ export default function Index() {
             },
             { title: t('system.settings'), url: '/admin/settings', order: 6 },
           ],
-          account: loaderData!.data!.account,
-          storeSettings: loaderData!.data!.storeSettings,
+          account: loaderData.data.account,
+          storeSettings: loaderData.data.storeSettings,
         }}
       >
-        <OrderList orders={loaderData!.data!.orders} />
+        <OrderList orders={loaderData.data.orders} />
       </AdminContext.Provider>
     </Suspense>
+  ) : (
+    <Skeleton />
   )
 }
