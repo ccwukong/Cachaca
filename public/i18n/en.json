@@ -128,5 +128,6 @@
   "system.delete": "Delete",
   "system.create_new_page": "Create a new page",
   "system.edit_page": "Edit page",
-  "system.email_templates": "Email templates"
+  "system.email_templates": "Email templates",
+  "system.home": "Home"
 }

@@ -1,3 +1,4 @@
+import addresses from '../../mockdata/addresses.json'
 import banners from '../../mockdata/banners.json'
 import cart from '../../mockdata/cart.json'
 import categories from '../../mockdata/categories.json'
@@ -41,6 +42,12 @@ export function getMockProducts(): Promise<object[]> {
         }
       }),
     )
+  })
+}
+
+export function getMockAddresses(): Promise<object[]> {
+  return new Promise((resolve) => {
+    resolve(addresses)
   })
 }
 

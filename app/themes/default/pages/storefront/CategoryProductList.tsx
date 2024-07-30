@@ -1,7 +1,16 @@
+import { Link } from '@remix-run/react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import StoreContext from '~/contexts/storeContext'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '~/themes/default/components/ui/breadcrumb'
 import Footer from '~/themes/default/components/ui/storefront/Footer'
 import Header from '~/themes/default/components/ui/storefront/Header'
 import ProductCard from '~/themes/default/components/ui/storefront/ProductCard'
@@ -50,10 +59,21 @@ const CategoryProductList = ({
   return (
     <div className="mx-6 overflow-hidden">
       <Header cartItems={useLiveQuery(() => idb.cart.toArray()) || []} />
-
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
-        <h2 className="mb-6 text-xl">{category}</h2>
-        <div className="grid grid-cols-1 lg:grid-cols-4 lg:gap-8">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink>
+                <Link to="/">{t('system.home')}</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{category}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <div className="mt-6 grid grid-cols-1 lg:grid-cols-4 lg:gap-8">
           {products.map((item) => {
             return (
               <ProductCard

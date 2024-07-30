@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "customerId": "123",
+    "address": "Bugis Junction",
+    "city": "Singapore",
+    "state": "Singapore",
+    "country": "Singapore",
+    "zipcode": "333333",
+    "type": 1
+  },
+  {
+    "id": "2",
+    "customerId": "123",
+    "address": "Waterpoint",
+    "city": "Singapore",
+    "state": "Singapore",
+    "country": "Singapore",
+    "zipcode": "111111",
+    "type": 2
+  }
+]
