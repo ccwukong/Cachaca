@@ -88,7 +88,7 @@ export default function Index() {
           publicPages: loaderData.data.publicPages,
         }}
       >
-        <Page content={loaderData.data.page} />
+        <Page page={loaderData.data.page} />
       </StoreContext.Provider>
     </Suspense>
   ) : (

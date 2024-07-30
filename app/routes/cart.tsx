@@ -44,19 +44,21 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     if (cookieStr) {
       const { accessToken } = (await cookie.parse(cookieStr)) || {}
 
-      const payload = (await decode(
-        accessToken,
-        process.env.JWT_TOKEN_SECRET,
-      )) as {
-        id: string
-        firstName: string
-        lastName: string
-        email: string
-      }
-
       if (await isValid(accessToken, process.env.JWT_TOKEN_SECRET)) {
-        account = await decode(accessToken, process.env.JWT_TOKEN_SECRET)
-        addresses = await new AddressModel().findManyByCustomerId(payload.id)
+        const payload = (await decode(
+          accessToken,
+          process.env.JWT_TOKEN_SECRET,
+        )) as {
+          id: string
+          firstName: string
+          lastName: string
+          email: string
+        }
+
+        if (await isValid(accessToken, process.env.JWT_TOKEN_SECRET)) {
+          account = await decode(accessToken, process.env.JWT_TOKEN_SECRET)
+          addresses = await new AddressModel().findManyByCustomerId(payload.id)
+        }
       }
     }
 

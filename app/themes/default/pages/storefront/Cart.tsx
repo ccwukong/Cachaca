@@ -1,8 +1,17 @@
+import { Link } from '@remix-run/react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import StoreContext from '~/contexts/storeContext'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '~/themes/default/components/ui/breadcrumb'
 import { Button } from '~/themes/default/components/ui/button'
 import CartItem from '~/themes/default/components/ui/storefront/CartItem'
 import Footer from '~/themes/default/components/ui/storefront/Footer'
@@ -82,9 +91,21 @@ const Cart = ({
     <div className="mx-6 overflow-hidden">
       <Header cartItems={cart} updateCartItemHandler={updateCartItemHandler} />
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
-        <p className="text-2xl font-light">
-          {t('system.my_cart_ph', { no_of_items: cart.length })}
-        </p>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink>
+                <Link to="/">{t('system.home')}</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>
+                {t('system.my_cart_ph', { no_of_items: cart.length })}
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
         {storeSettings && (
           <div className="mt-6 grid grid-cols-1 md:grid-cols-5 gap-8">
             <div className="md:col-span-3">

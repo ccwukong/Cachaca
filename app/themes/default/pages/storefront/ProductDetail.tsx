@@ -1,7 +1,16 @@
+import { Link } from '@remix-run/react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import StoreContext from '~/contexts/storeContext'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '~/themes/default/components/ui/breadcrumb'
 import { Button } from '~/themes/default/components/ui/button'
 import {
   Select,
@@ -63,8 +72,21 @@ const ProductDetail = ({ product }: { product: ProductPublicInfo | null }) => {
         updateCartItemHandler={updateCartItemHandler}
       />
       <div className="max-w-screen-xl mx-auto h-auto pt-24">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink>
+                <Link to="/">{t('system.home')}</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{product && product.name}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
         {product && (
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-5 gap-8">
             <div className="grid grid-cols-1 md:grid-cols-2 md:col-span-3 gap-2">
               {product.images.map((item, idx) => {
                 return (
