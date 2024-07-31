@@ -95,6 +95,7 @@ Please use the issue template to file an issue report, and try to provide the de
 ### Admin dashboard
 
 - [x] Admin account login
+- [x] Admin forgot password
 - [ ] User management
   - [ ] Role-based permission management
 - [ ] Customer management
@@ -132,7 +133,7 @@ Please use the issue template to file an issue report, and try to provide the de
 - [x] Customer account login
 - [x] Customer account registration
 - [x] Customer account reset password
-- [ ] Customer account forgot password
+- [x] Customer account forgot password
 - [ ] Customer order management
 - [x] Customer address management
 - [x] Customer account management
