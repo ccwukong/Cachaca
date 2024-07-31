@@ -105,6 +105,7 @@ export class Installer {
         createdOn,
         status: DatabaseRecordStatus.Active,
       })
+
       const storeData = {
         name: store.name,
         logo: '',
@@ -112,6 +113,7 @@ export class Installer {
         phone: '',
         baseCurrencyId: 1, //Default to USD
         description: store.description,
+        banners: { autoplay: false, speed: 0, items: [] },
         other: {
           copyright: `${store.name} ©${new Date().getFullYear()}`,
           apis: {},
