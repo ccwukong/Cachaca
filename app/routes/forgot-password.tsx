@@ -13,10 +13,16 @@ import {
 } from '~/utils/exception'
 import { encode } from '~/utils/jwt'
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ data }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { t } = useTranslation()
-  return [{ title: t('system.reset_password') }]
+  return [
+    {
+      title: `${data?.data?.storeSettings.name} - ${t(
+        'system.forgot_password',
+      )}`,
+    },
+  ]
 }
 
 export const loader = async () => {
@@ -29,7 +35,10 @@ export const loader = async () => {
       throw new JWTTokenSecretNotFoundException()
     }
 
-    return json({ error: null, data: {} })
+    return json({
+      error: null,
+      data: { storeSettings: await StoreConfig.getStoreInfo() },
+    })
   } catch (e) {
     if (e instanceof StoreNotInstalledError) {
       return redirect('/install')
@@ -72,9 +81,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           .replace('{{customer}}', 'Test name')
           .replace(
             '{{link}}',
-            `<a href="${request.url + '?=' + token}">${
-              request.url + '?t=' + token
-            }</a>`,
+            `<a href="${
+              request.url.replace('forgot-', 'reset-') + '?t=' + token
+            }">${request.url.replace('forgot-', 'reset-') + '?t=' + token}</a>`,
           ),
         from: storeInfo.email,
         sender: storeInfo.name,

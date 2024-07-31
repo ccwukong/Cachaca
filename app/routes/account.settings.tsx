@@ -26,10 +26,16 @@ import {
 } from '~/utils/exception'
 import { decode, isValid } from '~/utils/jwt'
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ data }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { t } = useTranslation()
-  return [{ title: t('system.account_dashboard_settings') }]
+  return [
+    {
+      title: `${data?.data?.storeSettings.name} - ${t(
+        'system.account_dashboard_settings',
+      )}`,
+    },
+  ]
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

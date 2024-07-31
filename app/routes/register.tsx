@@ -19,10 +19,16 @@ import {
 } from '~/utils/exception'
 import { encode } from '~/utils/jwt'
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ data }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { t } = useTranslation()
-  return [{ title: t('system.create_new_account') }]
+  return [
+    {
+      title: `${data?.data?.storeSettings.name} - ${t(
+        'system.create_new_account',
+      )}`,
+    },
+  ]
 }
 
 export const loader = async () => {

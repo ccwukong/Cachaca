@@ -17,6 +17,7 @@
   "system.password": "Password",
   "system.slug": "Slug",
   "system.forgot_password_hint": "Forgot password?",
+  "system.forgot_password": "Forgot password",
   "system.cart_voucher_hint": "Do you have an voucher?",
   "system.do_not_have_account_hint": "Don't have an account?",
   "system.create_new_account": "Create a new account",

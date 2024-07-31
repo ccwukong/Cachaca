@@ -17,10 +17,16 @@ import {
 import { decode, encode, isValid } from '~/utils/jwt'
 import * as mocks from '~/utils/mocks'
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ data }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { t } = useTranslation()
-  return [{ title: t('system.account_dashboard') }]
+  return [
+    {
+      title: `${data?.data?.storeSettings.name} - ${t(
+        'system.account_dashboard',
+      )}`,
+    },
+  ]
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

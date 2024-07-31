@@ -351,6 +351,26 @@ export class CustomerAuthentication {
       )
   }
 
+  public static async resetPassword({
+    email,
+    newPwd,
+  }: {
+    email: string
+    newPwd: string
+  }): Promise<void> {
+    const newSalt = makeStr(8)
+
+    await db
+      .update(customer)
+      .set({ password: md5(newPwd + newSalt), salt: newSalt })
+      .where(
+        and(
+          eq(customer.email, email),
+          eq(customer.status, DatabaseRecordStatus.Active),
+        ),
+      )
+  }
+
   public static async isEmailRegistered(email: string) {
     const res = await db
       .select()
