@@ -92,14 +92,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       })
     } else if (body.get('intent') === 'reset-password') {
       const result = await AdminAuthentication.getAdminNameByEmailIfRegistered(
-        String(body.get('email')),
+        String(body.get('reset-password-email')),
       )
 
       if (result) {
         const token = await encode(
           '1h',
-          { email: String(body.get('email')) },
-          process.env.JWT_TOKEN_SECRET!,
+          { email: String(body.get('reset-password-email')) },
+          process.env.PASSWORD_LINK_JWT_TOKEN_SECRET!,
         )
 
         //TODO: when installing store, insert this email template by default and make the template name uneditable
@@ -114,7 +114,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           apiToken: emailApi!.token as string,
           subject: emailTemplate.subject,
           body: emailTemplate.content
-            .replace('{{customer}}', `${result.firstName} ${result.lastName}`)
+            .replace('{{name}}', `${result.firstName} ${result.lastName}`)
             .replace(
               '{{link}}',
               `<a href="${
@@ -125,7 +125,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             ),
           from: storeInfo.email,
           sender: storeInfo.name,
-          to: String(body.get('email')),
+          to: String(body.get('reset-password-email')),
         })
       }
     }
