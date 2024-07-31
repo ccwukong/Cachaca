@@ -138,7 +138,7 @@ export class Installer {
   }
 }
 
-export class AdminAuthtication {
+export class AdminAuthentication {
   public static async login(
     email: string,
     password: string,
@@ -213,6 +213,29 @@ export class AdminAuthtication {
           eq(user.status, DatabaseRecordStatus.Active),
         ),
       )
+  }
+
+  public static async getAdminNameByEmailIfRegistered(
+    email: string,
+  ): Promise<{ [key: string]: string } | null> {
+    const res = await db
+      .select()
+      .from(user)
+      .where(
+        and(
+          eq(user.email, email),
+          eq(user.status, DatabaseRecordStatus.Active),
+        ),
+      )
+
+    if (res.length) {
+      return {
+        firstName: res[0].firstName,
+        lastName: res[0].lastName,
+      }
+    } else {
+      return null
+    }
   }
 }
 

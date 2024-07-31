@@ -1,5 +1,6 @@
 import { useFetcher } from '@remix-run/react'
 import { AlertCircle } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Alert,
@@ -27,6 +28,11 @@ import {
 const Login = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
+  const [formData, SetFormData] = useState<{
+    email: string
+    password: string
+    pwdEmail: string
+  }>({ email: '', password: '', pwdEmail: '' })
 
   return (
     <div className="max-w-screen-xl mx-auto h-full pt-24 flex justify-center">
@@ -49,7 +55,19 @@ const Login = () => {
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">{t('system.email')}</Label>
-                    <Input id="email" name="email" type="email" required />
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => {
+                        SetFormData({
+                          ...formData,
+                          email: e.target.value,
+                        })
+                      }}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="password">{t('system.password')}</Label>
@@ -58,10 +76,23 @@ const Login = () => {
                       name="password"
                       type="password"
                       required
+                      value={formData.password}
+                      onChange={(e) => {
+                        SetFormData({
+                          ...formData,
+                          password: e.target.value,
+                        })
+                      }}
                     />
                   </div>
-                  <Button type="submit" className="w-full">
-                    {fetcher.state !== 'idle' ? (
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    name="intent"
+                    value="login"
+                  >
+                    {fetcher.state !== 'idle' &&
+                    fetcher.formData?.get('login') ? (
                       <Spinner size="small" className="text-white" />
                     ) : (
                       t('system.login')
@@ -82,20 +113,42 @@ const Login = () => {
           </Card>
         </TabsContent>
         <TabsContent value="password">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('system.reset_password')}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="space-y-1">
-                <Label htmlFor="current">{t('system.email')}</Label>
-                <Input id="current" type="email" />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button>{t('system.submit')}</Button>
-            </CardFooter>
-          </Card>
+          <fetcher.Form method="POST">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('system.reset_password')}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="space-y-1">
+                  <Label htmlFor="reset-password-email">
+                    {t('system.email')}
+                  </Label>
+                  <Input
+                    id="reset-password-email"
+                    name="reset-password-email"
+                    type="email"
+                    value={formData.pwdEmail}
+                    onChange={(e) => {
+                      SetFormData({
+                        ...formData,
+                        pwdEmail: e.target.value,
+                      })
+                    }}
+                  />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button type="submit" name="intent" value="reset-password">
+                  {fetcher.state !== 'idle' &&
+                  fetcher.formData?.get('reset-password') ? (
+                    <Spinner size="small" className="text-white" />
+                  ) : (
+                    t('system.login')
+                  )}
+                </Button>
+              </CardFooter>
+            </Card>
+          </fetcher.Form>
         </TabsContent>
       </Tabs>
     </div>

@@ -10,7 +10,7 @@ import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import AdminContext from '~/contexts/adminContext'
 import { adminCookie } from '~/cookie'
-import { AdminAuthtication, StoreConfig, UserModel } from '~/models'
+import { AdminAuthentication, StoreConfig, UserModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Settings from '~/themes/default/pages/admin/Settings'
 import {
@@ -275,7 +275,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           avatar: String(body.get('avatar')),
         })
       } else if (body.get('intent') === 'change-password') {
-        await AdminAuthtication.updatePassword({
+        await AdminAuthentication.updatePassword({
           email: payload.email,
           oldPwd: String(body.get('old-password')),
           newPwd: String(body.get('new-password')),

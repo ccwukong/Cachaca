@@ -6,10 +6,11 @@ import type {
 import { json, redirect } from '@remix-run/node'
 import { Suspense } from 'react'
 import { adminCookie } from '~/cookie'
-import { AdminAuthtication, Installer } from '~/models'
+import { AdminAuthentication, Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Login from '~/themes/default/pages/admin/Login'
-import { FatalErrorTypes, Role } from '~/types'
+import { EmailTemplate, ExternalApiType, FatalErrorTypes, Role } from '~/types'
+import sendEmail from '~/utils/email'
 import {
   JWTTokenSecretNotFoundException,
   StoreNotInstalledError,
@@ -55,30 +56,79 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     const body = await request.formData()
-    const result = await AdminAuthtication.login(
-      String(body.get('email')),
-      String(body.get('password')),
-    )
 
-    const data = {
-      id: result.id,
-      firstName: result.firstName,
-      lastName: result.lastName,
-      email: result.email,
-      role: Role.Admin,
+    if (body.get('intent') === 'login') {
+      const result = await AdminAuthentication.login(
+        String(body.get('email')),
+        String(body.get('password')),
+      )
+
+      const data = {
+        id: result.id,
+        firstName: result.firstName,
+        lastName: result.lastName,
+        email: result.email,
+        role: Role.Admin,
+      }
+
+      const accessToken = await encode(
+        '1h',
+        data,
+        process.env.JWT_TOKEN_SECRET!,
+      )
+      const refreshToken = await encode(
+        '7d',
+        data,
+        process.env.JWT_TOKEN_SECRET!,
+      )
+
+      return redirect('/admin', {
+        headers: {
+          'Set-Cookie': await adminCookie.serialize({
+            accessToken,
+            refreshToken,
+          }),
+        },
+      })
+    } else if (body.get('intent') === 'reset-password') {
+      const result = await AdminAuthentication.getAdminNameByEmailIfRegistered(
+        String(body.get('email')),
+      )
+
+      if (result) {
+        const token = await encode(
+          '1h',
+          { email: String(body.get('email')) },
+          process.env.JWT_TOKEN_SECRET!,
+        )
+
+        //TODO: when installing store, insert this email template by default and make the template name uneditable
+        const emailTemplate = await StoreConfig.getEmailTemplateByName(
+          EmailTemplate.ForgotPassword,
+        )
+        const storeInfo = await StoreConfig.getStoreInfo()
+        const emailApi = storeInfo.other?.apis[ExternalApiType.Email]
+
+        sendEmail({
+          endpoint: emailApi!.endpoint as string,
+          apiToken: emailApi!.token as string,
+          subject: emailTemplate.subject,
+          body: emailTemplate.content
+            .replace('{{customer}}', `${result.firstName} ${result.lastName}`)
+            .replace(
+              '{{link}}',
+              `<a href="${
+                request.url.replace('forgot-', 'reset-') + '?t=' + token
+              }">${
+                request.url.replace('forgot-', 'reset-') + '?t=' + token
+              }</a>`,
+            ),
+          from: storeInfo.email,
+          sender: storeInfo.name,
+          to: String(body.get('email')),
+        })
+      }
     }
-
-    const accessToken = await encode('1h', data, process.env.JWT_TOKEN_SECRET!)
-    const refreshToken = await encode('7d', data, process.env.JWT_TOKEN_SECRET!)
-
-    return redirect('/admin', {
-      headers: {
-        'Set-Cookie': await adminCookie.serialize({
-          accessToken,
-          refreshToken,
-        }),
-      },
-    })
   } catch (e) {
     console.error(e) // TODO: replace this with a proper logger
 
