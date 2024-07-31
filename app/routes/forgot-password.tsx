@@ -64,7 +64,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       const token = await encode(
         '1h',
         { email: String(body.get('email')) },
-        process.env.JWT_TOKEN_SECRET!,
+        process.env.PASSWORD_LINK_JWT_TOKEN_SECRET!,
       )
 
       //TODO: when installing store, insert this email template by default and make the template name uneditable
@@ -79,7 +79,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         apiToken: emailApi!.token as string,
         subject: emailTemplate.subject,
         body: emailTemplate.content
-          .replace('{{customer}}', `${result.firstName} ${result.lastName}`)
+          .replace('{{name}}', `${result.firstName} ${result.lastName}`)
           .replace(
             '{{link}}',
             `<a href="${
