@@ -1,17 +1,17 @@
 import { render, screen } from '@testing-library/react'
 import { RouterProvider, createMemoryRouter } from 'react-router-dom'
-import CustomerContext from '~/contexts/customerContext'
-import ResetPassword from '~/themes/default/pages/account/ResetPassword'
+import AdminContext from '~/contexts/adminContext'
+import ResetPassword from '~/themes/default/pages/admin/ResetPassword'
 import { Role, StoreSettings } from '~/types'
 import * as mocks from '~/utils/mocks'
 
-describe('Customer ResetPassword page component', () => {
-  test('testing Customer ResetPassword page component rendering', async () => {
+describe('Admin ResetPassword page component', () => {
+  test('testing Admin ResetPassword page component rendering', async () => {
     const routes = [
       {
         path: '*',
         element: (
-          <CustomerContext.Provider
+          <AdminContext.Provider
             value={{
               storeSettings: (await mocks.getStoreInfo()) as StoreSettings,
               account: {
@@ -23,10 +23,11 @@ describe('Customer ResetPassword page component', () => {
                 avatar: 'XXXXXXXXXXXXX',
                 role: Role.Customer,
               },
+              navItems: [],
             }}
           >
             <ResetPassword email="test@test.com" />
-          </CustomerContext.Provider>
+          </AdminContext.Provider>
         ),
       },
     ]

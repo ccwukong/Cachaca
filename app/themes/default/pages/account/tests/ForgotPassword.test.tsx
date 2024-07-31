@@ -5,8 +5,8 @@ import ForgotPassword from '~/themes/default/pages/account/ForgotPassword'
 import { Role, StoreSettings } from '~/types'
 import * as mocks from '~/utils/mocks'
 
-describe('ForgotPassword page component', () => {
-  test('Testing ForgotPassword page component rendering', async () => {
+describe('Customer ForgotPassword page component', () => {
+  test('testing Customer ForgotPassword page component rendering', async () => {
     const routes = [
       {
         path: '*',

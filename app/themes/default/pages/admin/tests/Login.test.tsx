@@ -1,17 +1,17 @@
 import { render, screen } from '@testing-library/react'
-import { RouterProvider, createMemoryRouter } from 'react-router-dom'
-import CustomerContext from '~/contexts/customerContext'
-import ResetPassword from '~/themes/default/pages/account/ResetPassword'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import AdminContext from '~/contexts/adminContext'
+import ForgotPassword from '~/themes/default/pages/account/ForgotPassword'
 import { Role, StoreSettings } from '~/types'
 import * as mocks from '~/utils/mocks'
 
-describe('Customer ResetPassword page component', () => {
-  test('testing Customer ResetPassword page component rendering', async () => {
+describe('Admin Login page component', () => {
+  test('testing Admin Login page component rendering', async () => {
     const routes = [
       {
         path: '*',
         element: (
-          <CustomerContext.Provider
+          <AdminContext.Provider
             value={{
               storeSettings: (await mocks.getStoreInfo()) as StoreSettings,
               account: {
@@ -23,18 +23,19 @@ describe('Customer ResetPassword page component', () => {
                 avatar: 'XXXXXXXXXXXXX',
                 role: Role.Customer,
               },
+              navItems: [],
             }}
           >
-            <ResetPassword email="test@test.com" />
-          </CustomerContext.Provider>
+            <ForgotPassword />
+          </AdminContext.Provider>
         ),
       },
     ]
 
-    const router = createMemoryRouter(routes)
+    const router = createBrowserRouter(routes)
 
     render(<RouterProvider router={router} />)
 
-    expect(screen.getByDisplayValue('test@test.com')).toBeDefined()
+    expect(screen.getByText('system.get_reset_password_link')).toBeDefined()
   })
 })
