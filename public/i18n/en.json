@@ -129,5 +129,9 @@
   "system.create_new_page": "Create a new page",
   "system.edit_page": "Edit page",
   "system.email_templates": "Email templates",
-  "system.home": "Home"
+  "system.home": "Home",
+  "system.get_reset_password_link": "Get reset password link",
+  "system.subject": "Subject",
+  "system.check_forgot_password_email_link": "Email sent. You will receive the password reset link if you're registered with us.",
+  "system.go_to_login": "Go to login"
 }

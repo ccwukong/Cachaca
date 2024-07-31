@@ -200,6 +200,7 @@ DB_USER=root
 DB_PASS=<database user password>
 DB_NAME=<database name>
 JWT_TOKEN_SECRET=<a long random string that is used to sign JWT auth token>
+PASSWORD_LINK_JWT_TOKEN_SECRET=<a long random string that is used to sign JWT token for password reset>
 SESSION_COOKIE_SECRET=<a long random string that is used to sign cookie message>
 ```
 

@@ -164,6 +164,7 @@ export type AddressItem = {
 
 export type EmailTemplateItem = {
   name: string
+  subject: string
   content: string
 }
 
@@ -250,4 +251,8 @@ export enum DatabaseRecordStatus {
   Deleted = -1,
   Disabled = 0,
   Active = 1,
+}
+
+export enum EmailTemplate {
+  ForgotPassword = 'forgot_password_template',
 }

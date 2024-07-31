@@ -15,6 +15,13 @@
       "when": 1722231468218,
       "tag": "0001_yielding_rafael_vega",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1722396480449,
+      "tag": "0002_wise_butterfly",
+      "breakpoints": true
     }
   ]
 }

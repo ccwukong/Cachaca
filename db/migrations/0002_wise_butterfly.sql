@@ -1,0 +1,1 @@
+ALTER TABLE `email_template` ADD `subject` varchar(120) NOT NULL;

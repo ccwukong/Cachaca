@@ -350,6 +350,20 @@ export class CustomerAuthentication {
         ),
       )
   }
+
+  public static async isEmailRegistered(email: string) {
+    const res = await db
+      .select()
+      .from(customer)
+      .where(
+        and(
+          eq(customer.email, email),
+          eq(customer.status, DatabaseRecordStatus.Active),
+        ),
+      )
+
+    return res.length
+  }
 }
 
 export class UserModel implements CRUDModel<UserPublicInfo> {
@@ -1039,6 +1053,7 @@ export class StoreConfig {
     const data = await db
       .select({
         name: emailTemplate.name,
+        subject: emailTemplate.subject,
         content: emailTemplate.content,
       })
       .from(emailTemplate)
@@ -1053,6 +1068,7 @@ export class StoreConfig {
     const data = await db
       .select({
         name: emailTemplate.name,
+        subject: emailTemplate.subject,
         content: emailTemplate.content,
       })
       .from(emailTemplate)
@@ -1067,10 +1083,12 @@ export class StoreConfig {
 
   public static async createEmailTemplate(data: {
     name: string
+    subject: string
     content: string
   }): Promise<string> {
     const result = await db.insert(emailTemplate).values({
       name: data.name,
+      subject: data.subject,
       content: data.content,
       status: DatabaseRecordStatus.Active,
     })
@@ -1084,11 +1102,13 @@ export class StoreConfig {
 
   public static async updateEmailTemplateByName(data: {
     name: string
+    subject: string
     content: string
   }): Promise<void> {
     await db
       .update(emailTemplate)
       .set({
+        subject: data.subject,
         content: data.content,
       })
       .where(eq(emailTemplate.name, data.name))

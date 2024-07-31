@@ -1,14 +1,9 @@
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import { Role } from '~/types'
 
 export const encode = async (
   expiresIn: string,
   data: {
-    id: string
-    firstName: string
-    lastName: string
-    email: string
-    role: Role
+    [key: string]: string | number
   },
   secret: string,
 ) => {

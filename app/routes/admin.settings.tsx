@@ -301,11 +301,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       } else if (body.get('intent') === 'create-email-template') {
         await StoreConfig.createEmailTemplate({
           name: String(body.get('name')),
+          subject: String(body.get('subject')),
           content: String(body.get('content')),
         })
       } else if (body.get('intent') === 'update-email-template') {
         await StoreConfig.updateEmailTemplateByName({
           name: String(body.get('name')),
+          subject: String(body.get('subject')),
           content: String(body.get('content')),
         })
         return json({ error: null, data: {} }) //for modal dismissal

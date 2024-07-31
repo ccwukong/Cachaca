@@ -292,6 +292,7 @@ export const page = mysqlTable('page', {
 
 export const emailTemplate = mysqlTable('email_template', {
   name: varchar('name', { length: 50 }).primaryKey(),
+  subject: varchar('subject', { length: 120 }).notNull(),
   content: text('content').notNull(),
   status: tinyint('status').notNull(),
 })

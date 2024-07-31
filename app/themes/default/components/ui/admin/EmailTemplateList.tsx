@@ -33,7 +33,7 @@ const EmailTemplateList = () => {
     [key: string]: string | number
   }>({
     name: '',
-    slug: '',
+    subject: '',
     content: '',
     order: 99,
     intent: '',
@@ -73,6 +73,7 @@ const EmailTemplateList = () => {
         onClick={() => {
           setFormData({
             name: '',
+            subject: '',
             content: '',
             intent: 'create-email-template',
           })
@@ -87,6 +88,7 @@ const EmailTemplateList = () => {
           <TableHeader>
             <TableRow>
               <TableHead>{t('system.name')}</TableHead>
+              <TableHead>{t('system.subject')}</TableHead>
               <TableHead>
                 <span className="sr-only">{t('system.actions')}</span>
               </TableHead>
@@ -96,7 +98,8 @@ const EmailTemplateList = () => {
           <TableBody>
             {emailTemplates.map((item) => (
               <TableRow key={item.name}>
-                <TableCell className="font-medium">{item.name}</TableCell>
+                <TableCell>{item.name}</TableCell>
+                <TableCell>{item.subject}</TableCell>
                 <TableCell>
                   <Button
                     type="button"
@@ -151,6 +154,22 @@ const EmailTemplateList = () => {
                   })
                 }}
                 readOnly={!isCreate}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-right">{t('system.subject')}</Label>
+              <Input
+                id="email-template-subject"
+                name="email-template-subject"
+                className="col-span-3"
+                required
+                value={formData.subject || ''}
+                onChange={(e) => {
+                  setFormData({
+                    ...formData!,
+                    subject: e.target.value,
+                  })
+                }}
               />
             </div>
             <div className="space-y-2">

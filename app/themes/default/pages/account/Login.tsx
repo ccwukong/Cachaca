@@ -1,5 +1,6 @@
 import { Link, useFetcher } from '@remix-run/react'
 import { AlertCircle } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Alert,
@@ -20,6 +21,21 @@ import { Spinner } from '~/themes/default/components/ui/spinner'
 const Login = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
+  const [formData, SetFormData] = useState<{
+    email: string
+    password: string
+  }>({ email: '', password: '' })
+  const [formCompleted, setFormCompleted] = useState<boolean>(false)
+
+  useEffect(() => {
+    const { email, password } = formData
+
+    if (email && password) {
+      setFormCompleted(true)
+    } else {
+      setFormCompleted(false)
+    }
+  }, [formData])
 
   return (
     <div className="mx-6 overflow-hidden">
@@ -31,7 +47,18 @@ const Login = () => {
           <fetcher.Form method="POST" className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">{t('system.email')}</Label>
-              <Input id="email" name="email" type="email" required />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                required
+                onChange={(e) => {
+                  SetFormData({
+                    ...formData,
+                    email: e.target.value,
+                  })
+                }}
+              />
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
@@ -43,9 +70,20 @@ const Login = () => {
                   {t('system.forgot_password_hint')}
                 </Link>
               </div>
-              <Input id="password" type="password" name="password" required />
+              <Input
+                id="password"
+                type="password"
+                name="password"
+                required
+                onChange={(e) => {
+                  SetFormData({
+                    ...formData,
+                    password: e.target.value,
+                  })
+                }}
+              />
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={!formCompleted}>
               {fetcher.state !== 'idle' ? (
                 <Spinner size="small" className="text-white" />
               ) : (

@@ -1,4 +1,4 @@
-export default async function emailClient({
+export default async function sendEmail({
   endpoint,
   apiToken,
   subject,
