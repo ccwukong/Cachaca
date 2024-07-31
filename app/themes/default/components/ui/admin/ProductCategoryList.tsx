@@ -135,6 +135,23 @@ const ProductCategoryList = () => {
                 }}
               />
             </div>
+            {!isCreate ? (
+            <div className="space-y-2">
+                <Label className="text-right">{t('system.parentId')} </Label>
+              <Input
+                id="category-parentId" 
+                name="category-parentId"
+                className="col-span-3"
+                required
+                value={formData.slug || ''}
+                onChange={(e) => {
+                  setFormData({
+                    ...formData!,
+                    parentId: e.target.value
+                  })
+                }}
+              />
+            </div>): null}
             <DialogFooter>
               {!isCreate ? (
                 <Button
