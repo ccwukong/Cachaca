@@ -55,9 +55,10 @@ export const loader = async () => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     const body = await request.formData()
-    const result = await CustomerAuthentication.isEmailRegistered(
-      String(body.get('email')),
-    )
+    const result =
+      await CustomerAuthentication.getCustommerNameByEmailIfRegistered(
+        String(body.get('email')),
+      )
 
     if (result) {
       const token = await encode(
@@ -78,7 +79,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         apiToken: emailApi!.token as string,
         subject: emailTemplate.subject,
         body: emailTemplate.content
-          .replace('{{customer}}', 'Test name')
+          .replace('{{customer}}', `${result.firstName} ${result.lastName}`)
           .replace(
             '{{link}}',
             `<a href="${

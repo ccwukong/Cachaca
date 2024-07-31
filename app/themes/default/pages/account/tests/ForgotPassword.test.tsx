@@ -35,8 +35,6 @@ describe('ForgotPassword page component', () => {
 
     render(<RouterProvider router={router} />)
 
-    expect(
-      screen.getByText('system.check_forgot_password_email_link'),
-    ).toBeDefined()
+    expect(screen.getByText('system.get_reset_password_link')).toBeDefined()
   })
 })

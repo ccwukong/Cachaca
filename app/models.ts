@@ -363,7 +363,9 @@ export class CustomerAuthentication {
       )
   }
 
-  public static async isEmailRegistered(email: string) {
+  public static async getCustommerNameByEmailIfRegistered(
+    email: string,
+  ): Promise<{ [key: string]: string } | null> {
     const res = await db
       .select()
       .from(customer)
@@ -374,7 +376,14 @@ export class CustomerAuthentication {
         ),
       )
 
-    return res.length
+    if (res.length) {
+      return {
+        firstName: res[0].firstName,
+        lastName: res[0].lastName,
+      }
+    } else {
+      return null
+    }
   }
 }
 

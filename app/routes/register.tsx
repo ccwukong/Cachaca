@@ -9,7 +9,7 @@ import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { v4 as uuidv4 } from 'uuid'
 import { cookie } from '~/cookie'
-import { CustomerAuthentication, Installer } from '~/models'
+import { CustomerAuthentication, Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Register from '~/themes/default/pages/account/Register'
 import { FatalErrorTypes, Role } from '~/types'
@@ -37,7 +37,10 @@ export const loader = async () => {
       throw new StoreNotInstalledError()
     }
 
-    return json({ error: null, data: {} })
+    return json({
+      error: null,
+      data: { storeSettings: await StoreConfig.getStoreInfo() },
+    })
   } catch (e) {
     if (e instanceof StoreNotInstalledError) {
       return redirect('/install')
