@@ -1,5 +1,5 @@
 import { Form } from '@remix-run/react'
-import { MoreHorizontal, WandSparkles } from 'lucide-react'
+import { WandSparkles } from 'lucide-react'
 import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import AdminContext from '~/contexts/adminContext'
@@ -145,7 +145,7 @@ const ProductList = ({ products }: { products: ProductPublicInfo[] }) => {
                               size="icon"
                               variant="ghost"
                             >
-                              <MoreHorizontal className="h-4 w-4" />
+                              <span className="text-black font-bold">Edit</span>
                               <span className="sr-only">Toggle menu</span>
                             </Button>
                           </DropdownMenuTrigger>

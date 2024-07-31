@@ -109,7 +109,7 @@ const PublicPageList = () => {
                   <Button
                     type="button"
                     variant="link"
-                    onClick={(e) => {
+                    onClick={() => {
                       setFormData({ ...item, intent: 'update-page' })
                       setIsCreate(false)
                       setEditOpen(true)
@@ -138,7 +138,7 @@ const PublicPageList = () => {
             </DialogTitle>
           </DialogHeader>
           <fetcher.Form
-            onSubmit={(e) => {
+            onSubmit={() => {
               submit(formData, { method: 'POST' })
             }}
             encType="application/x-www-form-urlencoded"
@@ -152,7 +152,7 @@ const PublicPageList = () => {
                 className="col-span-3"
                 required
                 value={formData.name || ''}
-                onChange={(e) => {
+                onChange={() => {
                   setFormData({
                     ...formData!,
                     name: e.target.value,
@@ -169,7 +169,7 @@ const PublicPageList = () => {
                 className="col-span-3"
                 required
                 value={formData.slug || ''}
-                onChange={(e) => {
+                onChange={() => {
                   setFormData({
                     ...formData!,
                     slug: e.target.value,

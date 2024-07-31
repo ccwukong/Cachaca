@@ -1096,7 +1096,7 @@ export class StoreConfig {
 
   public static async deleteEmailTemplateByName(name: string): Promise<void> {
     await db.delete(emailTemplate).where(eq(emailTemplate.name, name))
-  }
+  } 
 }
 
 export class OrderModel implements CRUDModel<OrderItem> {

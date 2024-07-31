@@ -10,7 +10,7 @@ import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import AdminContext from '~/contexts/adminContext'
 import { adminCookie } from '~/cookie'
-import { AdminAuthtication, StoreConfig, UserModel } from '~/models'
+import { AdminAuthtication, ProductCategoryModel, StoreConfig, UserModel } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Settings from '~/themes/default/pages/admin/Settings'
 import {
@@ -312,9 +312,24 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       } else if (body.get('intent') === 'delete-email-template') {
         await StoreConfig.deleteEmailTemplateByName(String(body.get('name')))
         return json({ error: null, data: {} }) //for modal dismissal
+      } else if (body.get('intent') === 'create-category') {
+        await new ProductCategoryModel().create({
+          id: '',
+          name: String(body.get('name')),
+          slug: String(body.get('slug')),
+        })
+      } else if (body.get('intent') === 'update-category') {
+        await new ProductCategoryModel().update({
+          id: payload.id,
+          name: String(body.get('name')),
+          slug: String(body.get('slug')),
+          parentId: String(body.get('parentId')),
+        })
+        return json({ error: null, data: {} }) //for modal dismissal
+      } else if (body.get('intent') === 'delete-category') {
+        await new ProductCategoryModel().delete(payload.id)
+        return json({ error: null, data: {} })
       }
-
-      return json({ error: null, data: {} })
     }
   } catch (e) {
     console.error(e) // TODO: replace this with a proper logger
