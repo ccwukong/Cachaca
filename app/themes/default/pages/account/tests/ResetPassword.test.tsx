@@ -1,32 +1,40 @@
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
+import { RouterProvider, createMemoryRouter } from 'react-router-dom'
 import CustomerContext from '~/contexts/customerContext'
-import ForgotPassword from '~/themes/default/pages/account/ForgotPassword'
+import ResetPassword from '~/themes/default/pages/account/ResetPassword'
 import { Role, StoreSettings } from '~/types'
 import * as mocks from '~/utils/mocks'
 
-describe('ForgotPassword page component', () => {
-  test('Testing ForgotPassword page component rendering', async () => {
-    render(
-      <CustomerContext.Provider
-        value={{
-          storeSettings: (await mocks.getStoreInfo()) as StoreSettings,
-          account: {
-            id: '123',
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'XXXXXXXXXXXXX',
-            phone: 'XXXXXXXXXXXXX',
-            avatar: 'XXXXXXXXXXXXX',
-            role: Role.Customer,
-          },
-        }}
-      >
-        <ForgotPassword />
-      </CustomerContext.Provider>,
-      { wrapper: MemoryRouter },
-    )
+describe('ResetPassword page component', () => {
+  test('Testing ResetPassword page component rendering', async () => {
+    const routes = [
+      {
+        path: '*',
+        element: (
+          <CustomerContext.Provider
+            value={{
+              storeSettings: (await mocks.getStoreInfo()) as StoreSettings,
+              account: {
+                id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'XXXXXXXXXXXXX',
+                phone: 'XXXXXXXXXXXXX',
+                avatar: 'XXXXXXXXXXXXX',
+                role: Role.Customer,
+              },
+            }}
+          >
+            <ResetPassword email="test@test.com" />
+          </CustomerContext.Provider>
+        ),
+      },
+    ]
 
-    expect(screen.getByText('system.email')).toBeDefined()
+    const router = createMemoryRouter(routes)
+
+    render(<RouterProvider router={router} />)
+
+    expect(screen.getByDisplayValue('test@test.com')).toBeDefined()
   })
 })

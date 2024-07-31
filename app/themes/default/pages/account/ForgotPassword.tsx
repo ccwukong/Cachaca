@@ -32,7 +32,8 @@ const ForgotPassword = () => {
 
   return (
     <div className="mx-6 overflow-hidden">
-      {fetcher.state === 'idle' && !fetcher.data?.data ? (
+      {fetcher.state === 'idle' &&
+      'data' in ((fetcher.data as object) || {}) ? (
         <Card className="mx-auto max-w-sm mt-28">
           <CardHeader>
             <CardTitle className="text-2xl">
