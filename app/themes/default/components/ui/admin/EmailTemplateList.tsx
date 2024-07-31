@@ -104,7 +104,7 @@ const EmailTemplateList = () => {
                   <Button
                     type="button"
                     variant="link"
-                    onClick={(e) => {
+                    onClick={() => {
                       setFormData({ ...item, intent: 'update-email-template' })
                       setIsCreate(false)
                       setEditOpen(true)
@@ -133,7 +133,7 @@ const EmailTemplateList = () => {
             </DialogTitle>
           </DialogHeader>
           <fetcher.Form
-            onSubmit={(e) => {
+            onSubmit={() => {
               submit(formData, { method: 'POST' })
             }}
             encType="application/x-www-form-urlencoded"

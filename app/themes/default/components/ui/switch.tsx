@@ -1,5 +1,6 @@
-import * as React from 'react'
+/* eslint-disable react/prop-types */
 import * as SwitchPrimitives from '@radix-ui/react-switch'
+import * as React from 'react'
 import { cn } from '~/themes/lib/utils'
 
 const Switch = React.forwardRef<

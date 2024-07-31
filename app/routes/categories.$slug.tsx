@@ -7,7 +7,7 @@ import {
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import StoreContext from '~/contexts/storeContext'
-import { Installer, ProductModel, StoreConfig } from '~/models'
+import { Installer, StoreConfig } from '~/models'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import CategoryProductList from '~/themes/default/pages/storefront/CategoryProductList'
 import { CategoryItem, FatalErrorTypes, ProductPublicInfo } from '~/types'
@@ -34,7 +34,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     if (!(await Installer.isInstalled())) {
       throw new StoreNotInstalledError()
     }
-    const model = new ProductModel()
+
     return json({
       error: null,
       data: {

@@ -15,7 +15,7 @@
     "db:push": "drizzle-kit push",
     "db:seed": "npx tsx ./db/seed.ts",
     "db:studio": "npx drizzle-kit studio",
-    "precommit": "yarn lint && yarn test",
+    "precommit": "yarn lint -- --fix && yarn test",
     "prepare": "husky"
   },
   "husky": {

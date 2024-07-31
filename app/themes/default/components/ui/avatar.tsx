@@ -1,5 +1,6 @@
-import * as React from 'react'
+/* eslint-disable react/prop-types */
 import * as AvatarPrimitive from '@radix-ui/react-avatar'
+import * as React from 'react'
 import { cn } from '~/themes/lib/utils'
 
 const Avatar = React.forwardRef<
@@ -44,4 +45,4 @@ const AvatarFallback = React.forwardRef<
 ))
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
 
-export { Avatar, AvatarImage, AvatarFallback }
+export { Avatar, AvatarFallback, AvatarImage }

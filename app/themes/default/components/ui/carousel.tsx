@@ -1,10 +1,11 @@
-import * as React from 'react'
+/* eslint-disable react/prop-types */
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from 'embla-carousel-react'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
-import { cn } from '~/themes/lib/utils'
+import * as React from 'react'
 import { Button } from '~/themes/default/components/ui/button'
+import { cn } from '~/themes/lib/utils'
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -250,10 +251,10 @@ const CarouselNext = React.forwardRef<
 CarouselNext.displayName = 'CarouselNext'
 
 export {
-  type CarouselApi,
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselPrevious,
   CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
 }

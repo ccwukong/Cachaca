@@ -13,8 +13,10 @@ const ChangePasswordForm = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const { account } = useContext(AdminContext)
-  const [form, setForm] = useState({
+  const [form] = useState({
     account: account!,
+    oldPwd: '',
+    newPwd: '',
   })
 
   return (
@@ -22,11 +24,21 @@ const ChangePasswordForm = () => {
       <div className="space-y-4 w-[480px]">
         <div className="space-y-2">
           <Label htmlFor="old-password">{t('system.old_password')}</Label>
-          <Input type="password" id="old-password" name="old-password" />
+          <Input
+            type="password"
+            id="old-password"
+            name="old-password"
+            value={form.oldPwd}
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="new-password">{t('system.new_password')}</Label>
-          <Input type="password" id="new-password" name="new-password" />
+          <Input
+            type="password"
+            id="new-password"
+            name="new-password"
+            value={form.newPwd}
+          />
         </div>
         <Button type="submit" name="intent" value="change-password">
           {fetcher.state !== 'idle' &&

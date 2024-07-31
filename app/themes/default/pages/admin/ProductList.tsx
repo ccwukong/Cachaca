@@ -69,7 +69,7 @@ const ProductList = ({ products }: { products: ProductPublicInfo[] }) => {
                       className="col-span-3"
                       required
                       value=""
-                      onChange={(e) => {}}
+                      onChange={() => {}}
                     />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
@@ -80,7 +80,7 @@ const ProductList = ({ products }: { products: ProductPublicInfo[] }) => {
                       className="col-span-3"
                       required
                       value=""
-                      onChange={(e) => {}}
+                      onChange={() => {}}
                     />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
@@ -93,7 +93,7 @@ const ProductList = ({ products }: { products: ProductPublicInfo[] }) => {
                       className="col-span-3"
                       required
                       value=""
-                      onChange={(e) => {}}
+                      onChange={() => {}}
                     />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">

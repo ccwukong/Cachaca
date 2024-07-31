@@ -58,7 +58,7 @@ const CartItem = ({
         <Trash2
           className="cursor-pointer"
           data-testid={`delete-${id}`}
-          onClick={(e) => updateCartItemHandler(id, 0)}
+          onClick={() => updateCartItemHandler(id, 0)}
         />
       </div>
     </div>

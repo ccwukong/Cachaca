@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/heading-has-content */
+/* eslint-disable react/prop-types */
 import * as React from 'react'
 import { cn } from '~/themes/lib/utils'
 
@@ -75,4 +77,4 @@ const CardFooter = React.forwardRef<
 ))
 CardFooter.displayName = 'CardFooter'
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
