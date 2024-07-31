@@ -134,9 +134,6 @@ export class Installer {
       phone: '',
       avatar: '',
       role: Role.Admin,
-      createdOn,
-      updatedOn: null,
-      status: DatabaseRecordStatus.Active,
     }
   }
 }
@@ -174,9 +171,6 @@ export class AdminAuthtication {
       lastName: userData.lastName,
       avatar: userData.avatar,
       role: userData.role,
-      createdOn: userData.createdOn,
-      updatedOn: userData.updatedOn,
-      status: userData.status,
     }
   }
 
@@ -303,9 +297,7 @@ export class CustomerAuthentication {
       firstName: userData.firstName,
       lastName: userData.lastName,
       avatar: userData.avatar,
-      createdOn: userData.createdOn,
-      updatedOn: userData.updatedOn,
-      status: userData.status,
+      role: Role.Customer,
     }
   }
 
@@ -429,7 +421,7 @@ export class UserModel implements CRUDModel<UserPublicInfo> {
       .where(
         and(
           eq(user.id, id as string),
-          ne(user.status, DatabaseRecordStatus.Deleted),
+          ne(user.status, DatabaseRecordStatus.Deleted), // customer account could be disabled temporarily
         ),
       )
 
@@ -562,6 +554,7 @@ export class CustomerModel implements CRUDModel<UserPublicInfo> {
       firstName: res[0].firstName,
       lastName: res[0].lastName,
       avatar: res[0].avatar,
+      role: Role.Customer,
       createdOn: res[0].createdOn,
       updatedOn: res[0].updatedOn,
       status: res[0].status,
@@ -587,6 +580,7 @@ export class CustomerModel implements CRUDModel<UserPublicInfo> {
         firstName: item.firstName,
         lastName: item.lastName,
         avatar: item.avatar,
+        role: Role.Customer,
         createdOn: item.createdOn,
         updatedOn: item.updatedOn,
         status: item.status,

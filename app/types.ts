@@ -38,10 +38,10 @@ export type UserPublicInfo = {
   firstName: string
   lastName: string
   avatar: string
-  role?: number
+  role: number
   createdOn?: number
-  updatedOn: number | null
-  status: number
+  updatedOn?: number | null
+  status?: number
 }
 
 export type CartItem = {
