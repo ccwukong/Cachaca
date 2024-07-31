@@ -1,6 +1,6 @@
 import { useFetcher } from '@remix-run/react'
 import { AlertCircle } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Alert,
@@ -31,9 +31,20 @@ const Login = () => {
   const [formData, SetFormData] = useState<{
     email: string
     password: string
-    pwdEmail: string
-  }>({ email: '', password: '', pwdEmail: '' })
+  }>({ email: '', password: '' })
+  const [formCompleted, setFormCompleted] = useState<boolean>(false)
+  const [passwordEmail, SetPasswordEmall] = useState<string>('')
 
+  useEffect(() => {
+    const { email, password } = formData
+
+    if (email && password) {
+      setFormCompleted(true)
+    } else {
+      setFormCompleted(false)
+    }
+  }, [formData])
+  console.log(fetcher.state, fetcher.data, fetcher.formData?.get('intent'))
   return (
     <div className="max-w-screen-xl mx-auto h-full pt-24 flex justify-center">
       <Tabs defaultValue="account" className="w-[400px]">
@@ -90,6 +101,7 @@ const Login = () => {
                     className="w-full"
                     name="intent"
                     value="login"
+                    disabled={!formCompleted}
                   >
                     {fetcher.state !== 'idle' &&
                     fetcher.formData?.get('login') ? (
@@ -113,42 +125,50 @@ const Login = () => {
           </Card>
         </TabsContent>
         <TabsContent value="password">
-          <fetcher.Form method="POST">
-            <Card>
-              <CardHeader>
-                <CardTitle>{t('system.reset_password')}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="space-y-1">
-                  <Label htmlFor="reset-password-email">
-                    {t('system.email')}
-                  </Label>
-                  <Input
-                    id="reset-password-email"
-                    name="reset-password-email"
-                    type="email"
-                    value={formData.pwdEmail}
-                    onChange={(e) => {
-                      SetFormData({
-                        ...formData,
-                        pwdEmail: e.target.value,
-                      })
-                    }}
-                  />
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button type="submit" name="intent" value="reset-password">
-                  {fetcher.state !== 'idle' &&
-                  fetcher.formData?.get('reset-password') ? (
-                    <Spinner size="small" className="text-white" />
-                  ) : (
-                    t('system.login')
-                  )}
-                </Button>
-              </CardFooter>
-            </Card>
-          </fetcher.Form>
+          {fetcher.state === 'idle' &&
+          'data' in ((fetcher.data as object) || {}) ? (
+            <p>{t('system.check_forgot_password_email_link')}</p>
+          ) : (
+            <fetcher.Form method="POST">
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t('system.reset_password')}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="space-y-1">
+                    <Label htmlFor="reset-password-email">
+                      {t('system.email')}
+                    </Label>
+                    <Input
+                      id="reset-password-email"
+                      name="reset-password-email"
+                      type="email"
+                      value={passwordEmail}
+                      onChange={(e) => {
+                        SetPasswordEmall(e.target.value)
+                      }}
+                    />
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    name="intent"
+                    value="reset-password"
+                    disabled={!passwordEmail}
+                  >
+                    {fetcher.state !== 'idle' &&
+                    fetcher.formData?.get('intent') === 'reset-password' ? (
+                      <Spinner size="small" className="text-white" />
+                    ) : (
+                      t('system.get_reset_password_link')
+                    )}
+                  </Button>
+                </CardFooter>
+              </Card>
+            </fetcher.Form>
+          )}
         </TabsContent>
       </Tabs>
     </div>

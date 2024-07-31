@@ -215,6 +215,26 @@ export class AdminAuthentication {
       )
   }
 
+  public static async resetPassword({
+    email,
+    newPwd,
+  }: {
+    email: string
+    newPwd: string
+  }): Promise<void> {
+    const newSalt = makeStr(8)
+
+    await db
+      .update(user)
+      .set({ password: md5(newPwd + newSalt), salt: newSalt })
+      .where(
+        and(
+          eq(user.email, email),
+          eq(user.status, DatabaseRecordStatus.Active),
+        ),
+      )
+  }
+
   public static async getAdminNameByEmailIfRegistered(
     email: string,
   ): Promise<{ [key: string]: string } | null> {

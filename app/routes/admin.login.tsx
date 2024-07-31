@@ -118,9 +118,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             .replace(
               '{{link}}',
               `<a href="${
-                request.url.replace('forgot-', 'reset-') + '?t=' + token
+                request.url.replace('login', 'reset-password') + '?t=' + token
               }">${
-                request.url.replace('forgot-', 'reset-') + '?t=' + token
+                request.url.replace('login', 'reset-password') + '?t=' + token
               }</a>`,
             ),
           from: storeInfo.email,
@@ -128,6 +128,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           to: String(body.get('reset-password-email')),
         })
       }
+
+      return json({ error: null, data: {} })
     }
   } catch (e) {
     console.error(e) // TODO: replace this with a proper logger
