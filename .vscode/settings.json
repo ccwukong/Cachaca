@@ -1,6 +1,13 @@
 {
+  "typescript.preferences.importModuleSpecifier": "non-relative",  // Preferir caminhos de importação absolutos em TypeScript
+  "javascript.preferences.importModuleSpecifier": "non-relative",  // Preferir caminhos de importação absolutos em JavaScript
+  "typescript.preferences.importModuleSpecifierEnding": "index",
+  "prettier.singleQuote": true,
+  "prettier.jsxSingleQuote": false, 
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always",
     "source.addMissingImports": "always"
   }
+
+  
 }

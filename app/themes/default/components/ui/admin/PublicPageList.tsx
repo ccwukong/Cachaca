@@ -13,6 +13,7 @@ import {
 } from '~/themes/default/components/ui/dialog'
 import { Input } from '~/themes/default/components/ui/input'
 import { Label } from '~/themes/default/components/ui/label'
+import { Spinner } from '~/themes/default/components/ui/spinner'
 import {
   Table,
   TableBody,
@@ -21,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from '~/themes/default/components/ui/table'
-import { Spinner } from '../spinner'
+
 
 const PublicPageList = () => {
   const { t } = useTranslation()
@@ -152,7 +153,7 @@ const PublicPageList = () => {
                 className="col-span-3"
                 required
                 value={formData.name || ''}
-                onChange={() => {
+                onChange={(e) => {
                   setFormData({
                     ...formData!,
                     name: e.target.value,
@@ -169,7 +170,7 @@ const PublicPageList = () => {
                 className="col-span-3"
                 required
                 value={formData.slug || ''}
-                onChange={() => {
+                onChange={(e) => {
                   setFormData({
                     ...formData!,
                     slug: e.target.value,

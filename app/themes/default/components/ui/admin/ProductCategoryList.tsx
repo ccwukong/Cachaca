@@ -2,26 +2,43 @@ import { useFetcher, useSubmit } from '@remix-run/react'
 import { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AdminContext from '~/contexts/adminContext'
-import { Button } from '../button'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '../dialog'
-import { Input } from '../input'
-import { Label } from '../label'
-import { Spinner } from '../spinner'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../table'
 
-const ProductCategoryList = () => {
+import { Button } from '~/themes/default/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '~/themes/default/components/ui/dialog'
+import { Input } from '~/themes/default/components/ui/input'
+import { Label } from '~/themes/default/components/ui/label'
+import { Spinner } from '~/themes/default/components/ui/spinner'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '~/themes/default/components/ui/table'
+import { CategoryItem } from '~/types'
+
+const ProductCategoryList = ({
+  categories,
+}: {
+  categories: CategoryItem[]
+}) => {
   const { t } = useTranslation()
-  const { categoryItem } = useContext(AdminContext)
-
+  const { storeSettings } = useContext(AdminContext)
 
   const submit = useSubmit()
   const fetcher = useFetcher()
 
-  const [isFormCompleted, setIsFormCompleted] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
   const [isCreate, setIsCreate] = useState(false)
   const [formData, setFormData] = useState<{
-    [key: string]: string | number | null
+    [key: string]: string | null
   }>({
     name: '',
     slug: '',
@@ -35,16 +52,16 @@ const ProductCategoryList = () => {
     }
   }, [fetcher.data])
 
-
   return (
     <>
-      <Button className='bg-green-600 text-black float-start'
+      <Button
+        className="bg-green-600 text-black float-right"
         onClick={() => {
           setFormData({
             name: '',
             slug: '',
             intent: 'create-category',
-            parentId: ''
+            parentId: '',
           })
 
           setEditOpen(true)
@@ -53,7 +70,7 @@ const ProductCategoryList = () => {
       >
         {t('system.add')}
       </Button>
-      {categoryItem && categoryItem.length ? (
+      {categories && categories.length ? (
         <Table>
           <TableHeader>
             <TableRow>
@@ -62,8 +79,8 @@ const ProductCategoryList = () => {
           </TableHeader>
 
           <TableBody>
-            {categoryItem.map((category) =>
-              <TableRow key={category.name}>
+            {categories.map((category) => (
+              <TableRow key={category.id}>
                 <TableCell>{category.id}</TableCell>
                 <TableCell className="font-medium">{category.name}</TableCell>
                 <TableCell>
@@ -74,12 +91,13 @@ const ProductCategoryList = () => {
                       setFormData({ ...category, intent: 'update-category' })
                       setIsCreate(false)
                       setEditOpen(true)
-                    }}>
+                    }}
+                  >
                     {t('system.edit')}
                   </Button>
                 </TableCell>
               </TableRow>
-            )}
+            ))}
           </TableBody>
         </Table>
       ) : (
@@ -89,11 +107,14 @@ const ProductCategoryList = () => {
         open={editOpen}
         onOpenChange={() => {
           setEditOpen(!editOpen)
-        }}>
+        }}
+      >
         <DialogContent>
           <DialogHeader className="max-w-screen-sm">
             <DialogTitle>
-              {isCreate ? t('system.create_new_category') : t('system.edit_category')}
+              {isCreate
+                ? t('system.create_new_category')
+                : t('system.edit_category')}
             </DialogTitle>
           </DialogHeader>
           <fetcher.Form
@@ -103,6 +124,14 @@ const ProductCategoryList = () => {
             encType="application/x-www-form-urlencoded"
             className="space-y-4"
           >
+            <div>
+              <Input
+                type="hidden"
+                id="category-id"
+                name="category-id"
+                value={''}
+              />
+            </div>
             <div className="space-y-2">
               <Label className="text-right">{t('system.category')} </Label>
               <Input
@@ -114,15 +143,16 @@ const ProductCategoryList = () => {
                 onChange={(e) => {
                   setFormData({
                     ...formData!,
-                    name: e.target.value
+                    name: e.target.value,
                   })
                 }}
-                readOnly={!isCreate} />
-                </div>
-                <div className="space-y-2">
+                readOnly={!isCreate}
+              />
+            </div>
+            <div className="space-y-2">
               <Label className="text-right">{t('system.slug')} </Label>
               <Input
-                id="category-slug" 
+                id="category-slug"
                 name="category-slug"
                 className="col-span-3"
                 required
@@ -130,28 +160,12 @@ const ProductCategoryList = () => {
                 onChange={(e) => {
                   setFormData({
                     ...formData!,
-                    slug: e.target.value
+                    slug: e.target.value,
                   })
                 }}
               />
             </div>
-            {!isCreate ? (
-            <div className="space-y-2">
-                <Label className="text-right">{t('system.parentId')} </Label>
-              <Input
-                id="category-parentId" 
-                name="category-parentId"
-                className="col-span-3"
-                required
-                value={formData.slug || ''}
-                onChange={(e) => {
-                  setFormData({
-                    ...formData!,
-                    parentId: e.target.value
-                  })
-                }}
-              />
-            </div>): null}
+            
             <DialogFooter>
               {!isCreate ? (
                 <Button
@@ -165,11 +179,11 @@ const ProductCategoryList = () => {
                   }}
                 >
                   {fetcher.state !== 'idle' &&
-                    (formData.intent === 'delete-category') ?
-                    (<Spinner size="small" className="text-white" />)
-                    : (
-                      t('system.delete')
-                    )}
+                  formData.intent === 'delete-category' ? (
+                    <Spinner size="small" className="text-white" />
+                  ) : (
+                    t('system.delete')
+                  )}
                 </Button>
               ) : null}
               <Button
@@ -178,8 +192,8 @@ const ProductCategoryList = () => {
                 value={isCreate ? 'create-category' : 'update-category'}
               >
                 {fetcher.state !== 'idle' &&
-                  (formData.intent === 'create-category' ||
-                    formData.intent === 'update-category') ? (
+                (formData.intent === 'create-category' ||
+                  formData.intent === 'update-category') ? (
                   <Spinner size="small" className="text-white" />
                 ) : (
                   t('system.save')

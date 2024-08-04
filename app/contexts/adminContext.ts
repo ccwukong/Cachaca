@@ -1,10 +1,9 @@
 import { createContext } from 'react';
 import {
-  CategoryItem,
   EmailTemplateItem,
   PublicPage,
   StoreSettings,
-  UserPublicInfo,
+  UserPublicInfo
 } from '~/types';
 
 const initialValue: {
@@ -13,14 +12,12 @@ const initialValue: {
   storeSettings: StoreSettings | null
   publicPages?: PublicPage[]
   emailTemplates?: EmailTemplateItem[]
-  categoryItem?: CategoryItem[]
 } = {
   navItems: [],
   account: null,
   storeSettings: null,
   publicPages: [],
   emailTemplates: [],
-  categoryItem: [],
 }
 
 const AdminContext = createContext(initialValue)

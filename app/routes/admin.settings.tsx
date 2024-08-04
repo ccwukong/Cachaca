@@ -8,16 +8,24 @@ import {
 import { useLoaderData } from '@remix-run/react'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { v4 as uuidv4 } from 'uuid'
 import AdminContext from '~/contexts/adminContext'
 import { adminCookie } from '~/cookie'
-import { AdminAuthtication, ProductCategoryModel, StoreConfig, UserModel } from '~/models'
+import {
+  AdminAuthtication,
+  ProductCategoryModel,
+  StoreConfig,
+  UserModel
+} from '~/models'
+import ProductCategoryList from '~/themes/default/components/ui/admin/ProductCategoryList'
 import Skeleton from '~/themes/default/components/ui/storefront/Skeleton'
 import Settings from '~/themes/default/pages/admin/Settings'
 import {
   AddressType,
   ExternalApiType,
   FatalErrorTypes,
-  FileHostingProvider,
+  FileHostingProvider
 } from '~/types'
 import {
   JWTTokenSecretNotFoundException,
@@ -26,6 +34,7 @@ import {
 } from '~/utils/exception'
 import fileUpload from '~/utils/file'
 import { decode, isValid } from '~/utils/jwt'
+
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Admin Dashboard - Settings' }]
@@ -59,6 +68,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
       const account = await new UserModel().find(payload.id)
 
+      const categories =  await new ProductCategoryModel().findMany(0, 10)
+
       return json({
         error: null,
         data: {
@@ -67,9 +78,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
           publicPages: await StoreConfig.getPublicPages(),
           emailTemplates: await StoreConfig.getEmailTemplates(),
           account,
+          categories
         },
       })
     }
+    
   } catch (e) {
     console.error(e) // TODO: replace this with a proper logger
     if (e instanceof JWTTokenSecretNotFoundException) {
@@ -314,22 +327,25 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         return json({ error: null, data: {} }) //for modal dismissal
       } else if (body.get('intent') === 'create-category') {
         await new ProductCategoryModel().create({
-          id: '',
-          name: String(body.get('name')),
-          slug: String(body.get('slug')),
+          id: uuidv4(),
+          name: String(body.get('catetegory-name')),
+          slug: String(body.get('catetegory-slug')),
         })
+        return json({ error: null, data: {} })
       } else if (body.get('intent') === 'update-category') {
         await new ProductCategoryModel().update({
-          id: payload.id,
-          name: String(body.get('name')),
-          slug: String(body.get('slug')),
-          parentId: String(body.get('parentId')),
+          id: String(body.get('catetegory-id')),
+          name: String(body.get('catetegory-name')),
+          slug: String(body.get('catetegory-slug')),
+          parentId: String(body.get('catetegory-parentId')),
         })
         return json({ error: null, data: {} }) //for modal dismissal
       } else if (body.get('intent') === 'delete-category') {
-        await new ProductCategoryModel().delete(payload.id)
+        await new ProductCategoryModel().delete(
+          String(body.get('category-id'))
+        )
         return json({ error: null, data: {} })
-      }
+      } 
     }
   } catch (e) {
     console.error(e) // TODO: replace this with a proper logger
@@ -372,6 +388,7 @@ export default function Index() {
         }}
       >
         <Settings currencies={loaderData.data.currencies} />
+        <ProductCategoryList categories={loaderData.data.categories} />
       </AdminContext.Provider>
     </Suspense>
   ) : (

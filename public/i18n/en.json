@@ -132,5 +132,6 @@
   "system.home": "Home",
   "system.create_new_category": "Create a new category",
   "system.category" : "Category",
-  "system.edit_category" : "Edit category"
+  "system.edit_category" : "Edit category",
+  "system.parentId" : "Product ID"
 }
