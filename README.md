@@ -312,6 +312,6 @@ Some recommended painless **Serverless** options:
 
 ## Attribution
 
-- The dummy product photos/images that are used for development and demo purpose are from [https://www.pexels.com/](https://www.pexels.com/)
+- The dummy product photos/images that are used for development and demo purposes are from [https://www.pexels.com/](https://www.pexels.com/)
 
 - The logo/icon of Cachaca project is from [https://www.freepik.com/](https://www.freepik.com/)
