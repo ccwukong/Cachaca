@@ -1,34 +1,27 @@
 {
-  "autoplay": true,
-  "speed": 4000,
   "items": [
-    {
-      "id": "1",
-      "imageUrl": "https://images.pexels.com/photos/4239013/pexels-photo-4239013.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      "caption": "",
-      "link": "",
-      "order": 1
-    },
-    {
-      "id": "2",
-      "imageUrl": "https://images.unsplash.com/photo-1523779105320-d1cd346ff52b?q=80&w=3873&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "caption": "",
-      "link": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-      "order": 2
-    },
-    {
-      "id": "3",
-      "imageUrl": "https://images.unsplash.com/photo-1462927114214-6956d2fddd4e?q=80&w=3869&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "caption": "",
-      "link": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-      "order": 3
-    },
-    {
-      "id": "4",
-      "imageUrl": "https://plus.unsplash.com/premium_photo-1681487557151-d15812c252ed?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "caption": "",
-      "link": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-      "order": 4
-    }
-  ]
+      {
+          "id": "feb617ea-d012-4b2d-8e00-431f9381fd92",
+          "link": "",
+          "order": -1,
+          "caption": "file",
+          "imageUrl": "https://res.cloudinary.com/dyx7paypw/image/upload/v1721826819/feb617ea-d012-4b2d-8e00-431f9381fd92.jpg"
+      },
+      {
+          "id": "a24ac5fe-b880-4b64-ba03-d1d484a1644d",
+          "link": "",
+          "order": -1,
+          "caption": "file",
+          "imageUrl": "https://res.cloudinary.com/dyx7paypw/image/upload/v1721826883/a24ac5fe-b880-4b64-ba03-d1d484a1644d.jpg"
+      },
+      {
+          "id": "c36ca120-93a8-448e-bda2-707b86a8dea0",
+          "link": "",
+          "order": -1,
+          "caption": "file",
+          "imageUrl": "https://res.cloudinary.com/dyx7paypw/image/upload/v1722140281/c36ca120-93a8-448e-bda2-707b86a8dea0.jpg"
+      }
+  ],
+  "speed": 3000,
+  "autoplay": true
 }

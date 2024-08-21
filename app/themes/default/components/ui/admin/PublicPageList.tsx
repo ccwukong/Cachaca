@@ -13,6 +13,7 @@ import {
 } from '~/themes/default/components/ui/dialog'
 import { Input } from '~/themes/default/components/ui/input'
 import { Label } from '~/themes/default/components/ui/label'
+import { Spinner } from '~/themes/default/components/ui/spinner'
 import {
   Table,
   TableBody,
@@ -21,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from '~/themes/default/components/ui/table'
-import { Spinner } from '../spinner'
+
 
 const PublicPageList = () => {
   const { t } = useTranslation()
@@ -109,7 +110,7 @@ const PublicPageList = () => {
                   <Button
                     type="button"
                     variant="link"
-                    onClick={(e) => {
+                    onClick={() => {
                       setFormData({ ...item, intent: 'update-page' })
                       setIsCreate(false)
                       setEditOpen(true)
@@ -138,7 +139,7 @@ const PublicPageList = () => {
             </DialogTitle>
           </DialogHeader>
           <fetcher.Form
-            onSubmit={(e) => {
+            onSubmit={() => {
               submit(formData, { method: 'POST' })
             }}
             encType="application/x-www-form-urlencoded"

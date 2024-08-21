@@ -1,10 +1,10 @@
-import { createContext } from 'react'
+import { createContext } from 'react';
 import {
   EmailTemplateItem,
   PublicPage,
   StoreSettings,
-  UserPublicInfo,
-} from '~/types'
+  UserPublicInfo
+} from '~/types';
 
 const initialValue: {
   navItems: { title: string; url: string; order: number }[]
